@@ -12,14 +12,14 @@ export default function CanvasPage() {
   // const model = useGLTF("/models/chair-model.glb");
   // console.log("model", model);
   const { camera } = useThree();
-  // const { position } = useControls("Camera", {
-  //   position: {
-  //     value: [-0.011403, -5.26023, 0.8],
-  //     onChange: (value: [number, number, number]) => {
-  //       camera.position.set(...value);
-  //     },
-  //   },
-  // });
+  useControls("Camera", {
+    position: {
+      value: [-0.011403, -5.26023, 0.8],
+      onChange: (value: [number, number, number]) => {
+        camera.position.set(...value);
+      },
+    },
+  });
 
   return (
     <>
