@@ -8,8 +8,8 @@ import {
 } from "@react-spring/three";
 
 import { Vector3, Vector3Tuple } from "three";
-import { ProductTitle } from "./ProductTitle/ProductTitle";
-import { RotationSlider } from "./RotationSlider/RotationSlider";
+// import { ProductTitle } from "./ProductTitle/ProductTitle";
+// import { RotationSlider } from "./RotationSlider/RotationSlider";
 import { ProductRing } from "./ProductRing/ProductRing";
 // import { ProductSpring, springAtom } from "@/state/spring";
 import { useSetAtom } from "jotai";

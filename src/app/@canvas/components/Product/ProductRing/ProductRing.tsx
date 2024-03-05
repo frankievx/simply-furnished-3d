@@ -1,6 +1,6 @@
 import React, { memo, useEffect } from "react";
-import { DisplayItemSpring, springAtom } from "@/state/spring";
-import { config, to, useTransition } from "@react-spring/web";
+// import { DisplayItemSpring, springAtom } from "@/state/spring";
+// import { config, to, useTransition } from "@react-spring/web";
 import { times } from "lodash";
 import {
   animated as animated3,

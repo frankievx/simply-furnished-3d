@@ -12,7 +12,6 @@ import { Canvas, extend } from "@react-three/fiber";
 import { useRef } from "react";
 import { GizmoContainer } from "./GizmoContainer";
 import { Euler } from "three";
-import { CameraControlsWrapper } from "./CameraControlsWrapper";
 import { EffectComposer, SMAA, ToneMapping } from "@react-three/postprocessing";
 import { GammaCorrectionShader } from "three-stdlib";
 import { ShaderPass } from "three-stdlib";
