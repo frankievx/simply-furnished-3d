@@ -1,34 +1,26 @@
 "use client";
 import { productsAtom, productsSpringAtom } from "@/state/products";
-import { useAtom } from "jotai";
+import { useAtom, useSetAtom } from "jotai";
 import { useParams } from "next/navigation";
 import { useEffect } from "react";
 import { Vector3 } from "three";
-import {
-  animateCameraToProduct,
-  animateProductToCenter,
-} from "../@canvas/components/Product/animations";
+// import {
+//   animateCameraToProduct,
+//   animateProductToCenter,
+// } from "../@canvas/components/Product/animations";
 import { cameraSpringAtom } from "@/state/camera";
+import { animateCameraToRelatedProducts } from "./animations";
+import { showAtom } from "@/state/show";
 
-export default function ProductPage() {
+export default function RelatedProductsPage() {
   const { productId } = useParams<{ productId: string }>();
   const [productsSpring] = useAtom(productsSpringAtom);
   const [cameraSpring] = useAtom(cameraSpringAtom);
+  const setShow = useSetAtom(showAtom);
 
   useEffect(() => {
-    if (productsSpring && cameraSpring) {
-      animateCameraToProduct({
-        productId,
-        productsSpring,
-        cameraSpring,
-      }).then(() => {
-        animateProductToCenter({
-          productId,
-          productsSpring,
-          cameraSpring,
-        });
-      });
-    }
+    setShow((show) => ({ ...show, itemTitles: true }));
+    animateCameraToRelatedProducts({ cameraSpring });
   }, [productId, productsSpring, cameraSpring]);
 
   return (

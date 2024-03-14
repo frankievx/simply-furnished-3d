@@ -16,8 +16,9 @@ import { EffectComposer, SMAA, ToneMapping } from "@react-three/postprocessing";
 import { GammaCorrectionShader } from "three-stdlib";
 import { ShaderPass } from "three-stdlib";
 import { MeshLineGeometry, MeshLineMaterial } from "meshline";
+import { geometry } from "maath";
 
-extend({ ShaderPass, MeshLineGeometry, MeshLineMaterial });
+extend({ ShaderPass, MeshLineGeometry, MeshLineMaterial, ...geometry });
 
 export function CanvasContainer({
   children,
@@ -26,18 +27,12 @@ export function CanvasContainer({
 }>) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   return (
-    <div className="flex w-dvw h-dvh">
+    <div className="flex w-screen h-screen">
       <Canvas
         ref={canvasRef}
-        // gl={{
-        //   outputColorSpace: THREE.LinearSRGBColorSpace
-        // }}
         camera={{
-          position: [-0.011403, -15.26023, 0.028015],
-          rotation: new Euler(1.5708, 0, 0),
-          fov: 75,
-          focus: 100,
-          aspect: 16 / 9,
+          position: [-0.011403, -5.26023, 0.8],
+          // rotation: new Euler(1.5517880408684726, 0, 0),
         }}
         resize={{ debounce: { scroll: 50, resize: 0 } }}
         shadows
@@ -48,7 +43,7 @@ export function CanvasContainer({
         {children}
         {/* <ambientLight intensity={0.5} /> */}
         {/* <CameraControlsWrapper /> */}
-        <GizmoContainer />
+        {/* <GizmoContainer /> */}
         {/* <Stats /> */}
         {/* <StatsGl /> */}
         {/* <EffectComposer disableNormalPass>

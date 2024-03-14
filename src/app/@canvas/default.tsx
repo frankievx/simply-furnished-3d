@@ -1,0 +1,146 @@
+"use client";
+import { useThree } from "@react-three/fiber";
+import { useEffect } from "react";
+import { Color, Euler, Mesh, Object3D, Vector3, Vector3Tuple } from "three";
+import Product from "./components/Product/Product";
+import {
+  products,
+  productsSpringAtom,
+  relatedProductsSpringAtom,
+  selectedProductAtom,
+} from "../../state/products";
+import { easings, useSpring, useSprings } from "@react-spring/web";
+import { useSetAtom } from "jotai";
+import { CameraSpringRef, cameraSpringAtom } from "@/state/camera";
+import { Floor } from "./components/models/Floor";
+import { useRouter } from "next/navigation";
+import { ProductMask } from "./components/Product/ProductMask/ProductMask";
+
+const t = new Vector3();
+const lightTarget = new Object3D();
+const lTarget = new Mesh();
+lTarget.position.set(0, 0, -10);
+lightTarget.position.set(0, 0, -10);
+
+export default function CanvasPage() {
+  const { camera } = useThree();
+  const router = useRouter();
+  const setSelectedProduct = useSetAtom(selectedProductAtom);
+  const setProductsSpring = useSetAtom(productsSpringAtom);
+  const setRelatedProductsSpring = useSetAtom(relatedProductsSpringAtom);
+  const setCameraSpring = useSetAtom(cameraSpringAtom);
+
+  const [productsSpring, productsApi] = useSprings(products.length, (i) => ({
+    ...products[i],
+    config: { easing: easings.easeInOutSine },
+  }));
+  const [relatedProductsSpring, relatedProductsApi] = useSprings(
+    products.length,
+    (i) => {
+      const carouselLength = products.length * 1.5;
+      const positionX = 0 - carouselLength / 2 + i * 1.2;
+      return {
+        ...products[i],
+        shelfPosition: [0, 3, -2],
+        position: [
+          positionX,
+          products[i].position[1] - 0.8,
+          -10,
+        ] as Vector3Tuple,
+        config: { easing: easings.easeInOutSine },
+      };
+    }
+  );
+  const [, cameraApi] = useSpring(() => ({
+    from: {
+      position: [-0.011403, -5.26023, 0.9] as Vector3Tuple,
+      target: [-0.011403, 0, 0.8] as Vector3Tuple,
+    },
+    config: { easing: easings.easeInOutSine },
+    onChange: ({ value }: { value: CameraSpringRef }) => {
+      camera.position.set(...value.position);
+      camera.lookAt(t.set(...value.target));
+    },
+  }));
+
+  useEffect(() => {
+    // Needed to set the initial camera position for no jank on initial camera animation
+    camera.position.set(...[-0.011403, -5.26023, 0.9]);
+    camera.lookAt(t.set(...[-0.011403, 0, 0.8]));
+    setCameraSpring(() => cameraApi);
+  }, [setCameraSpring, camera, cameraApi]);
+
+  useEffect(() => {
+    setProductsSpring(() => productsApi);
+    setRelatedProductsSpring(() => relatedProductsApi);
+  }, [productsApi, setProductsSpring]);
+
+  // useControls("Camera", {
+  //   position: {
+  //     value: [-0.011403, -5.26023, 0.8],
+  //     onChange: (value: [number, number, number]) => {
+  //       camera.position.set(...value);
+  //     },
+  //   },
+  // });
+
+  const onProductClick = (product: ProductSpring) => {
+    setSelectedProduct(product);
+    router.push(`/${product.i.get()}`);
+  };
+
+  const onRelatedProductClick = (product: ProductSpring) => {
+    setSelectedProduct(product);
+  };
+
+  return (
+    <>
+      <directionalLight
+        color={new Color("#FFFFFF")}
+        position={[-5.36612, -8.0653, 2.40629]}
+        intensity={1.4}
+        shadow-mapSize={[2048, 2048]}
+        shadow-camera-near={0.1}
+        shadow-camera-far={100}
+        castShadow
+      />
+      <hemisphereLight color={new Color("#FFFFFF")} intensity={1.4} />
+      <ProductMask position={[0, -1.8, -9.01]} />
+      {productsSpring.map((product, index) => (
+        <Product
+          key={index}
+          product={product}
+          onClick={onProductClick}
+          castShadow
+        />
+      ))}
+
+      {relatedProductsSpring.map((product, index) => (
+        <Product
+          key={index}
+          product={product}
+          onClick={onRelatedProductClick}
+          castShadow
+        />
+      ))}
+      <mesh rotation={new Euler(Math.PI / 2, 0, 0)} receiveShadow>
+        <meshStandardMaterial color="#FFD468" />
+        <planeGeometry args={[25, 20]} />
+      </mesh>
+      <directionalLight
+        color={new Color("#FFFFFF")}
+        position={[-3.36612, -4.0653, -7.40629]}
+        intensity={1.4}
+        target={lTarget}
+        shadow-mapSize={[2048, 2048]}
+        shadow-near={0.1}
+        shadow-far={2}
+        castShadow
+      />
+      <primitive object={lTarget} />
+      <group position={[0, 0, -10]} receiveShadow>
+        <Floor />
+      </group>
+    </>
+  );
+}

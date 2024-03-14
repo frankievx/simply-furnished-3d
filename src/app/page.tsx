@@ -1,10 +1,25 @@
+"use client";
+import { cameraSpringAtom } from "@/state/camera";
+import { useAtom, useAtomValue } from "jotai";
 import Image from "next/image";
+import { useEffect } from "react";
+import { animateProductsToWall } from "./animations";
+import { productsAtom, productsSpringAtom } from "@/state/products";
 
 export default function Home() {
+  const cameraSpring = useAtomValue(cameraSpringAtom);
+  const productsSpring = useAtomValue(productsSpringAtom);
+  useEffect(() => {
+    cameraSpring?.start({
+      position: [-0.011403, -5.26023, 0.9],
+      target: [-0.011403, 0, 0.8],
+    });
+    animateProductsToWall({ productsSpring, cameraSpring });
+  }, [cameraSpring]);
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
+    <main className="absolute pointer-events-none w-3/4 px-4 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-transparent">
       <div
-        className="absolute pointer-events-none py-auto px-4 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-transparent"
+        className="flex min-h-screen flex-col items-center justify-center"
         // style={{ ...style }}
       >
         <div className="flex flex-col gap-16 items-center justify-center h-full">

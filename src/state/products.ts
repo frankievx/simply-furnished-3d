@@ -1,5 +1,7 @@
-import { Vector3Tuple } from "three";
-import { SpringConfig } from "@react-spring/web";
+import { Vector3, Vector3Tuple } from "three";
+import { SpringConfig, SpringRef, SpringValues } from "@react-spring/three";
+import { atom } from "jotai";
+import { Vector } from "three/examples/jsm/Addons.js";
 
 export const products = [
   {
@@ -66,14 +68,29 @@ export const products = [
       order: i,
       show: true,
       shelf: true,
-      shelfPosition: [0, 0, 0] as Vector3Tuple,
+      shelfPosition: [0, 0, 0],
       slider: false,
       ring: false,
       sliderPoints: 0,
       sliderOpacity: 0,
       position: item.position as Vector3Tuple,
       rotation: item.rotation as Vector3Tuple,
+      api: undefined,
     } as ProductType)
+);
+export const productsAtom = atom(products);
+export const productsSpringAtom = atom<ProductSpringRef | undefined>(undefined);
+
+export const selectedProductAtom = atom<ProductSpring | undefined>(undefined);
+
+export const relatedProductsAtom = atom(
+  products.map((x) => ({
+    ...x,
+    position: [x.position[0], -0.24315, -10] as Vector3Tuple,
+  }))
+);
+export const relatedProductsSpringAtom = atom<ProductSpringRef | undefined>(
+  undefined
 );
 
 export type ProductsType = typeof products;
@@ -95,3 +112,6 @@ export type ProductType = {
   delay?: number;
   config?: SpringConfig;
 };
+
+export type ProductSpring = SpringValues<ProductType>;
+export type ProductSpringRef = SpringRef<Omit<ProductType, "config">>;

@@ -12,13 +12,16 @@ import { Vector3, Vector3Tuple } from "three";
 // import { RotationSlider } from "./RotationSlider/RotationSlider";
 import { ProductRing } from "./ProductRing/ProductRing";
 // import { ProductSpring, springAtom } from "@/state/spring";
-import { useSetAtom } from "jotai";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { Shelf } from "../models/Shelf";
 import { Billboard, useCursor } from "@react-three/drei";
 import { memo, useEffect, useMemo, useState } from "react";
 import { Chair } from "../models/Chair";
-import { config } from "@react-spring/web";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
+import { ProductSpring, selectedProductAtom } from "@/state/products";
+import { RotationSlider } from "./RotationSlider/RotationSlider";
+import { ProductTitle } from "./ProductTitle/ProductTitle";
+import { showAtom } from "@/state/show";
 // import { cursorAtom } from "@/state/cursor";
 
 // type FurnitureProductProps = {
@@ -36,54 +39,59 @@ import { useRouter } from "next/navigation";
 
 // const MemoProductRing = memo(ProductRing);
 
-export default function Product(
-  props: JSX.IntrinsicElements["group"]
-  // props: { position: Vector3; rotation: Vector3 } //   {
-  //   obj,
-  //   index,
-  //   springItem,
-  //   onClick,
-  // }
-  // FurnitureProductProps
-) {
-  // const item = springItem;
-  // const setCursor = useSetAtom(cursorAtom);
+const AnimatedShelf = animated(Shelf);
+
+export default function Product({
+  product,
+  onClick,
+  ...props
+}: { product: ProductSpring } & JSX.IntrinsicElements["group"]) {
   const router = useRouter();
+  const { productId } = useParams();
+  const show = useAtomValue(showAtom);
+  const [selectedProduct, setSelectedProduct] = useAtom(selectedProductAtom);
   const [hovered, setHovered] = useState(false);
   useCursor(hovered, "pointer");
-  // const RingComponent = useMemo(
-  //   () => <ProductRing show={hovered} />,
-  //   [hovered]
-  // );
 
-  const onClick = () => {
-    router.push("/1");
-  };
+  // const onClick = (product: ProductSpring) => {
+  //   setSelectedProduct(product);
+  //   router.push(`/${product.i.get()}`);
+  // };
 
   return (
     <>
       <animated.group
-        {...props}
-        onClick={() => onClick()}
+        position={product.position}
+        onClick={() => onClick(product)}
         onPointerOver={() => {
           setHovered(true);
         }}
         onPointerOut={() => {
           setHovered(false);
         }}
+        {...props}
         // visible={item.show}
       >
-        <mesh position={[0.3, -0.1, 0.75]} rotation={[1.57, 0, 0]}>
+        <animated.mesh
+          visible={product.ring}
+          position={[0.3, -0.1, 0.75]}
+          rotation={[1.57, 0, 0]}
+        >
           <circleGeometry args={[0.03, 32]} />
           <meshBasicMaterial color="white" />
-        </mesh>
-        <ProductRing show={hovered} />
-        {/* <animated.group position={springItem.position}>
-          <ProductTitle />
+        </animated.mesh>
+
+        <animated.group visible={product.ring}>
+          <ProductRing show={!selectedProduct && hovered} />
         </animated.group>
-        <animated.group position={springItem.position}>
-          <RotationSlider item={item} />
-        </animated.group> */}
+        {/* <animated.group position={springItem.position}> */}
+        <ProductTitle />
+        {/* </animated.group> */}
+
+        <animated.group visible={product.slider}>
+          <RotationSlider item={product} />
+        </animated.group>
+
         <animated.group
           // position={props.position}
           // rotation={props.rotation as unknown as Vector3Tuple}
@@ -91,7 +99,7 @@ export default function Product(
           castShadow
         >
           <Chair />
-          <Shelf />
+          <AnimatedShelf position={product.shelfPosition} />
         </animated.group>
       </animated.group>
     </>

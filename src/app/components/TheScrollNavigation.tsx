@@ -1,0 +1,45 @@
+"use client";
+import { useSpring, animated } from "@react-spring/web";
+import { useParams, usePathname, useRouter } from "next/navigation";
+
+export const TheScrollNavigation = () => {
+  const { productId } = useParams();
+  const pathname = usePathname();
+  const router = useRouter();
+  const [style, api] = useSpring(() => ({
+    from: {
+      top: "0%",
+    },
+  }));
+
+  return (
+    <div className="absolute z-10 h-screen right-0">
+      <div className="flex h-full flex-col items-center justify-center mr-8">
+        <div className="relative w-3 flex flex-col items-center justify-center">
+          <animated.div
+            style={style}
+            className="border border-solid border-white rounded-full h-4 w-4 flex items-center justify-center absolute"
+          ></animated.div>
+          <button
+            className="h-2 w-2 bg-white rounded-full mx-auto mt-1 hover:h-3 hover:w-3 transition-all duration-300 ease-in-out"
+            onClick={() => {
+              api.start({ top: "0%" });
+            }}
+          ></button>
+          <div className="h-24 w-0.5 rounded-lg bg-white my-4 "></div>
+          <button
+            className="h-2 w-2 bg-white rounded-full -mb-3 hover:h-3 hover:w-3 transition-all duration-300 ease-in-out"
+            onClick={() => {
+              api.start({ top: "100%" });
+              // router.push("/related");
+              if (productId) router.push(`${productId}/related`);
+              else router.push("related");
+            }}
+          ></button>
+          {/* <div className="border border-solid border-white rounded-full h-3 w-3 flex items-center justify-center">
+          </div> */}
+        </div>
+      </div>
+    </div>
+  );
+};
