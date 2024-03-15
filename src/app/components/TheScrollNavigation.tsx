@@ -6,11 +6,15 @@ export const TheScrollNavigation = () => {
   const { productId } = useParams();
   const pathname = usePathname();
   const router = useRouter();
-  const [style, api] = useSpring(() => ({
-    from: {
-      top: "0%",
-    },
-  }));
+  const [style, api] = useSpring(
+    () => ({
+      to: {
+        top: pathname.includes("related") ? "100%" : "0%",
+      },
+      delay: 500,
+    }),
+    [pathname]
+  );
 
   return (
     <div className="absolute z-10 h-screen right-0">
@@ -23,17 +27,17 @@ export const TheScrollNavigation = () => {
           <button
             className="h-2 w-2 bg-white rounded-full mx-auto mt-1 hover:h-3 hover:w-3 transition-all duration-300 ease-in-out"
             onClick={() => {
-              api.start({ top: "0%" });
+              // api.start({ top: "0%", delay: 500 });
+              router.push(`/${productId}`);
             }}
           ></button>
           <div className="h-24 w-0.5 rounded-lg bg-white my-4 "></div>
           <button
             className="h-2 w-2 bg-white rounded-full -mb-3 hover:h-3 hover:w-3 transition-all duration-300 ease-in-out"
             onClick={() => {
-              api.start({ top: "100%" });
+              // api.start({ top: "100%", delay: 500 });
               // router.push("/related");
               if (productId) router.push(`${productId}/related`);
-              else router.push("related");
             }}
           ></button>
           {/* <div className="border border-solid border-white rounded-full h-3 w-3 flex items-center justify-center">

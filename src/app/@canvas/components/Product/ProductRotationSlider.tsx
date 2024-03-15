@@ -2,7 +2,7 @@ import { useAtomValue, useSetAtom } from "jotai";
 // import { DisplayItemSpring, springAtom } from "@/state/spring";
 import { useSpring } from "@react-spring/three";
 import { useDrag } from "@use-gesture/react";
-import { MathUtils, Vector3Tuple } from "three";
+import { Euler, MathUtils, Vector3Tuple } from "three";
 import { times } from "lodash";
 import { animated } from "@react-spring/web";
 import { animated as animated3 } from "@react-spring/three";
@@ -26,7 +26,7 @@ export function RotationSlider({ item }: { item: ProductSpring }) {
   // const setCursor = useSetAtom(cursorAtom);
   // const spring = useAtomValue(springAtom);
   const [circleSpring, circleApi] = useSpring(() => ({
-    rotation: [-0.3, 0, 0],
+    rotation: [-0.3, 0.01, 0],
   }));
 
   const bind = useDrag(
@@ -36,7 +36,7 @@ export function RotationSlider({ item }: { item: ProductSpring }) {
         MathUtils.clamp(mx / 1000, -0.5, 0.5)
       );
       circleApi.start({
-        rotation: [-0.3, 0, MathUtils.clamp(mx / 1000, -0.5, 0.5)],
+        rotation: [-0.3, 0, 0.2],
         immediate: down,
       });
       // spring.wallItems?.current[item.i.get()].start({
@@ -51,6 +51,10 @@ export function RotationSlider({ item }: { item: ProductSpring }) {
     <animated3.group
       position={[0, -0.3, 0.3]}
       rotation={circleSpring.rotation as unknown as Vector3Tuple}
+      // rotation={circleSpring.rotation.to((x, y, z) => {
+      //   console.log("val", x, y, z);
+      //   return [x, y, z];
+      // })}
     >
       <Html position={[0, 0, -0.17]}>
         <animated.button

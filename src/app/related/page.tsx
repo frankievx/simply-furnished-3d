@@ -1,6 +1,12 @@
 "use client";
-import { productsAtom, productsSpringAtom } from "@/state/products";
-import { useAtom, useSetAtom } from "jotai";
+import {
+  products,
+  productsAtom,
+  productsSpringAtom,
+  relatedProductsAtom,
+  relatedProductsSpringAtom,
+} from "@/state/products";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { useParams } from "next/navigation";
 import { useEffect } from "react";
 import { Vector3 } from "three";
@@ -11,16 +17,27 @@ import { Vector3 } from "three";
 import { cameraSpringAtom } from "@/state/camera";
 import { animateCameraToRelatedProducts } from "./animations";
 import { showAtom } from "@/state/show";
+import { animateRelatedProducts } from "./animations";
 
 export default function RelatedProductsPage() {
   const { productId } = useParams<{ productId: string }>();
   const [productsSpring] = useAtom(productsSpringAtom);
+  const relatedProductsApi = useAtomValue(relatedProductsSpringAtom);
   const [cameraSpring] = useAtom(cameraSpringAtom);
   const setShow = useSetAtom(showAtom);
 
   useEffect(() => {
     setShow((show) => ({ ...show, itemTitles: true }));
-    if (cameraSpring) animateCameraToRelatedProducts({ cameraSpring });
+    // const productValues = mapValues(product, (val) => val?.get()) as ProductType;
+
+    if (relatedProductsApi)
+      animateRelatedProducts({
+        relatedProductsApi,
+        product: relatedProductsApi.current[Number(productId)].get(),
+        // duration: 0,
+      });
+    if (cameraSpring)
+      animateCameraToRelatedProducts({ cameraSpring, delay: 500 });
   }, [productId, productsSpring, cameraSpring]);
 
   return (

@@ -4,7 +4,7 @@ import { useTransition } from "@react-spring/web";
 import { animated as animated3 } from "@react-spring/three";
 import { Billboard, Text, useMask } from "@react-three/drei";
 import { useAtomValue } from "jotai";
-export function ProductTitle({}) {
+export function ProductTitle({ title }: { title: string }) {
   const stencil = useMask(1, true);
   const stencil2 = useMask(1, false);
   const show = useAtomValue(showAtom);
@@ -25,7 +25,7 @@ export function ProductTitle({}) {
             fontSize={0.15}
             font={"/fonts/casanova.ttf"}
           >
-            Axis Lounge
+            {title}
             <animated3.meshBasicMaterial {...stencil} opacity={style.opacity} />
           </Text>
           <Text
@@ -36,7 +36,7 @@ export function ProductTitle({}) {
             fontSize={0.18}
             font={"/fonts/casanova.ttf"}
           >
-            Axis Lounge
+            {title}
             <animated3.meshBasicMaterial
               {...stencil2}
               opacity={style.opacity}

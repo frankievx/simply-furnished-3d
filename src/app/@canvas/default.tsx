@@ -6,6 +6,7 @@ import Product from "./components/Product/Product";
 import {
   ProductSpring,
   ProductSpringRef,
+  ProductType,
   products,
   productsSpringAtom,
   relatedProductsSpringAtom,
@@ -16,14 +17,19 @@ import { useSetAtom } from "jotai";
 import { CameraSpringRef, cameraSpringAtom } from "@/state/camera";
 import { Floor } from "./components/models/Floor";
 import { useParams, useRouter } from "next/navigation";
-import { ProductMask } from "./components/Product/ProductMask/ProductMask";
-import { calculateRelatedProductPositions } from "./utils";
+import { ProductMask } from "./components/Product/ProductMask";
+import { getRelatedProducts } from "./utils";
+import mapValues from "lodash/mapValues";
 
 const t = new Vector3();
 const lightTarget = new Object3D();
 const lTarget = new Mesh();
 lTarget.position.set(0, 0, -10);
 lightTarget.position.set(0, 0, -10);
+
+const relatedProducts = getRelatedProducts({
+  selected: products[3],
+});
 
 export default function CanvasPage() {
   const { camera } = useThree();
@@ -38,23 +44,13 @@ export default function CanvasPage() {
     ...products[i],
     config: { easing: easings.easeInOutSine },
   }));
-  const [relatedProductsSpring, relatedProductsApi] = useSprings(
-    products.length,
-    (i) => {
-      const carouselLength = products.length * 1.5;
-      const positionX = 0 - carouselLength / 2 + i * 1.2;
 
-      const newPositions = calculateRelatedProductPositions({
-        selected: products[Number(productId) || 0],
-      });
+  const [relatedProductsSpring, relatedProductsApi] = useSprings(
+    relatedProducts.length,
+    (i) => {
       return {
-        ...products[i],
+        ...relatedProducts[i],
         shelfPosition: [0, 3, -2] as Vector3Tuple,
-        position: [
-          positionX,
-          products[i].position[1] - 0.8,
-          -10,
-        ] as Vector3Tuple,
         config: { easing: easings.easeInOutSine },
       };
     }
@@ -103,6 +99,11 @@ export default function CanvasPage() {
 
   const onRelatedProductClick = (product: ProductSpring) => {
     setSelectedProduct(product);
+    router.push(`/${product.i.get()}/related`);
+    // const baseProduct = mapValues(product, (val) => val?.get()) as ProductType;
+    // const newRelatedProducts = getRelatedProducts({ selected: baseProduct });
+    // console.log("newRelatedProducts", newRelatedProducts);
+    // relatedProductsApi.start((i) => newRelatedProducts[i]);
   };
 
   return (

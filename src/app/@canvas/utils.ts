@@ -6,11 +6,7 @@ export function getMidpointIndex(products: ProductsType) {
   return Math.round(products.length / 2);
 }
 
-export const calculateRelatedProductPositions = ({
-  selected,
-}: {
-  selected: ProductType;
-}) => {
+export const getRelatedProducts = ({ selected }: { selected: ProductType }) => {
   let floorItems: ProductsType = [];
   const listMidpointIndex = getMidpointIndex(products);
 
@@ -34,20 +30,19 @@ export const calculateRelatedProductPositions = ({
     floorItems = [...products.map((item) => item)];
   }
 
-  const arr = products.map((displayItem, i) => {
+  return products.map((product, i) => {
     const orderIndex = floorItems.findIndex(
-      (floorItem) => displayItem.i === floorItem.i
+      (floorItem) => product.i === floorItem.i
     );
     const startPositionX = 0 - listMidpointIndex * 1.5;
     const positionX = startPositionX + orderIndex * 1.5;
 
     return {
-      ...displayItem,
+      ...product,
       order: orderIndex,
       shelf: false,
-      position: [positionX, -12, displayItem.position[2]] as Vector3Tuple,
+      position: [positionX, product.position[1] - 0.8, -10] as Vector3Tuple,
+      shelfPosition: [0, 3, -2] as Vector3Tuple,
     };
   });
-
-  return arr;
 };

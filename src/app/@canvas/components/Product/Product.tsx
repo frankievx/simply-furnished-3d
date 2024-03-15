@@ -1,27 +1,19 @@
 "use client";
-// import { shelfColor } from "@/state/constants";
-import {
-  animated,
-  useSpring,
-  useTransition,
-  useSpringValue,
-} from "@react-spring/three";
+import { animated } from "@react-spring/three";
 
-import { Vector3, Vector3Tuple } from "three";
-// import { ProductTitle } from "./ProductTitle/ProductTitle";
-// import { RotationSlider } from "./RotationSlider/RotationSlider";
-import { ProductRing } from "./ProductRing/ProductRing";
-// import { ProductSpring, springAtom } from "@/state/spring";
+import { ProductRing } from "./ProductRing";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { Shelf } from "../models/Shelf";
-import { Billboard, useCursor } from "@react-three/drei";
-import { memo, useEffect, useMemo, useState } from "react";
+import { useCursor } from "@react-three/drei";
+import { useState } from "react";
 import { Chair } from "../models/Chair";
 import { useParams, useRouter } from "next/navigation";
 import { ProductSpring, selectedProductAtom } from "@/state/products";
-import { RotationSlider } from "./RotationSlider/RotationSlider";
-import { ProductTitle } from "./ProductTitle/ProductTitle";
+import { RotationSlider } from "./ProductRotationSlider";
+import { ProductTitle } from "./ProductTitle";
 import { showAtom } from "@/state/show";
+import { ProductLandmark } from "./ProductLandmark";
+import { Vector3Tuple } from "three";
 // import { cursorAtom } from "@/state/cursor";
 
 // type FurnitureProductProps = {
@@ -65,7 +57,11 @@ export default function Product({
     <>
       <animated.group
         position={product.position}
-        onClick={() => onClick(product)}
+        rotation={product.rotation as unknown as Vector3Tuple}
+        onClick={(e) => {
+          e.stopPropagation();
+          onClick(product);
+        }}
         onPointerOver={() => {
           setHovered(true);
         }}
@@ -73,23 +69,21 @@ export default function Product({
           setHovered(false);
         }}
         {...props}
-        // visible={item.show}
       >
-        <animated.mesh
+        <animated.group
           visible={product.ring}
           position={[0.3, -0.1, 0.75]}
           rotation={[1.57, 0, 0]}
         >
-          <circleGeometry args={[0.03, 32]} />
-          <meshBasicMaterial color="white" />
-        </animated.mesh>
+          <ProductLandmark />
+        </animated.group>
 
         <animated.group visible={product.ring}>
           <ProductRing show={!selectedProduct && hovered} />
         </animated.group>
-        {/* <animated.group position={springItem.position}> */}
-        <ProductTitle />
-        {/* </animated.group> */}
+        <animated.group visible={show.itemTitles}>
+          <ProductTitle title={product.title.get()} />
+        </animated.group>
 
         <animated.group visible={product.slider}>
           <RotationSlider item={product} />
