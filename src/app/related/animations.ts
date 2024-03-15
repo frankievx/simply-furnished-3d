@@ -34,7 +34,7 @@ export const animateRelatedProducts = ({
     if (product.i === relatedProduct.i) {
       return {
         ...relatedProduct,
-        rotation: [0, -0.5, 0] as Vector3Tuple,
+        rotation: [0, 0, 0.2] as Vector3Tuple,
         config: { duration, easing: easings.easeOutQuad },
       };
     } else if ([0, products.length - 1].includes(relatedProduct.order))
@@ -45,7 +45,6 @@ export const animateRelatedProducts = ({
       config: { duration, easing: easings.easeOutQuad },
     };
   });
-  console.log("starting");
   relatedProductsApi.start((i) => {
     return {
       ...newRelatedProducts[i],

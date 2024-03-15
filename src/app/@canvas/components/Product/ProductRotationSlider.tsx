@@ -36,7 +36,7 @@ export function RotationSlider({ item }: { item: ProductSpring }) {
         MathUtils.clamp(mx / 1000, -0.5, 0.5)
       );
       circleApi.start({
-        rotation: [-0.3, 0, 0.2],
+        rotation: [-0.3, 0, 0],
         immediate: down,
       });
       // spring.wallItems?.current[item.i.get()].start({
