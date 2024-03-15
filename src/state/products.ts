@@ -68,7 +68,7 @@ export const products = [
       order: i,
       show: true,
       shelf: true,
-      shelfPosition: [0, 0, 0],
+      shelfPosition: [0, 0, 0] as Vector3Tuple,
       slider: false,
       ring: false,
       sliderPoints: 0,

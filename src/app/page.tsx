@@ -14,7 +14,7 @@ export default function Home() {
       position: [-0.011403, -5.26023, 0.9],
       target: [-0.011403, 0, 0.8],
     });
-    animateProductsToWall({ productsSpring, cameraSpring });
+    if (productsSpring) animateProductsToWall({ productsSpring });
   }, [cameraSpring]);
   return (
     <main className="absolute pointer-events-none w-3/4 px-4 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-transparent">

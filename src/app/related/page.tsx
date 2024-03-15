@@ -20,7 +20,7 @@ export default function RelatedProductsPage() {
 
   useEffect(() => {
     setShow((show) => ({ ...show, itemTitles: true }));
-    animateCameraToRelatedProducts({ cameraSpring });
+    if (cameraSpring) animateCameraToRelatedProducts({ cameraSpring });
   }, [productId, productsSpring, cameraSpring]);
 
   return (

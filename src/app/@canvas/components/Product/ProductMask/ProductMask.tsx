@@ -17,6 +17,7 @@ import {
   BufferGeometry,
   LineBasicMaterial,
   Vector2,
+  Euler,
 } from "three";
 // import { cartAtom } from "@/state/cart";
 // import { DisplayItemSpring } from "@/state/spring";
@@ -25,8 +26,8 @@ import { PlusIcon } from "@/app/components/svgs/PlusIcon";
 import { useLayoutEffect, useRef } from "react";
 import { GroupProps } from "@react-three/fiber";
 
-const width = 1;
-const height = 2;
+const width = 0.8;
+const height = 1.4;
 
 const AnimatedLine = animated(Line);
 
@@ -77,7 +78,7 @@ const getShapeGeometryPoints = (shape: Shape) => {
   return new BufferGeometry().setFromPoints(shape.getPoints());
 };
 
-const roundedRectShape = createRoundedRectShape(-0.4, -1, 0.8, 1.4, 0.05);
+const roundedRectShape = createRoundedRectShape(-0.4, -0.98, 0.8, 1.4, 0.05);
 
 const lineGeometry = createLineShape(roundedRectShape, -1, 1, 0, 0, 0, 0, 1);
 
@@ -123,7 +124,7 @@ export function ProductMask(props: BillboardProps & GroupProps) {
                 <animated.button
                   onClick={clickHandler}
                   style={{ opacity: style.opacity }}
-                  className="absolute bottom-12 left-1/2 -translate-x-1/2 bg-white rounded-full font-light px-4 py-2 whitespace-nowrap shadow-lg flex items-center gap-6 w-48 hover:bg-gray-100 active:shadow-none active:bg-white"
+                  className="absolute sm:bottom-12 bottom-8 left-1/2 -translate-x-1/2 bg-white rounded-full font-light px-4 py-2 whitespace-nowrap shadow-lg flex items-center gap-6 w-48 hover:bg-gray-100 active:shadow-none active:bg-white text-black"
                 >
                   <PlusIcon className="w-5 h-5" />
                   <p>Add To Cart</p>

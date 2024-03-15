@@ -17,7 +17,7 @@ export function ProductTitle({}) {
   return transition(
     (style, show) =>
       show && (
-        <Billboard position={[0, 1.3, -0.2]}>
+        <Billboard position={[0, 0, 1.3]}>
           <Text
             color="black"
             anchorX="center"
@@ -29,11 +29,11 @@ export function ProductTitle({}) {
             <animated3.meshBasicMaterial {...stencil} opacity={style.opacity} />
           </Text>
           <Text
-            position={[0, -0.02, 0]}
+            position={[0, 0, 0.2]}
             color="black"
             anchorX="center"
             anchorY="top"
-            fontSize={0.2}
+            fontSize={0.18}
             font={"/fonts/casanova.ttf"}
           >
             Axis Lounge

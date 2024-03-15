@@ -1,11 +1,9 @@
-import { products } from "@/state/products";
+import { ProductSpringRef, products } from "@/state/products";
 
 export const animateProductsToWall = async ({
   productsSpring,
-  cameraSpring,
 }: {
   productsSpring: ProductSpringRef;
-  cameraSpring: CameraSpringType;
 }) => {
   // const product = productsSpring?.current[Number(productId)].get();
   // cameraSpring?.start({

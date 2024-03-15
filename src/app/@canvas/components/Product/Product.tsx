@@ -45,7 +45,10 @@ export default function Product({
   product,
   onClick,
   ...props
-}: { product: ProductSpring } & JSX.IntrinsicElements["group"]) {
+}: Omit<JSX.IntrinsicElements["group"], "onClick"> & {
+  product: ProductSpring;
+  onClick: (product: ProductSpring) => void;
+}) {
   const router = useRouter();
   const { productId } = useParams();
   const show = useAtomValue(showAtom);

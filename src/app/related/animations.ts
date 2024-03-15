@@ -1,13 +1,8 @@
 import { CameraSpringRef } from "@/state/camera";
-import { ProductSpringRef } from "@/state/products";
 
 export const animateCameraToRelatedProducts = async ({
-  productId,
-  productsSpring,
   cameraSpring,
 }: {
-  productId: string;
-  productsSpring: ProductSpringRef;
   cameraSpring: CameraSpringRef;
 }) => {
   return cameraSpring?.start({

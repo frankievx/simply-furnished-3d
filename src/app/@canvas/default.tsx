@@ -4,6 +4,8 @@ import { useEffect } from "react";
 import { Color, Euler, Mesh, Object3D, Vector3, Vector3Tuple } from "three";
 import Product from "./components/Product/Product";
 import {
+  ProductSpring,
+  ProductSpringRef,
   products,
   productsSpringAtom,
   relatedProductsSpringAtom,
@@ -13,8 +15,9 @@ import { easings, useSpring, useSprings } from "@react-spring/web";
 import { useSetAtom } from "jotai";
 import { CameraSpringRef, cameraSpringAtom } from "@/state/camera";
 import { Floor } from "./components/models/Floor";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { ProductMask } from "./components/Product/ProductMask/ProductMask";
+import { calculateRelatedProductPositions } from "./utils";
 
 const t = new Vector3();
 const lightTarget = new Object3D();
@@ -25,6 +28,7 @@ lightTarget.position.set(0, 0, -10);
 export default function CanvasPage() {
   const { camera } = useThree();
   const router = useRouter();
+  const { productId } = useParams();
   const setSelectedProduct = useSetAtom(selectedProductAtom);
   const setProductsSpring = useSetAtom(productsSpringAtom);
   const setRelatedProductsSpring = useSetAtom(relatedProductsSpringAtom);
@@ -39,9 +43,13 @@ export default function CanvasPage() {
     (i) => {
       const carouselLength = products.length * 1.5;
       const positionX = 0 - carouselLength / 2 + i * 1.2;
+
+      const newPositions = calculateRelatedProductPositions({
+        selected: products[Number(productId) || 0],
+      });
       return {
         ...products[i],
-        shelfPosition: [0, 3, -2],
+        shelfPosition: [0, 3, -2] as Vector3Tuple,
         position: [
           positionX,
           products[i].position[1] - 0.8,
@@ -57,7 +65,11 @@ export default function CanvasPage() {
       target: [-0.011403, 0, 0.8] as Vector3Tuple,
     },
     config: { easing: easings.easeInOutSine },
-    onChange: ({ value }: { value: CameraSpringRef }) => {
+    onChange: ({
+      value,
+    }: {
+      value: { position: Vector3Tuple; target: Vector3Tuple };
+    }) => {
       camera.position.set(...value.position);
       camera.lookAt(t.set(...value.target));
     },
@@ -105,7 +117,7 @@ export default function CanvasPage() {
         castShadow
       />
       <hemisphereLight color={new Color("#FFFFFF")} intensity={1.4} />
-      <ProductMask position={[0, -1.8, -9.01]} />
+      <ProductMask position={[0, -1.85, -9.01]} />
       {productsSpring.map((product, index) => (
         <Product
           key={index}
@@ -138,7 +150,7 @@ export default function CanvasPage() {
         castShadow
       />
       <primitive object={lTarget} />
-      <group position={[0, 0, -10]} receiveShadow>
+      <group position={[0, 0, -9.985]} receiveShadow>
         <Floor />
       </group>
     </>

@@ -1,10 +1,6 @@
-import { ProductSpringRef, productsSpringAtom } from "@/state/products";
-import { products } from "../products";
-import { getCarouselPositionX } from "./utils";
-import { detailItemPosition } from "@/state/constants";
+import { ProductSpringRef } from "@/state/products";
 import { Vector3Tuple } from "three";
-import { CameraSpringRef, cameraSpringAtom } from "@/state/camera";
-import { easings } from "@react-spring/web";
+import { CameraSpringRef } from "@/state/camera";
 
 export const detailCameraPosition: Vector3Tuple = [-0.011403, -1.6, 0.8];
 export const detailCameraTarget: Vector3Tuple = [0, 0, 0.2];
