@@ -22,18 +22,18 @@ export const TheScrollNavigation = () => {
         <div className="relative w-3 flex flex-col items-center justify-center">
           <animated.div
             style={style}
-            className="border border-solid border-white rounded-full h-4 w-4 flex items-center justify-center absolute"
+            className="border border-solid border-white rounded-full h-5 w-5 flex items-center justify-center absolute"
           ></animated.div>
           <button
-            className="h-2 w-2 bg-white rounded-full mx-auto mt-1 hover:h-3 hover:w-3 transition-all duration-300 ease-in-out"
+            className="h-3 w-3 bg-white rounded-full mx-auto mt-1 hover:h-3 hover:w-3 transition-all duration-300 ease-in-out"
             onClick={() => {
               // api.start({ top: "0%", delay: 500 });
               router.push(`/${productId}`);
             }}
           ></button>
-          <div className="h-24 w-0.5 rounded-lg bg-white my-4 "></div>
+          <div className="h-32 w-0.5 rounded-lg bg-white my-4 "></div>
           <button
-            className="h-2 w-2 bg-white rounded-full -mb-3 hover:h-3 hover:w-3 transition-all duration-300 ease-in-out"
+            className="h-3 w-3 bg-white rounded-full -mb-4 hover:h-3 hover:w-3 transition-all duration-300 ease-in-out"
             onClick={() => {
               // api.start({ top: "100%", delay: 500 });
               // router.push("/related");

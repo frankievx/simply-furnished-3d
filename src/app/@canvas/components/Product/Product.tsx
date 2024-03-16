@@ -9,7 +9,7 @@ import { useState } from "react";
 import { Chair } from "../models/Chair";
 import { useParams, useRouter } from "next/navigation";
 import { ProductSpring, selectedProductAtom } from "@/state/products";
-import { RotationSlider } from "./ProductRotationSlider";
+import { ProductRotationSlider } from "./ProductRotationSlider";
 import { ProductTitle } from "./ProductTitle";
 import { showAtom } from "@/state/show";
 import { ProductLandmark } from "./ProductLandmark";
@@ -41,17 +41,10 @@ export default function Product({
   product: ProductSpring;
   onClick: (product: ProductSpring) => void;
 }) {
-  const router = useRouter();
-  const { productId } = useParams();
   const show = useAtomValue(showAtom);
   const [selectedProduct, setSelectedProduct] = useAtom(selectedProductAtom);
   const [hovered, setHovered] = useState(false);
   useCursor(hovered, "pointer");
-
-  // const onClick = (product: ProductSpring) => {
-  //   setSelectedProduct(product);
-  //   router.push(`/${product.i.get()}`);
-  // };
 
   return (
     <>
@@ -85,9 +78,9 @@ export default function Product({
           <ProductTitle title={product.title.get()} />
         </animated.group>
 
-        <animated.group visible={product.slider}>
-          <RotationSlider item={product} />
-        </animated.group>
+        {/* <animated.group visible={product.slider}>
+          <ProductRotationSlider item={product} />
+        </animated.group> */}
 
         <animated.group
           // position={props.position}

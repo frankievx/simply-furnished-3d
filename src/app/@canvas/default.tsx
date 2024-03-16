@@ -5,21 +5,20 @@ import { Color, Euler, Mesh, Object3D, Vector3, Vector3Tuple } from "three";
 import Product from "./components/Product/Product";
 import {
   ProductSpring,
-  ProductSpringRef,
-  ProductType,
   products,
   productsSpringAtom,
   relatedProductsSpringAtom,
   selectedProductAtom,
 } from "../../state/products";
 import { easings, useSpring, useSprings } from "@react-spring/web";
+import { animated } from "@react-spring/three";
 import { useSetAtom } from "jotai";
-import { CameraSpringRef, cameraSpringAtom } from "@/state/camera";
+import { cameraSpringAtom } from "@/state/camera";
 import { Floor } from "./components/models/Floor";
 import { useParams, useRouter } from "next/navigation";
 import { ProductMask } from "./components/Product/ProductMask";
 import { getRelatedProducts } from "./utils";
-import mapValues from "lodash/mapValues";
+import { ProductRotationSlider } from "./components/Product/ProductRotationSlider";
 
 const t = new Vector3();
 const lightTarget = new Object3D();
@@ -31,10 +30,10 @@ const relatedProducts = getRelatedProducts({
   selected: products[3],
 });
 
-export default function CanvasPage() {
+export default function Layout({ children }: { children: React.ReactNode }) {
+  console.log("rendering");
   const { camera } = useThree();
   const router = useRouter();
-  const { productId } = useParams();
   const setSelectedProduct = useSetAtom(selectedProductAtom);
   const setProductsSpring = useSetAtom(productsSpringAtom);
   const setRelatedProductsSpring = useSetAtom(relatedProductsSpringAtom);
@@ -81,16 +80,12 @@ export default function CanvasPage() {
   useEffect(() => {
     setProductsSpring(() => productsApi);
     setRelatedProductsSpring(() => relatedProductsApi);
-  }, [productsApi, setProductsSpring]);
-
-  // useControls("Camera", {
-  //   position: {
-  //     value: [-0.011403, -5.26023, 0.8],
-  //     onChange: (value: [number, number, number]) => {
-  //       camera.position.set(...value);
-  //     },
-  //   },
-  // });
+  }, [
+    productsApi,
+    setProductsSpring,
+    relatedProductsApi,
+    setRelatedProductsSpring,
+  ]);
 
   const onProductClick = (product: ProductSpring) => {
     setSelectedProduct(product);
@@ -100,10 +95,6 @@ export default function CanvasPage() {
   const onRelatedProductClick = (product: ProductSpring) => {
     setSelectedProduct(product);
     router.push(`/${product.i.get()}/related`);
-    // const baseProduct = mapValues(product, (val) => val?.get()) as ProductType;
-    // const newRelatedProducts = getRelatedProducts({ selected: baseProduct });
-    // console.log("newRelatedProducts", newRelatedProducts);
-    // relatedProductsApi.start((i) => newRelatedProducts[i]);
   };
 
   return (
@@ -119,6 +110,12 @@ export default function CanvasPage() {
       />
       <hemisphereLight color={new Color("#FFFFFF")} intensity={1.4} />
       <ProductMask position={[0, -1.85, -9.01]} />
+      <animated.group>
+        <ProductRotationSlider />
+      </animated.group>
+
+      {children}
+
       {productsSpring.map((product, index) => (
         <Product
           key={index}
@@ -127,7 +124,6 @@ export default function CanvasPage() {
           castShadow
         />
       ))}
-
       {relatedProductsSpring.map((product, index) => (
         <Product
           key={index}

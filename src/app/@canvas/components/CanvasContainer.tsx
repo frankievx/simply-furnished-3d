@@ -27,12 +27,11 @@ export function CanvasContainer({
 }>) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   return (
-    <div className="flex w-screen h-screen">
+    <div className="fixed w-screen h-screen">
       <Canvas
         ref={canvasRef}
         camera={{
           position: [-0.011403, -5.26023, 0.8],
-          // rotation: new Euler(1.5517880408684726, 0, 0),
         }}
         resize={{ debounce: { scroll: 50, resize: 0 } }}
         shadows
