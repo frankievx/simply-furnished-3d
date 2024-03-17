@@ -19,7 +19,7 @@ export const TheScrollNavigation = () => {
 
   return (
     <div className="absolute z-10 h-screen right-0">
-      <div className="flex h-full flex-col items-center justify-center mr-8">
+      <div className="flex h-full flex-col items-center justify-center mr-6">
         <div className="relative w-3 flex flex-col items-center justify-center">
           <animated.div
             style={style}

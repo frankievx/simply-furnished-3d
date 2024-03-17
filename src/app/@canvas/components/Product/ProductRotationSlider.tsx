@@ -67,7 +67,7 @@ export function ProductRotationSlider() {
       <Html position={[0, -0.5, 0]}>
         {/* <Html position={[0, 15, -5.6]} transform rotation={[-1.57, 0, 0]}> */}
         <animated.button
-          className="rounded-full p-2 bg-white rotate-90 cursor-pointer"
+          className="rounded-full p-2 bg-white rotate-90 cursor-pointer touch-none"
           {...bind()}
           // onMouseOver={() => setCursor("pointer")}
           // onMouseOut={() => setCursor("default")}
