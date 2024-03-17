@@ -84,12 +84,12 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       if (productId) return;
       cameraApi.start({
         position: [
-          MathUtils.clamp(mx / 100, -5, 5) - 0.011403,
+          MathUtils.clamp(-mx / 100, -5, 5) - 0.011403,
           -5.26023,
           MathUtils.clamp(my / 100, -2, 2) + 0.9,
         ],
         target: [
-          MathUtils.clamp(mx / 100, -5, 5) - 0.011403,
+          MathUtils.clamp(-mx / 100, -5, 5) - 0.011403,
           0,
           MathUtils.clamp(my / 100, -2, 2) + 0.8,
         ] as Vector3Tuple,
