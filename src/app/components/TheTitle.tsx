@@ -22,7 +22,7 @@ export function TheTitle({ show }: { show: boolean }) {
             <div>|</div>
             <div>SOFAS</div>
           </div>
-          <h1 className="font-casanova italic text-4xl sm:text-7xl ">
+          <h1 className="font-casanova italic  text-lg sm:text-4xl sm:text-7xl ">
             Simply Furnished
           </h1>
           <div className="text-sm text-center sm:text-lg font-extralight font-sans">

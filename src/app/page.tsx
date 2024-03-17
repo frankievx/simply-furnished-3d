@@ -22,7 +22,7 @@ export default function Home() {
     if (productsSpring) animateProductsToWall({ productsSpring });
   }, [cameraSpring]);
   return (
-    <main className="absolute pointer-events-none w-3/4 px-4 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-transparent">
+    <main className="absolute pointer-events-none  w-full sm:w-3/4 px-4 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-transparent">
       <div className="flex min-h-screen flex-col items-center justify-center">
         <div className="flex flex-col gap-16 items-center justify-center h-full">
           <div className="flex justify-center gap-8 sm:text-3xl tracking-widest">
@@ -30,7 +30,7 @@ export default function Home() {
             <div>|</div>
             <div>SOFAS</div>
           </div>
-          <h1 className="font-casanova italic text-4xl sm:text-7xl ">
+          <h1 className="font-display italic text-6xl sm:text-7xl text-center">
             Simply Furnished
           </h1>
           <div className="text-sm text-center sm:text-lg font-extralight font-sans">

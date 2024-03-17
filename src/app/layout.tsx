@@ -2,8 +2,6 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { CanvasContainer } from "@/app/@canvas/components/CanvasContainer";
-import { Leva } from "leva";
-import { TheScrollNavigation } from "./components/TheScrollNavigation";
 
 const inter = Inter({ subsets: ["latin"] });
 

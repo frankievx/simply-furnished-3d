@@ -2,6 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
+
+@layer base {
+  @font-face {
+    font-family: 'Casanova';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url(/fonts/casanova.ttf) format('truetype');
+  }
+}
+
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;

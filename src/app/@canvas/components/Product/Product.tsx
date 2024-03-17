@@ -52,8 +52,8 @@ export default function Product({
         position={product.position}
         rotation={product.rotation as unknown as Vector3Tuple}
         onClick={(e) => {
-          e.stopPropagation();
           onClick(product);
+          e.stopPropagation();
         }}
         onPointerOver={() => {
           setHovered(true);

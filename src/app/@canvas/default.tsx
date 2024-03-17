@@ -1,7 +1,15 @@
 "use client";
 import { useThree } from "@react-three/fiber";
 import { useEffect } from "react";
-import { Color, Euler, Mesh, Object3D, Vector3, Vector3Tuple } from "three";
+import {
+  Color,
+  Euler,
+  MathUtils,
+  Mesh,
+  Object3D,
+  Vector3,
+  Vector3Tuple,
+} from "three";
 import Product from "./components/Product/Product";
 import {
   ProductSpring,
@@ -19,6 +27,7 @@ import { useParams, useRouter } from "next/navigation";
 import { ProductMask } from "./components/Product/ProductMask";
 import { getRelatedProducts } from "./utils";
 import { ProductRotationSlider } from "./components/Product/ProductRotationSlider";
+import { useDrag } from "@use-gesture/react";
 
 const t = new Vector3();
 const lightTarget = new Object3D();
@@ -31,9 +40,9 @@ const relatedProducts = getRelatedProducts({
 });
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  console.log("rendering");
   const { camera } = useThree();
   const router = useRouter();
+  const { productId } = useParams();
   const setSelectedProduct = useSetAtom(selectedProductAtom);
   const setProductsSpring = useSetAtom(productsSpringAtom);
   const setRelatedProductsSpring = useSetAtom(relatedProductsSpringAtom);
@@ -69,6 +78,26 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       camera.lookAt(t.set(...value.target));
     },
   }));
+
+  const bind = useDrag(
+    ({ down, offset: [mx, my] }) => {
+      if (productId) return;
+      cameraApi.start({
+        position: [
+          MathUtils.clamp(mx / 100, -5, 5) - 0.011403,
+          -5.26023,
+          MathUtils.clamp(my / 100, -2, 2) + 0.9,
+        ],
+        target: [
+          MathUtils.clamp(mx / 100, -5, 5) - 0.011403,
+          0,
+          MathUtils.clamp(my / 100, -2, 2) + 0.8,
+        ] as Vector3Tuple,
+        immediate: down,
+      });
+    },
+    { bounds: { left: -3000, right: 3000 } }
+  );
 
   useEffect(() => {
     // Needed to set the initial camera position for no jank on initial camera animation
@@ -132,7 +161,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           castShadow
         />
       ))}
-      <mesh rotation={new Euler(Math.PI / 2, 0, 0)} receiveShadow>
+      {/* @ts-ignore */}
+      <mesh rotation={new Euler(Math.PI / 2, 0, 0)} receiveShadow {...bind()}>
         <meshStandardMaterial color="#FFD468" />
         <planeGeometry args={[25, 20]} />
       </mesh>
