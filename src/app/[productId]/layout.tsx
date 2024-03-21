@@ -27,7 +27,6 @@ export default function Layout({ children }: { children: ReactNode }) {
     window.addEventListener("wheel", scrollHandler);
 
     return () => {
-      console.log("is this running");
       window.removeEventListener("wheel", scrollHandler);
     };
   }, []);

@@ -58,9 +58,9 @@ export default function Product({
       onPointerOut: () => {
         setHovered(false);
       },
-      // onPointerDown: ({ event }) => {
-      //   onClick(product);
-      // },
+      onPointerDown: ({ event }) => {
+        onClick(product);
+      },
     },
     { drag: { bounds: { left: -500, right: 500 } } }
   );

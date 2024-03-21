@@ -81,7 +81,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   const bind = useDrag(
     ({ down, offset: [mx, my] }) => {
-      if (productId) return;
       cameraApi.start({
         position: [
           MathUtils.clamp(-mx / 100, -5, 5) - 0.011403,
@@ -96,7 +95,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         immediate: down,
       });
     },
-    { bounds: { left: -3000, right: 3000 } }
+    { bounds: { left: -3000, right: 3000 }, enabled: !productId }
   );
 
   useEffect(() => {
