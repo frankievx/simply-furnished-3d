@@ -58,9 +58,9 @@ export default function Product({
       onPointerOut: () => {
         setHovered(false);
       },
-      onPointerDown: ({ event }) => {
-        onClick(product);
-      },
+      // onPointerDown: ({ event }) => {
+      //   onClick(product);
+      // },
     },
     { drag: { bounds: { left: -500, right: 500 } } }
   );
@@ -68,11 +68,12 @@ export default function Product({
 
   return (
     <>
+      {/* @ts-ignore */}
       <animated.group
         position={product.position}
         rotation={product.rotation as unknown as Vector3Tuple}
-        {...bind()}
         {...props}
+        {...bind()}
       >
         <animated.group
           visible={product.ring}

@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { CanvasContainer } from "@/app/@canvas/components/CanvasContainer";
-import Transition from "./transition";
 
 const inter = Inter({ subsets: ["latin"] });
 
