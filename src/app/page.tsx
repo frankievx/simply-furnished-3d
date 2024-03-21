@@ -4,13 +4,14 @@ import { useAtom, useAtomValue } from "jotai";
 import Image from "next/image";
 import { useEffect } from "react";
 import { animateProductsToWall } from "./animations";
-import { productsAtom, productsSpringAtom } from "@/state/products";
-import { sliderSpringAtom } from "@/state/slider";
+import { productsAtom, productsApiAtom } from "@/state/products";
+import { sliderApiAtom } from "@/state/slider";
+import { TheTitle } from "./components/TheTitle";
 
 export default function Home() {
   const cameraSpring = useAtomValue(cameraSpringAtom);
-  const productsSpring = useAtomValue(productsSpringAtom);
-  const sliderApi = useAtomValue(sliderSpringAtom);
+  const productsApi = useAtomValue(productsApiAtom);
+  const sliderApi = useAtomValue(sliderApiAtom);
   useEffect(() => {
     if (sliderApi)
       sliderApi.start({ points: 0, opacity: 0, config: { duration: 300 } });
@@ -19,25 +20,13 @@ export default function Home() {
       target: [-0.011403, 0, 0.8],
       delay: 300,
     });
-    if (productsSpring) animateProductsToWall({ productsSpring });
+    if (productsApi) animateProductsToWall({ productsApi });
   }, [cameraSpring]);
+
   return (
     <main className="absolute pointer-events-none  w-full sm:w-3/4 px-4 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-transparent">
       <div className="flex min-h-screen flex-col items-center justify-center">
-        <div className="flex flex-col gap-16 items-center justify-center h-full">
-          <div className="flex justify-center gap-8 sm:text-3xl tracking-widest">
-            <div>CHAIRS</div>
-            <div>|</div>
-            <div>SOFAS</div>
-          </div>
-          <h1 className="font-display italic text-6xl sm:text-7xl text-center">
-            Simply Furnished
-          </h1>
-          <div className="text-sm text-center sm:text-lg font-extralight font-sans">
-            <div>Inspiring spaces start with the right furniture.</div>
-            <div>Experience the difference with our handcrafted pieces.</div>
-          </div>
-        </div>
+        <TheTitle />
       </div>
     </main>
   );

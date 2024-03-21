@@ -79,7 +79,7 @@ export const products = [
     } as ProductType)
 );
 export const productsAtom = atom(products);
-export const productsSpringAtom = atom<ProductSpringRef | undefined>(undefined);
+export const productsApiAtom = atom<ProductSpringRef | undefined>(undefined);
 
 export const selectedProductAtom = atom<ProductSpring | undefined>(undefined);
 
@@ -89,7 +89,7 @@ export const relatedProductsAtom = atom(
     position: [x.position[0], -0.24315, -10] as Vector3Tuple,
   }))
 );
-export const relatedProductsSpringAtom = atom<ProductSpringRef | undefined>(
+export const relatedProductsApiAtom = atom<ProductSpringRef | undefined>(
   undefined
 );
 

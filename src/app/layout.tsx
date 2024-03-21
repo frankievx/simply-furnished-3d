@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { CanvasContainer } from "@/app/@canvas/components/CanvasContainer";
+import Transition from "./transition";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,7 +21,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={`${inter.className} select-none`}>
         <CanvasContainer>{canvas}</CanvasContainer>
         {children}
       </body>

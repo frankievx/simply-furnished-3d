@@ -2,18 +2,14 @@
 import {
   products,
   productsAtom,
-  productsSpringAtom,
+  productsApiAtom,
   relatedProductsAtom,
-  relatedProductsSpringAtom,
+  relatedProductsApiAtom,
 } from "@/state/products";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { useParams } from "next/navigation";
 import { useEffect } from "react";
 import { Vector3 } from "three";
-// import {
-//   animateCameraToProduct,
-//   animateProductToCenter,
-// } from "../@canvas/components/Product/animations";
 import { cameraSpringAtom } from "@/state/camera";
 import { animateCameraToRelatedProducts } from "./animations";
 import { showAtom } from "@/state/show";
@@ -21,24 +17,21 @@ import { animateRelatedProducts } from "./animations";
 
 export default function RelatedProductsPage() {
   const { productId } = useParams<{ productId: string }>();
-  const [productsSpring] = useAtom(productsSpringAtom);
-  const relatedProductsApi = useAtomValue(relatedProductsSpringAtom);
+  const productsApi = useAtom(productsApiAtom);
+  const relatedProductsApi = useAtomValue(relatedProductsApiAtom);
   const [cameraSpring] = useAtom(cameraSpringAtom);
   const setShow = useSetAtom(showAtom);
 
   useEffect(() => {
     setShow((show) => ({ ...show, itemTitles: true }));
-    // const productValues = mapValues(product, (val) => val?.get()) as ProductType;
-
     if (relatedProductsApi)
       animateRelatedProducts({
         relatedProductsApi,
         product: relatedProductsApi.current[Number(productId)].get(),
-        // duration: 0,
       });
     if (cameraSpring)
       animateCameraToRelatedProducts({ cameraSpring, delay: 500 });
-  }, [productId, productsSpring, cameraSpring]);
+  }, [productId, productsApi, cameraSpring]);
 
   return (
     <main className="fixed flex min-h-screen flex-col items-center justify-between p-24">

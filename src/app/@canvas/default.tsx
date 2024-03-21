@@ -14,8 +14,8 @@ import Product from "./components/Product/Product";
 import {
   ProductSpring,
   products,
-  productsSpringAtom,
-  relatedProductsSpringAtom,
+  productsApiAtom,
+  relatedProductsApiAtom,
   selectedProductAtom,
 } from "../../state/products";
 import { easings, useSpring, useSprings } from "@react-spring/web";
@@ -44,8 +44,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const { productId } = useParams();
   const setSelectedProduct = useSetAtom(selectedProductAtom);
-  const setProductsSpring = useSetAtom(productsSpringAtom);
-  const setRelatedProductsSpring = useSetAtom(relatedProductsSpringAtom);
+  const setProductsApi = useSetAtom(productsApiAtom);
+  const setRelatedProductsApi = useSetAtom(relatedProductsApiAtom);
   const setCameraSpring = useSetAtom(cameraSpringAtom);
 
   const [productsSpring, productsApi] = useSprings(products.length, (i) => ({
@@ -107,22 +107,15 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   }, [setCameraSpring, camera, cameraApi]);
 
   useEffect(() => {
-    setProductsSpring(() => productsApi);
-    setRelatedProductsSpring(() => relatedProductsApi);
-  }, [
-    productsApi,
-    setProductsSpring,
-    relatedProductsApi,
-    setRelatedProductsSpring,
-  ]);
+    setProductsApi(() => productsApi);
+    setRelatedProductsApi(() => relatedProductsApi);
+  }, [productsApi, setProductsApi, relatedProductsApi, setRelatedProductsApi]);
 
   const onProductClick = (product: ProductSpring) => {
-    setSelectedProduct(product);
     router.push(`/${product.i.get()}`);
   };
 
   const onRelatedProductClick = (product: ProductSpring) => {
-    setSelectedProduct(product);
     router.push(`/${product.i.get()}/related`);
   };
 

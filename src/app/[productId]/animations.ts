@@ -1,21 +1,21 @@
 import { ProductSpringRef } from "@/state/products";
 import { Vector3Tuple } from "three";
 import { CameraSpringRef } from "@/state/camera";
-import { SliderSpringRef } from "@/state/slider";
+import { SliderApiRef } from "@/state/slider";
 
 export const detailCameraPosition: Vector3Tuple = [-0.011403, -1.6, 0.8];
 export const detailCameraTarget: Vector3Tuple = [0, 0, 0.2];
 
 export const animateCameraToProduct = async ({
   productId,
-  productsSpring,
+  productsApi,
   cameraSpring,
 }: {
   productId: string;
-  productsSpring: ProductSpringRef;
+  productsApi: ProductSpringRef;
   cameraSpring: CameraSpringRef;
 }) => {
-  const product = productsSpring?.current[Number(productId)].get();
+  const product = productsApi?.current[Number(productId)].get();
   return cameraSpring?.start({
     position: [product.position[0], -5.26023, product.position[2]],
     target: product.position,
@@ -25,17 +25,17 @@ export const animateCameraToProduct = async ({
 
 export const animateProductToCenter = async ({
   productId,
-  productsSpring,
+  productsApi,
   cameraSpring,
-  sliderSpring,
+  sliderApi,
 }: {
   productId: string;
-  productsSpring: ProductSpringRef;
+  productsApi: ProductSpringRef;
   cameraSpring: CameraSpringRef;
-  sliderSpring: SliderSpringRef;
+  sliderApi: SliderApiRef;
 }) => {
-  const product = productsSpring?.current[Number(productId)].get();
-  sliderSpring.start({
+  const product = productsApi?.current[Number(productId)].get();
+  sliderApi.start({
     points: 361,
     opacity: 1,
     config: { duration: 1000 },
@@ -59,12 +59,13 @@ export const animateProductToCenter = async ({
       });
     },
   });
-  return productsSpring?.start((i: number) => {
-    const currentProduct = productsSpring?.current[i].get();
+  return productsApi?.start((i: number) => {
+    const currentProduct = productsApi?.current[i].get();
     const currentPosition = currentProduct.position;
     if (currentProduct.i === product.i)
       return {
         position: [0, -0.324315, 0],
+        rotation: [0, 0, 0],
         shelfPosition: [0, 3, 0],
         ring: false,
         config: { duration: 1000 },
@@ -77,6 +78,7 @@ export const animateProductToCenter = async ({
 
     return {
       position: newPosition,
+      rotation: [0, 0, 0],
       shelfPosition: [0, 3, -2],
       ring: false,
       config: { duration: 1000 },

@@ -1,21 +1,20 @@
 import { ProductSpringRef, products } from "@/state/products";
-import { SliderSpringRef } from "@/state/slider";
 
 export const animateProductsToWall = async ({
-  productsSpring,
+  productsApi,
 }: {
-  productsSpring: ProductSpringRef;
+  productsApi: ProductSpringRef;
 }) => {
-  productsSpring?.start((i: number) => {
-    const product = products.find((product) => product.i === i);
+  productsApi?.start((i: number) => {
     return {
       config: { duration: 500 },
     };
   });
-  return productsSpring?.start((i: number) => {
+  return productsApi?.start((i: number) => {
     const product = products.find((product) => product.i === i);
     return {
       position: product?.position,
+      rotation: [0, 0, 0],
       shelfPosition: [0, 0, 0],
       ring: true,
       config: { duration: 1000 },

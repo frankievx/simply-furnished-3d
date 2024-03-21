@@ -8,10 +8,10 @@ import { animated } from "@react-spring/web";
 import { animated as animated3 } from "@react-spring/three";
 import { Html } from "@react-three/drei";
 import { BarsIcon } from "@/app/components/svgs/BarsIcon";
-import { ProductSpring, productsSpringAtom } from "@/state/products";
+import { productsApiAtom } from "@/state/products";
 import { useParams } from "next/navigation";
-import { useEffect } from "react";
-import { sliderSpringAtom } from "@/state/slider";
+import { useEffect, useRef } from "react";
+import { sliderApiAtom } from "@/state/slider";
 // import { cursorAtom } from "@/state/cursor";
 // import { showAtom } from "@/state/show";
 
@@ -26,9 +26,10 @@ const points = times(361, (i) => {
 });
 
 export function ProductRotationSlider() {
+  const cancelRef = useRef();
   const productId = Number(useParams().productId);
-  const productsSpring = useAtomValue(productsSpringAtom);
-  const setSliderApi = useSetAtom(sliderSpringAtom);
+  const productsApi = useAtomValue(productsApiAtom);
+  const setSliderApi = useSetAtom(sliderApiAtom);
   const [sliderSpring, sliderApi] = useSpring(() => ({
     rotation: [-0.3, 0, 0],
     points: 0,
@@ -36,12 +37,12 @@ export function ProductRotationSlider() {
   }));
 
   const bind = useDrag(
-    ({ down, offset: [mx] }) => {
+    ({ down, offset: [mx], cancel }) => {
       sliderApi.start({
         rotation: [-0.3, 0, MathUtils.clamp(mx / 1000, -0.5, 0.5)],
         immediate: down,
       });
-      productsSpring?.current[productId].start({
+      productsApi?.current[productId].start({
         rotation: [0, 0, MathUtils.clamp(mx / 500, -2, 2)],
         immediate: down,
       });
@@ -57,20 +58,12 @@ export function ProductRotationSlider() {
   return (
     <animated3.group
       position={[0, -0.6, 0.3]}
-      // rotation={[-0.3, 0, 0]}
       rotation={sliderSpring.rotation as unknown as Vector3Tuple}
-      // rotation={circleSpring.rotation.to((x, y, z) => {
-      //   console.log("val", x, y, z);
-      //   return [x, y, z];
-      // })}
     >
       <Html position={[0, -0.5, 0]}>
-        {/* <Html position={[0, 15, -5.6]} transform rotation={[-1.57, 0, 0]}> */}
         <animated.button
           className="rounded-full p-2 bg-white rotate-90 cursor-pointer touch-none"
           {...bind()}
-          // onMouseOver={() => setCursor("pointer")}
-          // onMouseOut={() => setCursor("default")}
           style={{ opacity: sliderSpring?.opacity }}
         >
           <BarsIcon className="w-4 h-4" />

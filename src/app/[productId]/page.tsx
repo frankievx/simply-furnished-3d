@@ -1,37 +1,40 @@
 "use client";
-import { productsSpringAtom } from "@/state/products";
+import { productsApiAtom } from "@/state/products";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { useParams } from "next/navigation";
 import { useEffect } from "react";
 import { animateCameraToProduct, animateProductToCenter } from "./animations";
 import { cameraSpringAtom } from "@/state/camera";
-import { sliderSpringAtom } from "@/state/slider";
+import { sliderApiAtom } from "@/state/slider";
 import { showAtom } from "@/state/show";
 
 export default function ProductPage() {
   const { productId } = useParams<{ productId: string }>();
-  const productsSpring = useAtomValue(productsSpringAtom);
+  const productsApi = useAtomValue(productsApiAtom);
   const cameraSpring = useAtomValue(cameraSpringAtom);
-  const sliderSpring = useAtomValue(sliderSpringAtom);
+  const sliderApi = useAtomValue(sliderApiAtom);
   const setShow = useSetAtom(showAtom);
 
   useEffect(() => {
-    if (productsSpring && cameraSpring && sliderSpring) {
+    if (productsApi && cameraSpring && sliderApi) {
       setShow((prev) => ({ ...prev, itemTitles: false }));
       animateCameraToProduct({
         productId,
-        productsSpring,
+        productsApi,
         cameraSpring,
       }).then(() => {
         animateProductToCenter({
           productId,
-          productsSpring,
+          productsApi,
           cameraSpring,
-          sliderSpring,
+          sliderApi,
         });
       });
+      return () => {
+        sliderApi.start({ rotation: [-0.3, 0, 0] });
+      };
     }
-  }, [productId, productsSpring, cameraSpring, sliderSpring]);
+  }, [productId, productsApi, cameraSpring, sliderApi]);
 
   return <></>;
 }

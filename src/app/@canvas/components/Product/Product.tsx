@@ -8,28 +8,18 @@ import { useCursor } from "@react-three/drei";
 import { useState } from "react";
 import { Chair } from "../models/Chair";
 import { useParams, useRouter } from "next/navigation";
-import { ProductSpring, selectedProductAtom } from "@/state/products";
+import {
+  ProductSpring,
+  productsApiAtom,
+  selectedProductAtom,
+} from "@/state/products";
 import { ProductRotationSlider } from "./ProductRotationSlider";
 import { ProductTitle } from "./ProductTitle";
 import { showAtom } from "@/state/show";
 import { ProductLandmark } from "./ProductLandmark";
-import { Vector3Tuple } from "three";
-// import { cursorAtom } from "@/state/cursor";
-
-// type FurnitureProductProps = {
-//   obj: any;
-//   index: number;
-//   springItem: ProductSpring;
-//   onClick: ({
-//     item,
-//     index,
-//   }: {
-//     item: ProductSpring;
-//     index: number;
-//   }) => void;
-// };
-
-// const MemoProductRing = memo(ProductRing);
+import { MathUtils, Vector3Tuple } from "three";
+import { useDrag, useGesture } from "@use-gesture/react";
+import { sliderApiAtom } from "@/state/slider";
 
 const AnimatedShelf = animated(Shelf);
 
@@ -41,9 +31,39 @@ export default function Product({
   product: ProductSpring;
   onClick: (product: ProductSpring) => void;
 }) {
+  const { productId } = useParams();
   const show = useAtomValue(showAtom);
-  const [selectedProduct, setSelectedProduct] = useAtom(selectedProductAtom);
+  // const [selectedProduct, setSelectedProduct] = useAtom(selectedProductAtom);
+  const productsApi = useAtomValue(productsApiAtom);
+  const sliderApi = useAtomValue(sliderApiAtom);
   const [hovered, setHovered] = useState(false);
+
+  const bind = useGesture(
+    {
+      onDrag: ({ down, offset: [mx] }) => {
+        if (productId) {
+          productsApi?.current[Number(productId)].start({
+            rotation: [0, 0, MathUtils.clamp(mx / 500, -2, 2)],
+            immediate: down,
+          });
+          sliderApi?.start({
+            rotation: [-0.3, 0, MathUtils.clamp(mx / 1000, -0.5, 0.5)],
+            immediate: down,
+          });
+        }
+      },
+      onPointerOver: () => {
+        setHovered(true);
+      },
+      onPointerOut: () => {
+        setHovered(false);
+      },
+      onPointerDown: ({ event }) => {
+        onClick(product);
+      },
+    },
+    { drag: { bounds: { left: -500, right: 500 } } }
+  );
   useCursor(hovered, "pointer");
 
   return (
@@ -51,16 +71,7 @@ export default function Product({
       <animated.group
         position={product.position}
         rotation={product.rotation as unknown as Vector3Tuple}
-        onClick={(e) => {
-          onClick(product);
-          e.stopPropagation();
-        }}
-        onPointerOver={() => {
-          setHovered(true);
-        }}
-        onPointerOut={() => {
-          setHovered(false);
-        }}
+        {...bind()}
         {...props}
       >
         <animated.group
@@ -72,7 +83,7 @@ export default function Product({
         </animated.group>
 
         <animated.group visible={product.ring}>
-          <ProductRing show={!selectedProduct && hovered} />
+          <ProductRing show={!productId && hovered} />
         </animated.group>
         <animated.group visible={show.itemTitles}>
           <ProductTitle title={product.title.get()} />
