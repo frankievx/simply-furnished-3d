@@ -47,7 +47,7 @@ export function ProductRotationSlider() {
         immediate: down,
       });
     },
-    { bounds: { left: -500, right: 500 } }
+    { bounds: { left: -500, right: 500 }, axis: "x" }
   );
 
   useEffect(() => {
@@ -62,7 +62,7 @@ export function ProductRotationSlider() {
     >
       <Html position={[0, -0.5, 0]}>
         <animated.button
-          className="rounded-full p-2 bg-white rotate-90 cursor-pointer"
+          className="rounded-full p-2 bg-white rotate-90 cursor-pointer touch-pan-y shadow-md"
           {...bind()}
           style={{ opacity: sliderSpring?.opacity }}
         >
