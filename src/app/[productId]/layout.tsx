@@ -18,15 +18,18 @@ export default function Layout({ children }: { children: ReactNode }) {
     };
 
     const touchStartHandler = (e: TouchEvent) => {
+      console.log("e", e);
       touchStart.current = e.targetTouches[0].screenY;
+      console.log("touchStart", touchStart);
     };
     const touchEndHandler = (e: TouchEvent) => {
       const deltaY = e.changedTouches[0].screenY - touchStart.current;
-      if (deltaY < 0) {
+      console.log("deltaY", deltaY);
+      if (deltaY < -30) {
         touchStart.current = 0;
         router.push(`/${productId}/related`);
       }
-      if (deltaY > 0) {
+      if (deltaY > 30) {
         touchStart.current = 0;
         router.push(`/${productId}`);
       }
