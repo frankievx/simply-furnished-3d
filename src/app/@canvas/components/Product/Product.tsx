@@ -20,6 +20,7 @@ import { ProductLandmark } from "./ProductLandmark";
 import { MathUtils, Vector3Tuple } from "three";
 import { useDrag, useGesture } from "@use-gesture/react";
 import { sliderApiAtom } from "@/state/slider";
+import { dragAtom } from "@/state/drag";
 
 const AnimatedShelf = animated(Shelf);
 
@@ -33,6 +34,7 @@ export default function Product({
 }) {
   const { productId } = useParams();
   const show = useAtomValue(showAtom);
+  const drag = useAtomValue(dragAtom);
   // const [selectedProduct, setSelectedProduct] = useAtom(selectedProductAtom);
   const productsApi = useAtomValue(productsApiAtom);
   const sliderApi = useAtomValue(sliderApiAtom);
@@ -59,10 +61,12 @@ export default function Product({
         setHovered(false);
       },
       onPointerDown: ({ event }) => {
+        console.log("event", event);
+        event.stopPropagation();
         onClick(product);
       },
     },
-    { drag: { bounds: { left: -500, right: 500 } } }
+    { drag: { bounds: { left: -500, right: 500 }, enabled: drag.product } }
   );
   useCursor(hovered, "pointer");
 

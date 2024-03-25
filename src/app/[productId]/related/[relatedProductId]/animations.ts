@@ -1,6 +1,6 @@
 import { CameraSpringRef } from "@/state/camera";
 import { ProductSpringRef, ProductType, products } from "@/state/products";
-import { getRelatedProducts } from "../@canvas/utils";
+import { getRelatedProducts } from "@/app/@canvas/utils";
 import { easings } from "@react-spring/web";
 import { Vector3Tuple } from "three";
 

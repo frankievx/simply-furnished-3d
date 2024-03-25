@@ -12,6 +12,7 @@ import { productsApiAtom } from "@/state/products";
 import { useParams } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { sliderApiAtom } from "@/state/slider";
+import { dragAtom } from "@/state/drag";
 // import { cursorAtom } from "@/state/cursor";
 // import { showAtom } from "@/state/show";
 
@@ -29,6 +30,7 @@ export function ProductRotationSlider() {
   const cancelRef = useRef();
   const productId = Number(useParams().productId);
   const productsApi = useAtomValue(productsApiAtom);
+  const drag = useAtomValue(dragAtom);
   const setSliderApi = useSetAtom(sliderApiAtom);
   const [sliderSpring, sliderApi] = useSpring(() => ({
     rotation: [-0.3, 0, 0],
@@ -47,7 +49,7 @@ export function ProductRotationSlider() {
         immediate: down,
       });
     },
-    { bounds: { left: -500, right: 500 }, axis: "x" }
+    { bounds: { left: -500, right: 500 }, axis: "x", enabled: drag.product }
   );
 
   useEffect(() => {

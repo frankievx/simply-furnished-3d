@@ -37,7 +37,7 @@ export const TheScrollNavigation = () => {
             className="-mb-3 sm:-mb-4 "
             onClick={() => {
               console.log("working");
-              if (productId) router.push(`${productId}/related`);
+              if (productId) router.push(`${productId}/related/${productId}`);
             }}
           />
         </div>

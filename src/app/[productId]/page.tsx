@@ -7,6 +7,7 @@ import { animateCameraToProduct, animateProductToCenter } from "./animations";
 import { cameraSpringAtom } from "@/state/camera";
 import { sliderApiAtom } from "@/state/slider";
 import { showAtom } from "@/state/show";
+import { dragAtom } from "@/state/drag";
 
 export default function ProductPage() {
   const { productId } = useParams<{ productId: string }>();
@@ -14,10 +15,12 @@ export default function ProductPage() {
   const cameraSpring = useAtomValue(cameraSpringAtom);
   const sliderApi = useAtomValue(sliderApiAtom);
   const setShow = useSetAtom(showAtom);
+  const setDrag = useSetAtom(dragAtom);
 
   useEffect(() => {
     if (productsApi && cameraSpring && sliderApi) {
       setShow((prev) => ({ ...prev, itemTitles: false }));
+      setDrag((prev) => ({ ...prev, product: true }));
       animateCameraToProduct({
         productId,
         productsApi,

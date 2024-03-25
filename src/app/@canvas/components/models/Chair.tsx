@@ -106,4 +106,4 @@ export function Chair(props: JSX.IntrinsicElements["group"]) {
   );
 }
 
-useGLTF.preload("/models/chair-model.glb");
+// useGLTF.preload("/models/chair-model.glb");

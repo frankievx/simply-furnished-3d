@@ -28,11 +28,13 @@ export const animateProductToCenter = async ({
   productsApi,
   cameraSpring,
   sliderApi,
-}: {
+}: // onRest,
+{
   productId: string;
   productsApi: ProductSpringRef;
   cameraSpring: CameraSpringRef;
   sliderApi: SliderApiRef;
+  // onRest: () => void;
 }) => {
   const product = productsApi?.current[Number(productId)].get();
   sliderApi.start({

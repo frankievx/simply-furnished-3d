@@ -1,6 +1,6 @@
 "use client";
 import { useThree } from "@react-three/fiber";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import {
   Color,
   Euler,
@@ -20,14 +20,16 @@ import {
 } from "../../state/products";
 import { easings, useSpring, useSprings } from "@react-spring/web";
 import { animated } from "@react-spring/three";
-import { useSetAtom } from "jotai";
+import { useAtomValue, useSetAtom } from "jotai";
 import { cameraSpringAtom } from "@/state/camera";
 import { Floor } from "./components/models/Floor";
 import { useParams, useRouter } from "next/navigation";
 import { ProductMask } from "./components/Product/ProductMask";
 import { getRelatedProducts } from "./utils";
 import { ProductRotationSlider } from "./components/Product/ProductRotationSlider";
-import { useDrag } from "@use-gesture/react";
+import { Vector2, useDrag } from "@use-gesture/react";
+import { dragAtom } from "@/state/drag";
+// import { useGLTF } from "@react-three/drei";
 
 const t = new Vector3();
 const lightTarget = new Object3D();
@@ -43,6 +45,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const { camera } = useThree();
   const router = useRouter();
   const { productId } = useParams();
+  const drag = useAtomValue(dragAtom);
+  const offsetRef = useRef<Vector2>([0, 0]);
   const setSelectedProduct = useSetAtom(selectedProductAtom);
   const setProductsApi = useSetAtom(productsApiAtom);
   const setRelatedProductsApi = useSetAtom(relatedProductsApiAtom);
@@ -81,6 +85,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   const bind = useDrag(
     ({ down, offset: [mx, my] }) => {
+      offsetRef.current = [mx, my];
       cameraApi.start({
         position: [
           MathUtils.clamp(-mx / 100, -5, 5) - 0.011403,
@@ -95,7 +100,14 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         immediate: down,
       });
     },
-    { bounds: { left: -3000, right: 3000 }, enabled: !productId }
+    {
+      bounds: { left: -3000, right: 3000 },
+      enabled: drag.canvas,
+      from: () => offsetRef.current,
+      // Fixes a bug when clicking a button and "down" gets stuck and forces dragging when the mouse isn't held down.
+      // https://github.com/pmndrs/use-gesture/issues/376
+      pointer: { capture: false },
+    }
   );
 
   useEffect(() => {
@@ -111,11 +123,12 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   }, [productsApi, setProductsApi, relatedProductsApi, setRelatedProductsApi]);
 
   const onProductClick = (product: ProductSpring) => {
+    offsetRef.current = [0, 0];
     router.push(`/${product.i.get()}`);
   };
 
   const onRelatedProductClick = (product: ProductSpring) => {
-    router.push(`/${product.i.get()}/related`);
+    router.push(`/${productId}/related/${product.i.get()}`);
   };
 
   return (
@@ -175,3 +188,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     </>
   );
 }
+
+// useGLTF.preload("/models/shelf.glb");
+// useGLTF.preload("/models/floor.glb");
+// useGLTF.preload("/models/chair-model.glb");
