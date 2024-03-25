@@ -7,7 +7,6 @@ import TheHomeButton from "./components/TheHomeButton";
 import { dragAtom } from "@/state/drag";
 import { useSetAtom } from "jotai";
 import { useVerticalDragGestures } from "./hooks/useVerticalDragGestures";
-import { TheRelatedProductsNavigation } from "./components/TheRelatedProductsNavigation";
 
 export default function Layout({ children }: { children: ReactNode }) {
   useVerticalDragGestures();

@@ -63,6 +63,8 @@ export const TheRelatedProductsNavigation = ({
   // const transitions = useTransition(navButtons, () => {
   //   return
   // });
+
+  // const [containerSpring, containerApi] = useSpring({})
   const [springs, api] = useSprings(
     5,
     (i) => {
@@ -86,12 +88,12 @@ export const TheRelatedProductsNavigation = ({
     const isPrev =
       (relatedProductIdRef.current === 0 && relatedProductId === 7) ||
       relatedProductId < relatedProductIdRef.current;
-
     if (isPrev)
       api.start((i) => {
         if (i === 2) return { opacity: 0.4 };
         if (i === 3) return { opacity: 1 };
       });
+
     // else
     //   api.start((i) => ({
     //     x: "100px",
