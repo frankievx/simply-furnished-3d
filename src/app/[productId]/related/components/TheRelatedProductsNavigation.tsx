@@ -57,7 +57,6 @@ export const TheRelatedProductsNavigation = ({
   const [springs, api] = useSprings(
     navButtons.length,
     (i) => {
-      console.log("runnign");
       return {
         opacity: navButtons[i].opacity,
       };
@@ -70,11 +69,11 @@ export const TheRelatedProductsNavigation = ({
 
   const animateNext = () => {
     api.start((i) => {
-      if (i === 1) return { opacity: 1 };
+      if (i === 3) return { opacity: 1 };
       return { opacity: 0.4 };
     });
     containerApi.start({
-      x: "3.5rem",
+      x: "-3.5rem",
       config: { duration: 1500 },
       onRest: () => {
         containerApi.set({ x: "0rem" });

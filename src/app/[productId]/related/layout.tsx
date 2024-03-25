@@ -14,10 +14,6 @@ export default function RelatedProductsLayout({
     productId: Number(params.productId),
   };
 
-  useEffect(() => {
-    return () => console.log("layout unmount");
-  });
-
   return (
     <>
       <TheRelatedProductsNavigation
