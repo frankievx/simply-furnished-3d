@@ -47,7 +47,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const { productId } = useParams();
   const drag = useAtomValue(dragAtom);
   const offsetRef = useRef<Vector2>([0, 0]);
-  const setSelectedProduct = useSetAtom(selectedProductAtom);
   const setProductsApi = useSetAtom(productsApiAtom);
   const setRelatedProductsApi = useSetAtom(relatedProductsApiAtom);
   const setCameraSpring = useSetAtom(cameraSpringAtom);
@@ -69,10 +68,15 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   );
   const [, cameraApi] = useSpring(() => ({
     from: {
+      position: [-0.011403, -5.26023, -4] as Vector3Tuple,
+      target: [-0.011403, 0, -4.5] as Vector3Tuple,
+    },
+    to: {
       position: [-0.011403, -5.26023, 0.9] as Vector3Tuple,
       target: [-0.011403, 0, 0.8] as Vector3Tuple,
     },
-    config: { easing: easings.easeInOutSine },
+    config: { easing: easings.easeInOutSine, duration: 2000 },
+    delay: 300,
     onChange: ({
       value,
     }: {
@@ -112,10 +116,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     // Needed to set the initial camera position for no jank on initial camera animation
-    camera.position.set(...[-0.011403, -5.26023, 0.9]);
-    camera.lookAt(t.set(...[-0.011403, 0, 0.8]));
     setCameraSpring(() => cameraApi);
-  }, [setCameraSpring, camera, cameraApi]);
+  }, []);
 
   useEffect(() => {
     setProductsApi(() => productsApi);

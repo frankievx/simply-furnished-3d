@@ -1,25 +1,25 @@
 "use client";
 import { TheScrollNavigation } from "@/app/[productId]/components/TheScrollNavigation";
-import { useParams, useRouter } from "next/navigation";
-import { ReactNode, useEffect, useRef, useState } from "react";
-import { useDrag, useScroll } from "@use-gesture/react";
+import { ReactNode } from "react";
 import TheHomeButton from "./components/TheHomeButton";
-import { dragAtom } from "@/state/drag";
-import { useSetAtom } from "jotai";
 import { useVerticalDragGestures } from "./hooks/useVerticalDragGestures";
+import { animated, useSpring } from "@react-spring/web";
 
 export default function Layout({ children }: { children: ReactNode }) {
   useVerticalDragGestures();
 
-  useEffect(() => {
-    return () => console.log("higher layout unmount");
-  }, []);
+  const spring = useSpring({
+    from: { opacity: 0, y: "4rem" },
+    to: { opacity: 1, y: "0rem" },
+    delay: 1500,
+  });
+
   return (
-    <>
+    <animated.div style={spring}>
       <TheHomeButton />
       <TheScrollNavigation />
       {/* <TheRelatedProductsNavigation /> */}
       {children}
-    </>
+    </animated.div>
   );
 }

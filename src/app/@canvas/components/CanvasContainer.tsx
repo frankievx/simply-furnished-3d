@@ -31,7 +31,8 @@ export function CanvasContainer({
       <Canvas
         ref={canvasRef}
         camera={{
-          position: [-0.011403, -5.26023, 0.8],
+          position: [-0.011403, -5.26023, -6],
+          rotation: new Euler(-0.5, 0, 0),
         }}
         resize={{ debounce: { scroll: 50, resize: 0 } }}
         shadows

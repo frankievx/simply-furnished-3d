@@ -19,8 +19,7 @@ export function TheTitle({ show }: { show?: boolean }) {
       opacity: 1,
       y: 0,
     },
-    reset: true,
-    config: { duration: 1000 },
+    config: { duration: 2000 },
   });
 
   return (

@@ -6,13 +6,13 @@ import TheLoader from "./components/TheLoader";
 import { DragIcon } from "./components/svgs/DragIcon";
 import { ClickIcon } from "./components/svgs/ClickIcon";
 import { TheGestureGuide } from "./components/TheGestureGuide";
+import { TheApp } from "./components/TheApp";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Simply Furnished",
   description: "Inspiring spaces start with the right furniture.",
-  // colorScheme: "light",
 };
 
 export default function RootLayout({
@@ -28,7 +28,7 @@ export default function RootLayout({
         {/* <TheLoader /> */}
         {/* <TheGestureGuide /> */}
         <CanvasContainer>{canvas}</CanvasContainer>
-        {children}
+        <TheApp>{children}</TheApp>
       </body>
     </html>
   );
