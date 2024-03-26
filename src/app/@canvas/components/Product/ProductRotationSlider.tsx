@@ -62,7 +62,7 @@ export function ProductRotationSlider() {
       position={[0, -0.6, 0.3]}
       rotation={sliderSpring.rotation as unknown as Vector3Tuple}
     >
-      <Html position={[0, -0.5, 0]}>
+      <Html position={[-0.03, -0.5, 0]}>
         <animated.button
           className="rounded-full p-2 bg-white rotate-90 cursor-pointer touch-none shadow-md"
           {...bind()}

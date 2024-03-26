@@ -47,7 +47,7 @@ export const animateProductToCenter = async ({
     to: async (next) => {
       await next({
         position: [
-          product.position[0] - 0.011403,
+          product.position[0] + 0.011403,
           -5.26023,
           product.position[2] + 0.9,
         ],
