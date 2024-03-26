@@ -9,7 +9,7 @@ export const TheGestureGuide = () => {
   );
   if (isMobile)
     return (
-      <div className="z-20 absolute h-screen w-screen flex flex-col justify-end px-4 pointer-events-none">
+      <div className="z-20 absolute h-dvh w-screen flex flex-col justify-end px-4 pointer-events-none">
         <div className="bg-white h-12 mb-4 rounded-md opacity-70 pointer-events-auto flex justify-around items-center gap-4 px-4">
           <div className="flex justify-center items-center gap-2">
             <DragIcon />

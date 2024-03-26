@@ -27,7 +27,7 @@ export function CanvasContainer({
 }>) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   return (
-    <div className="fixed w-screen h-screen touch-none">
+    <div className="fixed w-screen h-dvh touch-none">
       <Canvas
         ref={canvasRef}
         camera={{

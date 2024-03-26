@@ -32,7 +32,7 @@ export default function TheLoader({ onClick }: { onClick: () => void }) {
   });
 
   return (
-    <div className=" bg-[#E8D896] h-screen w-screen flex flex-col justify-center items-center gap-8 z-20 absolute">
+    <div className=" bg-[#E8D896] h-dvh w-screen flex flex-col justify-center items-center gap-8 z-20 absolute">
       <div className="w-1/2 h-1/2 flex justify-center">
         <TheTitle />
         <animated.div
