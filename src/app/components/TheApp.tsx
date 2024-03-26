@@ -12,8 +12,8 @@ export const TheApp = ({ children }: { children: ReactNode }) => {
   const [spring, api] = useSpring({ opacity: 1 }, []);
   const enterHandler = () => {
     cameraApi?.set({
-      position: [-0.011403, -5.26023, -4] as Vector3Tuple,
-      target: [-0.011403, 0, -4.5] as Vector3Tuple,
+      position: [-0.011403, -5.26023, -3] as Vector3Tuple,
+      target: [-0.011403, 0, -3.3] as Vector3Tuple,
     });
     api.start({ opacity: 0, onRest: () => setEnter(true) });
     // setEnter(true);
