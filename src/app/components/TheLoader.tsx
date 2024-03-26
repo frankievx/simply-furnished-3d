@@ -2,12 +2,13 @@
 import { animated, useSpring } from "@react-spring/web";
 import { useGLTF, useProgress } from "@react-three/drei";
 import { Dispatch, SetStateAction, useState } from "react";
+import { RightArrowIcon } from "./svgs/RightArrowIcon";
+import { TheTitle } from "./TheTitle";
 
 export default function TheLoader({ onClick }: { onClick: () => void }) {
   const [loading, setLoading] = useState(true);
-  console.log("loading", loading);
   const { active, progress, errors, item, loaded, total } = useProgress();
-  const [props, api] = useSpring(
+  const [progressSpring, progressApi] = useSpring(
     () => ({
       from: { width: "0%" },
       to: { width: progress.toFixed(2) + "%" },
@@ -17,23 +18,45 @@ export default function TheLoader({ onClick }: { onClick: () => void }) {
     [progress]
   );
 
+  const buttonSpring = useSpring({
+    from: {
+      opacity: 0,
+      y: 300,
+    },
+    to: {
+      opacity: 1,
+      y: 0,
+    },
+    config: { duration: 2000 },
+  });
+
   return (
-    <div className="bg-gradient-to-br from-amber-50 to-[#E8D896] h-screen w-screen flex flex-col justify-center items-center gap-8 z-20 absolute">
-      <div className="w-1/2 flex justify-center">
-        {loading ? (
-          <div className="w-full">
-            <animated.div className="h-1 bg-black" style={props}></animated.div>
-            <h1 className="text-lg text-center mt-8">Loading...</h1>
-          </div>
-        ) : (
-          <button
-            className="rounded-lg px-5 py-3 bg-[#D2BE9D]"
-            onClick={onClick}
-          >
-            {" "}
-            Enter{" "}
-          </button>
-        )}
+    <div className=" bg-[#E8D896] h-screen w-screen flex flex-col justify-center items-center gap-8 z-20 absolute">
+      <div className="w-1/2 h-1/2 flex justify-center">
+        <TheTitle />
+        <div className="absolute bottom-12 sm:bottom-48  flex flex-col items-center w-1/2 sm:w-1/4">
+          {loading ? (
+            // <div className="w-full">
+            <>
+              <animated.div
+                className="h-1 bg-[#D2BE9D] rounded-md "
+                style={progressSpring}
+              ></animated.div>
+              <h1 className="text-lg text-center mt-4">Loading...</h1>
+            </>
+          ) : (
+            // </div>
+            <>
+              <animated.button
+                style={buttonSpring}
+                className="rounded-lg px-5 py-3 bg-[#D2BE9D] w-fit"
+                onClick={onClick}
+              >
+                <RightArrowIcon />
+              </animated.button>
+            </>
+          )}
+        </div>
       </div>
     </div>
   );

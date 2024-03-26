@@ -3,13 +3,6 @@ import { animated, config, useSpring, useTransition } from "@react-spring/web";
 // import { showAtom } from "@/state/show";
 
 export function TheTitle({ show }: { show?: boolean }) {
-  // const show = useAtomValue(showAtom);
-  // const transitions = useTransition(true, {
-  //   from: { opacity: 0, y: -100 },
-  //   enter: { opacity: 1, config: config.slow, y: 0 },
-  //   leave: { opacity: 0, config: config.slow, y: -100 },
-  // });
-
   const spring = useSpring({
     from: {
       opacity: 0,

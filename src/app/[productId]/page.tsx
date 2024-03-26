@@ -8,6 +8,7 @@ import { cameraSpringAtom } from "@/state/camera";
 import { sliderApiAtom } from "@/state/slider";
 import { showAtom } from "@/state/show";
 import { dragAtom } from "@/state/drag";
+import { ScrollDownIndicator } from "./components/ScrollDownIndicator";
 
 export default function ProductPage() {
   const { productId } = useParams<{ productId: string }>();
@@ -39,5 +40,9 @@ export default function ProductPage() {
     }
   }, [productId, productsApi, cameraSpring, sliderApi]);
 
-  return <></>;
+  return (
+    <div className="absolute pointer-events-none w-full h-full flex justify-center items-end bottom-12">
+      <ScrollDownIndicator />
+    </div>
+  );
 }

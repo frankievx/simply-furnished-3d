@@ -12,6 +12,7 @@ import { animateCameraToRelatedProducts } from "./animations";
 import { showAtom } from "@/state/show";
 import { animateRelatedProducts } from "./animations";
 import { useHorizontalDragGestures } from "../hooks/useHorizontalDragGestures";
+import { ScrollUpIndicator } from "../../components/ScrollUpIndicator";
 
 export default function RelatedProductsPage() {
   const router = useRouter();
@@ -50,40 +51,9 @@ export default function RelatedProductsPage() {
 
   return (
     <>
-      {/* <div className="absolute text-white bottom-12 sm:bottom-20 w-full">
-        <div className=" flex justify-center gap-4">
-          {springs.map((props) => (
-            <animated.button
-              style={props}
-              className="cursor-pointer py-4"
-              onClick={prevHandler}
-            >
-              <div className="h-1 w-10 rounded-md bg-white"></div>
-            </animated.button>
-          ))}
-          <button className="opacity-0 cursor-default" onClick={prevHandler}>
-            <div className="h-1 w-10 rounded-md bg-white"></div>
-          </button>
-          <button
-            className=" opacity-40 hover:opacity-100"
-            onClick={prevHandler}
-          >
-            <div className="h-1 w-10 rounded-md bg-white"></div>
-          </button>
-          <button className="cursor-default">
-            <div className="h-1 w-10 rounded-md bg-white"></div>
-          </button>
-          <button
-            className="opacity-40 hover:opacity-100 py-4"
-            onClick={nextHandler}
-          >
-            <div className="h-1 w-10 rounded-md bg-white"></div>
-          </button>
-          <button className="opacity-0 cursor-default" onClick={prevHandler}>
-            <div className="h-1 w-10 rounded-md bg-white"></div>
-          </button>
-        </div>
-      </div> */}
+      <div className="absolute pointer-events-none w-full h-full flex justify-center items-start top-4 sm:top-8">
+        <ScrollUpIndicator />
+      </div>
     </>
   );
 }

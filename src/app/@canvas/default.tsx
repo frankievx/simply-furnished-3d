@@ -68,8 +68,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   );
   const [, cameraApi] = useSpring(() => ({
     from: {
-      position: [-0.011403, -5.26023, -4] as Vector3Tuple,
-      target: [-0.011403, 0, -4.5] as Vector3Tuple,
+      position: [-0.011403, -5.26023, -3] as Vector3Tuple,
+      target: [-0.011403, 0, -3.3] as Vector3Tuple,
     },
     to: {
       position: [-0.011403, -5.26023, 0.9] as Vector3Tuple,
@@ -117,6 +117,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     // Needed to set the initial camera position for no jank on initial camera animation
     setCameraSpring(() => cameraApi);
+
+    products.forEach((product) => {
+      router.prefetch(`/${product.i}`);
+    });
   }, []);
 
   useEffect(() => {
@@ -190,7 +194,3 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     </>
   );
 }
-
-// useGLTF.preload("/models/shelf.glb");
-// useGLTF.preload("/models/floor.glb");
-// useGLTF.preload("/models/chair-model.glb");
