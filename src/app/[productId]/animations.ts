@@ -41,7 +41,7 @@ export const animateProductToCenter = async ({
     points: 361,
     opacity: 1,
     config: { duration: 1000 },
-    delay: 1800,
+    delay: 2000,
   });
   cameraSpring?.start({
     to: async (next) => {

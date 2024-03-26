@@ -13,11 +13,13 @@ import { showAtom } from "@/state/show";
 import { animateRelatedProducts } from "./animations";
 import { useHorizontalDragGestures } from "../hooks/useHorizontalDragGestures";
 import { ScrollUpIndicator } from "../../components/ScrollUpIndicator";
+import { sliderApiAtom } from "@/state/slider";
 
 export default function RelatedProductsPage() {
   const router = useRouter();
   const productId = Number(useParams().productId);
   const relatedProductId = Number(useParams().relatedProductId);
+  const sliderApi = useAtomValue(sliderApiAtom);
   const productsApi = useAtom(productsApiAtom);
   const relatedProductsApi = useAtomValue(relatedProductsApiAtom);
   const [cameraSpring] = useAtom(cameraSpringAtom);
@@ -40,6 +42,11 @@ export default function RelatedProductsPage() {
 
   useEffect(() => {
     setShow((show) => ({ ...show, itemTitles: true }));
+    sliderApi.start({
+      points: 0,
+      opacity: 0,
+      config: { duration: 1000 },
+    });
     if (relatedProductsApi)
       animateRelatedProducts({
         relatedProductsApi,
