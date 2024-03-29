@@ -54,7 +54,7 @@ export const GestureGuideOverlay = ({
   return (
     <animated.div
       style={spring}
-      className="absolute h-screen w-screen flex flex-col justify-center items-center z-30 pointer-events-auto gap-4 sm:gap-8 top-4"
+      className="absolute h-dvh w-screen flex flex-col justify-center items-center z-30 pointer-events-auto gap-4 sm:gap-8 top-4"
     >
       <div
         {...bind()}

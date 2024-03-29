@@ -1,7 +1,7 @@
 // import { animated, useSpring } from "@react-spring/web";
 export const TheInfoModal = ({ onDismiss }: { onDismiss: () => void }) => {
   return (
-    <div className="absolute h-screen w-screen flex flex-col justify-center items-center z-30 pointer-events-auto gap-4 sm:gap-8 top-4">
+    <div className="absolute h-dvh w-screen flex flex-col justify-center items-center z-30 pointer-events-auto gap-4 sm:gap-8 top-4">
       <div className="bg-[#D2BE9D] bg-opacity-[0.90] w-3/4 h-3/4 sm:h-1/2 sm:w-1/3 rounded-lg flex flex-col justify-around items-center gap-8 relative py-16 px-8">
         <h1 className="text-2xl font-bold"> Credits</h1>
         <div className="flex flex-col gap-8">
