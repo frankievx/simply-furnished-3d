@@ -12,5 +12,7 @@ export const showAtom = atom({
   landmarks: false,
   scrollUpIndicator: false,
   scrollDownIndicator: false,
+  gestureGuide: true,
+  info: false,
 });
 export type ShowAtomType = ExtractAtomValue<typeof showAtom>;

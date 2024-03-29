@@ -18,9 +18,9 @@ export const TheScrollNavigation = () => {
   );
 
   return (
-    <div className="absolute z-10 h-dvh right-0 pointer-events-auto">
+    <div className="absolute h-dvh right-0 pointer-events-none">
       <div className="flex h-full flex-col items-center justify-center mr-6">
-        <div className="relative w-3 flex flex-col items-center justify-center">
+        <div className="relative w-3 flex flex-col items-center justify-center pointer-events-auto ">
           <animated.div
             style={style}
             className="border border-solid border-white rounded-full  h-4 w-4 sm:h-5 sm:w-5 flex items-center justify-center absolute"
@@ -28,7 +28,6 @@ export const TheScrollNavigation = () => {
           <ScrollButton
             className="mt-1"
             onClick={() => {
-              console.log("test");
               router.push(`/${productId}`);
             }}
           />

@@ -45,6 +45,10 @@ body {
     rgb(var(--background-start-rgb));
 }
 
+a {
+  @apply underline text-blue-600 hover:text-blue-800 visited:text-purple-600
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;

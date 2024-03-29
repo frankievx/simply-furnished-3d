@@ -121,7 +121,6 @@ export const TheRelatedProductsNavigation = ({
         animatePrev();
       }
     }
-    return () => console.log("unmount");
   }, [relatedProductId]);
 
   useHorizontalDragGestures({ nextHandler, prevHandler });

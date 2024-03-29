@@ -29,6 +29,7 @@ import { getRelatedProducts } from "./utils";
 import { ProductRotationSlider } from "./components/Product/ProductRotationSlider";
 import { Vector2, useDrag } from "@use-gesture/react";
 import { dragAtom } from "@/state/drag";
+import { showAtom } from "@/state/show";
 // import { useGLTF } from "@react-three/drei";
 
 const t = new Vector3();
@@ -47,6 +48,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const { productId } = useParams();
   const drag = useAtomValue(dragAtom);
   const offsetRef = useRef<Vector2>([0, 0]);
+  const setShow = useSetAtom(showAtom);
   const setProductsApi = useSetAtom(productsApiAtom);
   const setRelatedProductsApi = useSetAtom(relatedProductsApiAtom);
   const setCameraSpring = useSetAtom(cameraSpringAtom);
@@ -87,8 +89,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     },
   }));
 
+  // Enables wall display panning
   const bind = useDrag(
     ({ down, offset: [mx, my] }) => {
+      if (down) setShow((show) => ({ ...show, title: false }));
       offsetRef.current = [mx, my];
       cameraApi.start({
         position: [

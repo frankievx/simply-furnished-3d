@@ -14,16 +14,20 @@ import { animateRelatedProducts } from "./animations";
 import { useHorizontalDragGestures } from "../hooks/useHorizontalDragGestures";
 import { ScrollUpIndicator } from "../../components/ScrollUpIndicator";
 import { sliderApiAtom } from "@/state/slider";
+import { GestureGuideOverlay } from "@/app/components/GestureGuideOverlay";
+import { GestureGuideCarousel } from "./components/GestureGuide/GestureGuideCarousel";
+import { GestureGuideScrollUp } from "./components/GestureGuide/GestureGuideScrollUp";
+import { GestureGuideNav } from "./components/GestureGuide/GestureGuideNav";
+import { getShowGestureGuide } from "@/app/utils/gestureGuide";
 
 export default function RelatedProductsPage() {
   const router = useRouter();
   const productId = Number(useParams().productId);
   const relatedProductId = Number(useParams().relatedProductId);
   const sliderApi = useAtomValue(sliderApiAtom);
-  const productsApi = useAtom(productsApiAtom);
   const relatedProductsApi = useAtomValue(relatedProductsApiAtom);
+  const [show, setShow] = useAtom(showAtom);
   const [cameraSpring] = useAtom(cameraSpringAtom);
-  const setShow = useSetAtom(showAtom);
 
   const nextHandler = () => {
     const nextId =
@@ -41,8 +45,12 @@ export default function RelatedProductsPage() {
   useHorizontalDragGestures({ nextHandler, prevHandler });
 
   useEffect(() => {
-    setShow((show) => ({ ...show, itemTitles: true }));
-    sliderApi.start({
+    setShow((show) => ({
+      ...show,
+      itemTitles: true,
+      gestureGuide: getShowGestureGuide(),
+    }));
+    sliderApi?.start({
       points: 0,
       opacity: 0,
       config: { duration: 1000 },
@@ -54,12 +62,25 @@ export default function RelatedProductsPage() {
       });
     if (cameraSpring)
       animateCameraToRelatedProducts({ cameraSpring, delay: 500 });
-  }, [productId, productsApi, cameraSpring]);
+  }, [productId]);
 
   return (
     <>
       <div className="absolute pointer-events-none w-full h-full flex justify-center items-start top-4 sm:top-8">
-        <ScrollUpIndicator />
+        {show.gestureGuide ? (
+          <GestureGuideOverlay
+            pages={[
+              <GestureGuideCarousel key={"gesture-guide-carousel"} />,
+              <GestureGuideNav key="gesture-guide-nav" />,
+              <GestureGuideScrollUp key={"gesture-guide-scroll-up"} />,
+            ]}
+            onDismiss={() =>
+              setShow((prev) => ({ ...prev, gestureGuide: false }))
+            }
+          />
+        ) : (
+          <ScrollUpIndicator />
+        )}
       </div>
     </>
   );

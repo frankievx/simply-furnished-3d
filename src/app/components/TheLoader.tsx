@@ -32,35 +32,33 @@ export default function TheLoader({ onClick }: { onClick: () => void }) {
   });
 
   return (
-    <div className=" bg-[#E8D896] h-dvh w-screen flex flex-col justify-center items-center gap-8 z-20 absolute">
+    <div className=" bg-[#E8D896] h-dvh w-screen flex flex-col justify-center items-center z-20 absolute overflow-hidden">
       <div className="w-1/2 h-1/2 flex justify-center">
         <TheTitle />
-        <animated.div
-          style={containerSpring}
-          className="absolute bottom-12 sm:bottom-48  flex flex-col items-center w-1/2 sm:w-1/4"
-        >
-          {loading ? (
-            // <div className="w-full">
-            <>
-              <animated.div
-                className="h-1 bg-[#D2BE9D] rounded-md "
-                style={progressSpring}
-              ></animated.div>
-              <h1 className="text-lg text-center mt-4">Loading...</h1>
-            </>
-          ) : (
-            // </div>
-            <>
-              <animated.button
-                className="rounded-lg px-5 py-3 bg-[#D2BE9D] w-fit"
-                onClick={onClick}
-              >
-                <RightArrowIcon />
-              </animated.button>
-            </>
-          )}
-        </animated.div>
       </div>
+      <animated.div
+        style={containerSpring}
+        className="absolute bottom-12 sm:bottom-48  flex flex-col items-center w-1/2 sm:w-1/4"
+      >
+        {loading ? (
+          <>
+            <animated.div
+              className="h-1 bg-[#D2BE9D] rounded-md "
+              style={progressSpring}
+            ></animated.div>
+            <h1 className="text-lg text-center mt-4">Loading...</h1>
+          </>
+        ) : (
+          <>
+            <animated.button
+              className="rounded-lg px-5 py-3 bg-[#D2BE9D] w-fit"
+              onClick={onClick}
+            >
+              <RightArrowIcon />
+            </animated.button>
+          </>
+        )}
+      </animated.div>
     </div>
   );
 }
