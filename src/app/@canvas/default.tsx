@@ -28,9 +28,8 @@ import { ProductMask } from "./components/Product/ProductMask";
 import { getRelatedProducts } from "./utils";
 import { ProductRotationSlider } from "./components/Product/ProductRotationSlider";
 import { Vector2, useDrag } from "@use-gesture/react";
-import { dragAtom } from "@/state/drag";
+import { gestureAtom } from "@/state/gesture";
 import { showAtom } from "@/state/show";
-// import { useGLTF } from "@react-three/drei";
 
 const t = new Vector3();
 const lightTarget = new Object3D();
@@ -46,7 +45,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const { camera } = useThree();
   const router = useRouter();
   const { productId } = useParams();
-  const drag = useAtomValue(dragAtom);
+  const gesture = useAtomValue(gestureAtom);
   const offsetRef = useRef<Vector2>([0, 0]);
   const setShow = useSetAtom(showAtom);
   const setProductsApi = useSetAtom(productsApiAtom);
@@ -110,7 +109,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     },
     {
       bounds: { left: -3000, right: 3000 },
-      enabled: drag.canvas,
+      enabled: gesture.canvas,
       from: () => offsetRef.current,
       // Fixes a bug when clicking a button and "down" gets stuck and forces dragging when the mouse isn't held down.
       // https://github.com/pmndrs/use-gesture/issues/376
@@ -152,7 +151,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         shadow-camera-far={100}
         castShadow
       />
-      <hemisphereLight color={new Color("#FFFFFF")} intensity={1.4} />
+      <hemisphereLight color={new Color("#FFFFFF")} intensity={1} />
       <ProductMask position={[0, -1.85, -9.01]} />
       <animated.group>
         <ProductRotationSlider />
@@ -184,7 +183,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <directionalLight
         color={new Color("#FFFFFF")}
         position={[-3.36612, -4.0653, -7.40629]}
-        intensity={1.4}
+        intensity={1.3}
         target={lTarget}
         shadow-mapSize={[2048, 2048]}
         shadow-near={0.1}

@@ -123,11 +123,11 @@ export const TheRelatedProductsNavigation = ({
     }
   }, [relatedProductId]);
 
-  useHorizontalDragGestures({ nextHandler, prevHandler });
+  // useHorizontalDragGestures({ nextHandler, prevHandler });
 
   return (
     <>
-      <div className="absolute text-white bottom-8 sm:bottom-20 w-full">
+      <div className="absolute text-white bottom-8 sm:bottom-20 w-full  pointer-events-auto">
         {/* Mask */}
         <div className=" w-40 overflow-hidden mx-auto">
           {/* Container */}

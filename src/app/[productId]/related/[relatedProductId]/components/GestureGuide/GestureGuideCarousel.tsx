@@ -46,17 +46,6 @@ export const GestureGuideCarousel = () => {
           </animated.div>
         </div>
       </animated.div>
-      {/* <animated.div
-        style={spring}
-        className="flex-grow flex justify-center items-center"
-      >
-        <div className="relative">
-          <div className="rounded-full p-2 bg-transparent rotate-90 cursor-pointer touch-none border-black border-[3px]">
-            <BarsIcon className="w-6 h-6 stroke-[3]" />
-          </div>
-          <FingerIcon className="w-16 h-16 fill-black stroke-black stroke-1 absolute -mt-3 ml-1" />
-        </div>
-      </animated.div> */}
       <h2 className="text-xl font-semibold flex-shrink text-center">
         Swipe left or right to navigate the related products.
       </h2>

@@ -1,11 +1,22 @@
 "use client";
 import { TheScrollNavigation } from "@/app/[productId]/components/TheScrollNavigation";
-import { ReactNode } from "react";
+import { ReactNode, useEffect, useRef } from "react";
 import TheHomeButton from "./components/TheHomeButton";
 import { useVerticalDragGestures } from "./hooks/useVerticalDragGestures";
 import { animated, useSpring } from "@react-spring/web";
+import { useSetAtom } from "jotai";
+import { gestureAtom } from "@/state/gesture";
 
 export default function Layout({ children }: { children: ReactNode }) {
+  const setGesture = useSetAtom(gestureAtom);
+  useEffect(() => {
+    setGesture((gesture) => ({
+      ...gesture,
+      navigation: true,
+      relatedProducts: true,
+      canvas: false,
+    }));
+  }, []);
   useVerticalDragGestures();
 
   const spring = useSpring({
@@ -15,10 +26,9 @@ export default function Layout({ children }: { children: ReactNode }) {
   });
 
   return (
-    <animated.div style={spring}>
+    <animated.div style={spring} className="h-dvh w-full absolute">
       <TheHomeButton />
-      <TheScrollNavigation />
-      {/* <TheRelatedProductsNavigation /> */}
+      {/* <TheScrollNavigation /> */}
       {children}
     </animated.div>
   );

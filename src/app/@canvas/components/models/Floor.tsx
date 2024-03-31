@@ -6,6 +6,7 @@ import * as THREE from "three";
 import React, { useRef } from "react";
 import { useGLTF } from "@react-three/drei";
 import { GLTF } from "three-stdlib";
+import { useLoader } from "@react-three/fiber";
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -18,6 +19,17 @@ type GLTFResult = GLTF & {
 
 export function Floor(props: JSX.IntrinsicElements["group"]) {
   const { nodes, materials } = useGLTF("/models/floor.glb") as GLTFResult;
+
+  // const [colorMap, displacementMap, normalMap, glossMap, aoMap, bumpMap, reflMap] = useLoader(THREE.TextureLoader, [
+  //   '/textures/WoodFlooringAshSuperWhite001/WoodFlooringAshSuperWhite001_COL_2K.jpg',
+  //   '/textures/WoodFlooringAshSuperWhite001/WoodFlooringAshSuperWhite001_DISP_2K.jpg',
+  //   '/textures/WoodFlooringAshSuperWhite001/WoodFlooringAshSuperWhite001_NRM_2K.png',
+  //   '/textures/WoodFlooringAshSuperWhite001/WoodFlooringAshSuperWhite001_GLOSS_2K.jpg',
+  //   '/textures/WoodFlooringAshSuperWhite001/WoodFlooringAshSuperWhite001_AO_2K.jpg',
+  //   '/textures/WoodFlooringAshSuperWhite001/WoodFlooringAshSuperWhite001_BUMP_2K.jpg',
+  //   '/textures/WoodFlooringAshSuperWhite001/WoodFlooringAshSuperWhite001_REFL_2K.jpg'
+  // ])
+
   return (
     <group {...props} dispose={null}>
       <mesh
@@ -27,7 +39,9 @@ export function Floor(props: JSX.IntrinsicElements["group"]) {
         material={materials.Floor}
         scale={[9.468, 3.824, 6.383]}
         renderOrder={2}
-      />
+      >
+        {/* <meshPhysicalMaterial bumpMap={bumpMap} aoMap={aoMap} sheenColorMap={colorMap} spe/> */}
+      </mesh>
     </group>
   );
 }

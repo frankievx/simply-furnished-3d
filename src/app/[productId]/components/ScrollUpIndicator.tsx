@@ -29,13 +29,7 @@ export const ScrollUpIndicator = () => {
           <div className="text-white tracking-widest text-xs mt-4">DETAILS</div>
         </div>
       </animated.div>
-      {/* <div className="h-12 flex items-start">
-        <animated.div
-          style={spring}
-          className="w-0.5 bg-white mx-auto  rounded-full"
-        ></animated.div>
-      </div>
-      <div className="text-white tracking-widest text-xs">LEARN MORE</div> */}
+
     </>
   );
 };

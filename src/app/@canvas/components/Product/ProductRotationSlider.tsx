@@ -12,9 +12,7 @@ import { productsApiAtom } from "@/state/products";
 import { useParams } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { sliderApiAtom } from "@/state/slider";
-import { dragAtom } from "@/state/drag";
-// import { cursorAtom } from "@/state/cursor";
-// import { showAtom } from "@/state/show";
+import { gestureAtom } from "@/state/gesture";
 
 const radius = 0.55;
 const lineThickness = 0.0035;
@@ -27,10 +25,9 @@ const points = times(361, (i) => {
 });
 
 export function ProductRotationSlider() {
-  const cancelRef = useRef();
   const productId = Number(useParams().productId);
   const productsApi = useAtomValue(productsApiAtom);
-  const drag = useAtomValue(dragAtom);
+  const gesture = useAtomValue(gestureAtom);
   const setSliderApi = useSetAtom(sliderApiAtom);
   const [sliderSpring, sliderApi] = useSpring(() => ({
     rotation: [-0.3, 0, 0],
@@ -39,7 +36,8 @@ export function ProductRotationSlider() {
   }));
 
   const bind = useDrag(
-    ({ down, offset: [mx], cancel }) => {
+    ({ down, offset: [mx], event }) => {
+      event.stopPropagation();
       sliderApi.start({
         rotation: [-0.3, 0, MathUtils.clamp(mx / 1000, -0.5, 0.5)],
         immediate: down,
@@ -49,7 +47,11 @@ export function ProductRotationSlider() {
         immediate: down,
       });
     },
-    { bounds: { left: -500, right: 500 }, axis: "x", enabled: drag.product }
+    {
+      bounds: { left: -500, right: 500 },
+      axis: "x",
+      enabled: gesture.product,
+    }
   );
 
   useEffect(() => {

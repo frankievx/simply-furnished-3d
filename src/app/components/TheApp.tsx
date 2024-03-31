@@ -1,5 +1,5 @@
 "use client";
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import TheLoader from "./TheLoader";
 import { useAtom, useAtomValue } from "jotai";
 import { cameraSpringAtom } from "@/state/camera";
@@ -9,12 +9,15 @@ import { TheGestureGuideButton } from "./TheGestureGuideButton";
 import { TheInfoButton } from "./TheInfoButton";
 import { TheInfoModal } from "./TheInfoModal";
 import { showAtom } from "@/state/show";
+import { gestureAtom } from "@/state/gesture";
 
 export const TheApp = ({ children }: { children: ReactNode }) => {
   const [enter, setEnter] = useState(false);
   const cameraApi = useAtomValue(cameraSpringAtom);
   const [spring, api] = useSpring({ opacity: 1 }, []);
   const [show, setShow] = useAtom(showAtom);
+  const [gesture] = useAtom(gestureAtom);
+  const initialGestureStateRef = useRef(gesture);
   const enterHandler = () => {
     cameraApi?.set({
       position: [-0.011403, -5.26023, -3] as Vector3Tuple,
@@ -25,26 +28,30 @@ export const TheApp = ({ children }: { children: ReactNode }) => {
 
   const transitions = useTransition(show.info, {
     from: {
-      y: 300,
       opacity: 0,
-      z: 100,
     },
     enter: {
-      y: 0,
       opacity: 1,
-      z: 100,
     },
     leave: {
-      y: 100,
       opacity: 0,
-      z: 100,
     },
   });
+
+  const dismissHandler = () => {
+    setShow((show) => ({ ...show, info: false }));
+  };
 
   useEffect(() => {
     if (window.localStorage.showGestureGuide === undefined)
       window.localStorage.showGestureGuide = true;
   }, []);
+
+  useEffect(() => {
+    if (show.info) {
+      initialGestureStateRef.current = Object.assign({}, gesture);
+    }
+  }, [show.info]);
 
   if (!enter)
     return (
@@ -54,24 +61,23 @@ export const TheApp = ({ children }: { children: ReactNode }) => {
     );
 
   return (
-    <>
-      <div className="absolute bottom-3 left-3">
+    <main className="absolute pointer-events-none w-full h-dvh bg-transparent">
+      <div className="absolute flex justify-between items-end w-full px-3 pointer-events-none bottom-3">
         <TheInfoButton />
-      </div>
-      <div className="absolute bottom-3 right-3">
         <TheGestureGuideButton />
       </div>
+      {children}
       {transitions(
         (style, show) =>
           show && (
-            <animated.div style={style} className="z-50">
+            <animated.div style={style} className="absolute h-full w-full">
               <TheInfoModal
-                onDismiss={() => setShow((show) => ({ ...show, info: false }))}
+                onDismiss={dismissHandler}
+                initialGestureState={initialGestureStateRef.current}
               />
             </animated.div>
           )
       )}
-      {children}
-    </>
+    </main>
   );
 };
