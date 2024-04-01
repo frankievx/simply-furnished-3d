@@ -1,6 +1,6 @@
 "use client";
-import { products, relatedProductsApiAtom } from "@/state/products";
-import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import { relatedProductsApiAtom } from "@/state/products";
+import { useAtom, useAtomValue } from "jotai";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { cameraSpringAtom } from "@/state/camera";
@@ -14,14 +14,9 @@ import { GestureGuideOverlay } from "@/app/components/GestureGuideOverlay";
 import { GestureGuideCarousel } from "./components/GestureGuide/GestureGuideCarousel";
 import { GestureGuideScrollUp } from "./components/GestureGuide/GestureGuideScrollUp";
 import { GestureGuideNav } from "./components/GestureGuide/GestureGuideNav";
-import { useShowGestureGuide } from "@/app/hooks/useShowGestureGuide";
 import { gestureAtom } from "@/state/gesture";
 import { getNextRelatedProductId } from "../../utils/getNextRelatedProductId";
 import { getPrevRelatedProductId } from "../../utils/getPrevRelatedProductId";
-
-// export async function generateStaticParams() {
-//   return products.map((item) => item.i);
-// }
 
 export default function RelatedProductsPage() {
   const router = useRouter();
@@ -68,6 +63,7 @@ export default function RelatedProductsPage() {
     const nextId = getNextRelatedProductId(relatedProductId);
     router.prefetch(`/${productId}/related/${prevId}`);
     router.prefetch(`/${productId}/related/${nextId}`);
+    router.prefetch(`/${relatedProductId}`);
   }, []);
 
   return (

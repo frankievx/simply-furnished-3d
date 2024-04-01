@@ -1,7 +1,7 @@
 "use client";
 import { products, productsApiAtom } from "@/state/products";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { animateCameraToProduct, animateProductToCenter } from "./animations";
 import { cameraSpringAtom } from "@/state/camera";
@@ -14,11 +14,8 @@ import { GestureGuideScrollDown } from "./components/GestureGuide/GestureGuideSc
 import { useShowGestureGuide } from "../hooks/useShowGestureGuide";
 import { gestureAtom } from "@/state/gesture";
 
-// export async function generateStaticParams() {
-//   return products.map((item) => item.i);
-// }
-
 export default function ProductPage() {
+  const router = useRouter();
   const { productId } = useParams<{ productId: string }>();
   const productsApi = useAtomValue(productsApiAtom);
   const cameraSpring = useAtomValue(cameraSpringAtom);
@@ -51,6 +48,10 @@ export default function ProductPage() {
       };
     }
   }, [productId, productsApi, cameraSpring, sliderApi]);
+
+  useEffect(() => {
+    router.prefetch(`/${productId}/related/${productId}`);
+  }, []);
 
   return (
     <div className="absolute pointer-events-none w-full h-full flex justify-center items-end">
