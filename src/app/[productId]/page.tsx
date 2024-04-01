@@ -1,5 +1,5 @@
 "use client";
-import { productsApiAtom } from "@/state/products";
+import { products, productsApiAtom } from "@/state/products";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { useParams } from "next/navigation";
 import { useEffect } from "react";
@@ -13,6 +13,10 @@ import { GestureGuideRotate } from "./components/GestureGuide/GestureGuideRotate
 import { GestureGuideScrollDown } from "./components/GestureGuide/GestureGuideScrollDown";
 import { useShowGestureGuide } from "../hooks/useShowGestureGuide";
 import { gestureAtom } from "@/state/gesture";
+
+// export async function generateStaticParams() {
+//   return products.map((item) => item.i);
+// }
 
 export default function ProductPage() {
   const { productId } = useParams<{ productId: string }>();

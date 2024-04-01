@@ -16,6 +16,12 @@ import { GestureGuideScrollUp } from "./components/GestureGuide/GestureGuideScro
 import { GestureGuideNav } from "./components/GestureGuide/GestureGuideNav";
 import { useShowGestureGuide } from "@/app/hooks/useShowGestureGuide";
 import { gestureAtom } from "@/state/gesture";
+import { getNextRelatedProductId } from "../../utils/getNextRelatedProductId";
+import { getPrevRelatedProductId } from "../../utils/getPrevRelatedProductId";
+
+// export async function generateStaticParams() {
+//   return products.map((item) => item.i);
+// }
 
 export default function RelatedProductsPage() {
   const router = useRouter();
@@ -28,14 +34,12 @@ export default function RelatedProductsPage() {
   const gesture = useAtomValue(gestureAtom);
 
   const nextHandler = () => {
-    const nextId =
-      relatedProductId === products.length - 1 ? 0 : relatedProductId + 1;
+    const nextId = getNextRelatedProductId(relatedProductId);
     router.push(`/${productId}/related/${nextId}`);
   };
 
   const prevHandler = () => {
-    const prevId =
-      relatedProductId === 0 ? products.length - 1 : relatedProductId - 1;
+    const prevId = getPrevRelatedProductId(relatedProductId);
     router.push(`/${productId}/related/${prevId}`);
   };
 
@@ -58,6 +62,13 @@ export default function RelatedProductsPage() {
     if (cameraSpring)
       animateCameraToRelatedProducts({ cameraSpring, delay: 500 });
   }, [productId]);
+
+  useEffect(() => {
+    const prevId = getPrevRelatedProductId(relatedProductId);
+    const nextId = getNextRelatedProductId(relatedProductId);
+    router.prefetch(`/${productId}/related/${prevId}`);
+    router.prefetch(`/${productId}/related/${nextId}`);
+  }, []);
 
   return (
     <>

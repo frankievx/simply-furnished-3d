@@ -28,12 +28,8 @@ export default function RelatedProductsLayout({
   children: ReactNode;
   params: { productId: string };
 }) {
-  const router = useRouter();
   const relatedProductId = Number(useParams().relatedProductId);
-  const sliderApi = useAtomValue(sliderApiAtom);
-  const relatedProductsApi = useAtomValue(relatedProductsApiAtom);
   const [show, setShow] = useAtom(showAtom);
-  const [cameraSpring] = useAtom(cameraSpringAtom);
   const gesture = useAtomValue(gestureAtom);
   const relatedProductIdRef = useRef(0);
   const { productId } = {
