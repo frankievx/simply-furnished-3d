@@ -17,6 +17,7 @@ import { GestureGuideNav } from "./components/GestureGuide/GestureGuideNav";
 import { gestureAtom } from "@/state/gesture";
 import { getNextRelatedProductId } from "../../utils/getNextRelatedProductId";
 import { getPrevRelatedProductId } from "../../utils/getPrevRelatedProductId";
+import { useShowGestureGuide } from "@/app/hooks/useShowGestureGuide";
 
 export default function RelatedProductsPage() {
   const router = useRouter();
@@ -38,6 +39,7 @@ export default function RelatedProductsPage() {
     router.push(`/${productId}/related/${prevId}`);
   };
 
+  useShowGestureGuide();
   useHorizontalDragGestures({ nextHandler, prevHandler });
   useEffect(() => {
     setShow((show) => ({
@@ -69,7 +71,7 @@ export default function RelatedProductsPage() {
   return (
     <>
       <div className="absolute pointer-events-none w-full h-full flex justify-center items-start">
-        {show.gestureGuide ? (
+        {show.gestureGuide && (
           <GestureGuideOverlay
             gestureState={{
               ...gesture,
@@ -82,12 +84,9 @@ export default function RelatedProductsPage() {
               <GestureGuideScrollUp key={"gesture-guide-scroll-up"} />,
             ]}
             onDismiss={() => {
-              console.log("dimissed");
               setShow((prev) => ({ ...prev, gestureGuide: false }));
             }}
           />
-        ) : (
-          <ScrollUpIndicator />
         )}
       </div>
     </>

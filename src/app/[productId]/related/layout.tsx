@@ -63,7 +63,9 @@ export default function RelatedProductsLayout({
             }}
           />
         ) : (
-          <ScrollUpIndicator />
+          <div className="mt-4">
+            <ScrollUpIndicator />
+          </div>
         )}
       </div>
       <TheRelatedProductsNavigation
