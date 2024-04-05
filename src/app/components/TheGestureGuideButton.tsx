@@ -7,7 +7,6 @@ export const TheGestureGuideButton = () => {
   const setShow = useSetAtom(showAtom);
 
   const onClick = () => {
-    console.log("is this working");
     setShow((show) => ({ ...show, gestureGuide: true }));
   };
   return (

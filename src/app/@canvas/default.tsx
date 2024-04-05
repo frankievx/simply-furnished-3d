@@ -30,6 +30,9 @@ import { ProductRotationSlider } from "./components/Product/ProductRotationSlide
 import { Vector2, useDrag } from "@use-gesture/react";
 import { gestureAtom } from "@/state/gesture";
 import { showAtom } from "@/state/show";
+import { Wall } from "./components/models/Wall";
+import { Plant } from "./components/models/Plant";
+import { WallCarvingArt } from "./components/models/WallCarvingArt";
 
 const t = new Vector3();
 const lightTarget = new Object3D();
@@ -176,14 +179,15 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         />
       ))}
       {/* @ts-ignore */}
-      <mesh rotation={new Euler(Math.PI / 2, 0, 0)} receiveShadow {...bind()}>
+      <Wall rotation={new Euler(Math.PI / 2, 0, 0)} receiveShadow {...bind()} />
+      {/* <mesh rotation={new Euler(Math.PI / 2, 0, 0)} receiveShadow {...bind()}>
         <meshStandardMaterial color="#FFD468" />
         <planeGeometry args={[25, 20]} />
-      </mesh>
+      </mesh> */}
       <directionalLight
         color={new Color("#FFFFFF")}
         position={[-3.36612, -4.0653, -7.40629]}
-        intensity={1.3}
+        intensity={1.5}
         target={lTarget}
         shadow-mapSize={[2048, 2048]}
         shadow-near={0.1}
@@ -191,9 +195,17 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         castShadow
       />
       <primitive object={lTarget} />
+      {/* <group position={[0, 0, -11.36]} receiveShadow>
+        <Floor />
+      </group> */}
       <group position={[0, 0, -9.985]} receiveShadow>
+        <WallCarvingArt />
+        <Plant />
         <Floor />
       </group>
+      {/* <group position={[0, 1, -11.2]} receiveShadow>
+        <Floor />
+      </group> */}
     </>
   );
 }

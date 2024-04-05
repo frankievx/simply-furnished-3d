@@ -18,29 +18,41 @@ type GLTFResult = GLTF & {
 };
 
 export function Floor(props: JSX.IntrinsicElements["group"]) {
-  const { nodes, materials } = useGLTF("/models/floor.glb") as GLTFResult;
-
-  // const [colorMap, displacementMap, normalMap, glossMap, aoMap, bumpMap, reflMap] = useLoader(THREE.TextureLoader, [
-  //   '/textures/WoodFlooringAshSuperWhite001/WoodFlooringAshSuperWhite001_COL_2K.jpg',
-  //   '/textures/WoodFlooringAshSuperWhite001/WoodFlooringAshSuperWhite001_DISP_2K.jpg',
-  //   '/textures/WoodFlooringAshSuperWhite001/WoodFlooringAshSuperWhite001_NRM_2K.png',
-  //   '/textures/WoodFlooringAshSuperWhite001/WoodFlooringAshSuperWhite001_GLOSS_2K.jpg',
-  //   '/textures/WoodFlooringAshSuperWhite001/WoodFlooringAshSuperWhite001_AO_2K.jpg',
-  //   '/textures/WoodFlooringAshSuperWhite001/WoodFlooringAshSuperWhite001_BUMP_2K.jpg',
-  //   '/textures/WoodFlooringAshSuperWhite001/WoodFlooringAshSuperWhite001_REFL_2K.jpg'
-  // ])
+  const [
+    colorMap,
+    displacementMap,
+    normalMap,
+    roughnessMap,
+    metalnessMap,
+    aoMap,
+  ] = useLoader(THREE.TextureLoader, [
+    "/textures/VeneerWhiteOakRandomMatched001-4K/VeneerWhiteOakRandomMatched001_COL_4K_METALNESS.png",
+    "/textures/VeneerWhiteOakRandomMatched001-4K/VeneerWhiteOakRandomMatched001_DISP16_4K_METALNESS.png",
+    "/textures/VeneerWhiteOakRandomMatched001-4K/VeneerWhiteOakRandomMatched001_NRM_4K_METALNESS.png",
+    "/textures/VeneerWhiteOakRandomMatched001-4K/VeneerWhiteOakRandomMatched001_ROUGHNESS_4K_METALNESS.png",
+    "/textures/VeneerWhiteOakRandomMatched001-4K/VeneerWhiteOakRandomMatched001_METALNESS_4K_METALNESS.png",
+    "/textures/VeneerWhiteOakRandomMatched001-4K/VeneerWhiteOakRandomMatched001_AO_4K_METALNESS.png",
+  ]).map((texture) => {
+    texture.rotation = Math.PI * -0.25;
+    return texture;
+  });
 
   return (
     <group {...props} dispose={null}>
       <mesh
-        castShadow
+        position={[0, 0, -0.215]}
+        rotation={new THREE.Euler(0, 0, 0)}
         receiveShadow
-        geometry={nodes.MainFloor.geometry}
-        material={materials.Floor}
-        scale={[9.468, 3.824, 6.383]}
-        renderOrder={2}
       >
-        {/* <meshPhysicalMaterial bumpMap={bumpMap} aoMap={aoMap} sheenColorMap={colorMap} spe/> */}
+        <meshStandardMaterial
+          map={colorMap}
+          aoMap={aoMap}
+          normalMap={normalMap}
+          roughnessMap={roughnessMap}
+          metalnessMap={metalnessMap}
+          displacementMap={displacementMap}
+        />
+        <planeGeometry args={[8, 5]} />
       </mesh>
     </group>
   );
