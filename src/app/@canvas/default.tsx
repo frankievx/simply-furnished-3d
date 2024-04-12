@@ -33,6 +33,7 @@ import { showAtom } from "@/state/show";
 import { Wall } from "./components/models/Wall";
 import { Plant } from "./components/models/Plant";
 import { WallCarvingArt } from "./components/models/WallCarvingArt";
+import { useGLTF } from "@react-three/drei";
 
 const t = new Vector3();
 const lightTarget = new Object3D();
@@ -209,3 +210,5 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     </>
   );
 }
+
+useGLTF.preload("/models/PlantPalm001/PlantPalm001-opt.glb");

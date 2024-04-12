@@ -7,6 +7,7 @@ import React, { useRef } from "react";
 import { useFBX, useGLTF, useTexture } from "@react-three/drei";
 import { GLTF } from "three-stdlib";
 import { useLoader } from "@react-three/fiber";
+import { imageKitLoader } from "@/app/utils/loader";
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -21,36 +22,43 @@ type GLTFResult = GLTF & {
 
 export function Plant(props: JSX.IntrinsicElements["group"]) {
   const { nodes } = useGLTF(
-    "/models/PlantPalm001/PlantPalm001.glb"
+    "/models/PlantPalm001/PlantPalm001-opt.glb"
   ) as GLTFResult;
 
   const [plantColorMap, plantNormalMap, plantRoughnessMap, plantMetalnessMap] =
-    useLoader(THREE.TextureLoader, [
-      "/models/PlantPalm001/PlantPalm001_COL_4K_METALNESS.jpg",
-      "/models/PlantPalm001/PlantPalm001_NRM_4K_METALNESS.jpg",
-      "/models/PlantPalm001/PlantPalm001_ROUGHNESS_4K_METALNESS.jpg",
-      "/models/PlantPalm001/PlantPalm001_METALNESS_4K_METALNESS.jpg",
-    ]).map((texture) => {
+    useLoader(
+      THREE.TextureLoader,
+      [
+        "/models/PlantPalm001/PlantPalm001_COL_4K_METALNESS.jpg",
+        "/models/PlantPalm001/PlantPalm001_NRM_4K_METALNESS.jpg",
+        "/models/PlantPalm001/PlantPalm001_ROUGHNESS_4K_METALNESS.jpg",
+        "/models/PlantPalm001/PlantPalm001_METALNESS_4K_METALNESS.jpg",
+      ].map((src) => imageKitLoader({ src, quality: "50" }))
+    ).map((texture) => {
       return texture;
     });
   const [vaseColorMap, vaseNormalMap, vaseRoughnessMap, vaseMetalnessMap] =
-    useLoader(THREE.TextureLoader, [
-      "/models/PlantPalm001/PlantPalmVase001_COL_4K_METALNESS.jpg",
-      "/models/PlantPalm001/PlantPalmVase001_NRM_4K_METALNESS.png",
-      "/models/PlantPalm001/PlantPalmVase001_ROUGHNESS_4K_METALNESS.jpg",
-      "/models/PlantPalm001/PlantPalmVase001_METALNESS_4K_METALNESS.jpg",
-    ]).map((texture) => {
+    useLoader(
+      THREE.TextureLoader,
+      [
+        "/models/PlantPalm001/PlantPalmVase001_COL_4K_METALNESS.jpg",
+        "/models/PlantPalm001/PlantPalmVase001_NRM_4K_METALNESS.png",
+        "/models/PlantPalm001/PlantPalmVase001_ROUGHNESS_4K_METALNESS.jpg",
+        "/models/PlantPalm001/PlantPalmVase001_METALNESS_4K_METALNESS.jpg",
+      ].map((src) => imageKitLoader({ src, quality: "50" }))
+    ).map((texture) => {
       texture.flipY = false;
       return texture;
     });
 
   return (
-    <group {...props}>
+    <group {...props} position={[-0.1, -0.5, 0.84]}>
       <mesh
         castShadow
         receiveShadow
         geometry={nodes.PlantPalm001001.geometry}
-        position={[-0.7, -0.4, 0]}
+        position={[-0.659, -0.085, -0.114]}
+        scale={0.499}
       >
         <meshStandardMaterial
           map={plantColorMap}
@@ -63,7 +71,8 @@ export function Plant(props: JSX.IntrinsicElements["group"]) {
         castShadow
         receiveShadow
         geometry={nodes.PlantPalmVase001001.geometry}
-        position={[-0.7, -0.4, 0]}
+        position={[-0.613, -0.142, -0.716]}
+        scale={0.14}
       >
         <meshStandardMaterial
           map={vaseColorMap}

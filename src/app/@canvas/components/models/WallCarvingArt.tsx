@@ -7,6 +7,7 @@ import React, { useRef } from "react";
 import { useGLTF } from "@react-three/drei";
 import { GLTF } from "three-stdlib";
 import { useLoader } from "@react-three/fiber";
+import { imageKitLoader } from "@/app/utils/loader";
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -30,7 +31,7 @@ export function WallCarvingArt(props: JSX.IntrinsicElements["group"]) {
       "/models/WallCarvingArt/WalledDecoration002_ROUGHNESS_4K_METALNESS.png",
       "/models/WallCarvingArt/WalledDecoration002_METALNESS_4K_METALNESS.png",
       "/models/WallCarvingArt/WalledDecoration002_AO_4K_METALNESS.png",
-    ]
+    ].map((src) => imageKitLoader({ src, quality: "50" }))
   ).map((texture) => {
     texture.flipY = false;
     return texture;

@@ -65,4 +65,5 @@ export default function TheLoader({ onClick }: { onClick: () => void }) {
 
 useGLTF.preload("/models/shelf.glb");
 useGLTF.preload("/models/floor.glb");
-useGLTF.preload("/models/chair-model.glb");
+useGLTF.preload("/models/chair-model-opt.glb");
+
