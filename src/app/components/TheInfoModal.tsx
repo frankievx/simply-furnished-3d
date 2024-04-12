@@ -35,7 +35,14 @@ export const TheInfoModal = ({
         className="relative bg-[#D2BE9D] w-3/4 h-3/4 sm:h-1/2 sm:w-1/3 rounded-lg flex flex-col justify-around items-center gap-8 py-16 px-8 pointer-events-auto"
       >
         <h1 className="text-2xl font-bold"> Credits</h1>
+
         <div className="flex flex-col gap-8">
+          <div className="text-lg">
+            <h2 className="font-semibold text-xl mb-2">
+              Creative Director / Developer
+            </h2>
+            Francis Vithayathil
+          </div>
           <div className="text-normal">
             <h2 className="font-semibold text-lg">Inspiration</h2>
             <a

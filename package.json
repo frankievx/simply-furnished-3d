@@ -13,6 +13,7 @@
     "@react-spring/web": "^9.7.3",
     "@react-three/drei": "^9.99.2",
     "@react-three/fiber": "^8.15.16",
+    "@react-three/offscreen": "^0.0.8",
     "@react-three/postprocessing": "^2.16.0",
     "@use-gesture/react": "^10.3.0",
     "jotai": "^2.7.0",

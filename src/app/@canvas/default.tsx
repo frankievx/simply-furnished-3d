@@ -34,6 +34,7 @@ import { Wall } from "./components/models/Wall";
 import { Plant } from "./components/models/Plant";
 import { WallCarvingArt } from "./components/models/WallCarvingArt";
 import { useGLTF } from "@react-three/drei";
+import { loadingAtom } from "@/state/loading";
 
 const t = new Vector3();
 const lightTarget = new Object3D();
@@ -45,10 +46,11 @@ const relatedProducts = getRelatedProducts({
   selected: products[3],
 });
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+export default function Layout({ children }: { children?: React.ReactNode }) {
   const { camera } = useThree();
   const router = useRouter();
   const { productId } = useParams();
+  const loading = useAtomValue(loadingAtom);
   const gesture = useAtomValue(gestureAtom);
   const offsetRef = useRef<Vector2>([0, 0]);
   const setShow = useSetAtom(showAtom);
@@ -162,15 +164,15 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       </animated.group>
 
       {children}
-
-      {productsSpring.map((product, index) => (
-        <Product
-          key={index}
-          product={product}
-          onClick={onProductClick}
-          castShadow
-        />
-      ))}
+      {!loading &&
+        productsSpring.map((product, index) => (
+          <Product
+            key={index}
+            product={product}
+            onClick={onProductClick}
+            castShadow
+          />
+        ))}
       {relatedProductsSpring.map((product, index) => (
         <Product
           key={index}
@@ -179,6 +181,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           castShadow
         />
       ))}
+
       {/* @ts-ignore */}
       <Wall rotation={new Euler(Math.PI / 2, 0, 0)} receiveShadow {...bind()} />
       {/* <mesh rotation={new Euler(Math.PI / 2, 0, 0)} receiveShadow {...bind()}>
@@ -196,19 +199,18 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         castShadow
       />
       <primitive object={lTarget} />
-      {/* <group position={[0, 0, -11.36]} receiveShadow>
-        <Floor />
-      </group> */}
-      <group position={[0, 0, -9.985]} receiveShadow>
-        <WallCarvingArt />
-        <Plant />
-        <Floor />
-      </group>
+      {!loading && (
+        <group position={[0, 0, -9.985]} receiveShadow>
+          <WallCarvingArt />
+          {/* <Plant /> */}
+          <Floor />
+        </group>
+      )}
       {/* <group position={[0, 1, -11.2]} receiveShadow>
-        <Floor />
+      <Floor />
       </group> */}
     </>
   );
 }
 
-useGLTF.preload("/models/PlantPalm001/PlantPalm001-opt.glb");
+// useGLTF.preload("/models/PlantPalm001/PlantPalm001-opt.glb");

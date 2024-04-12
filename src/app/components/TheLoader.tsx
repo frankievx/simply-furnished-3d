@@ -4,9 +4,11 @@ import { useGLTF, useProgress } from "@react-three/drei";
 import { Dispatch, SetStateAction, useState } from "react";
 import { RightArrowIcon } from "./svgs/RightArrowIcon";
 import { TheTitle } from "./TheTitle";
+import { useAtom } from "jotai";
+import { loadingAtom } from "@/state/loading";
 
 export default function TheLoader({ onClick }: { onClick: () => void }) {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useAtom(loadingAtom);
   const { active, progress, errors, item, loaded, total } = useProgress();
 
   const [progressSpring, progressApi] = useSpring(
@@ -66,4 +68,6 @@ export default function TheLoader({ onClick }: { onClick: () => void }) {
 useGLTF.preload("/models/shelf.glb");
 useGLTF.preload("/models/floor.glb");
 useGLTF.preload("/models/chair-model-opt.glb");
+useGLTF.preload("/models/PlantPalm001/PlantPalm001-opt.glb");
+
 

@@ -19,7 +19,7 @@ type GLTFResult = GLTF & {
 };
 
 export function WallCarvingArt(props: JSX.IntrinsicElements["group"]) {
-  const { nodes, materials } = useGLTF(
+  const { nodes } = useGLTF(
     "/models/WallCarvingArt/WallCarvingArt.glb"
   ) as GLTFResult;
 
