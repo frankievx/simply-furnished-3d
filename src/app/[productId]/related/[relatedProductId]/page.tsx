@@ -71,7 +71,7 @@ export default function RelatedProductsPage() {
   return (
     <>
       <div className="absolute pointer-events-none w-full h-full flex justify-center items-start">
-        {show.gestureGuide && (
+        {/* {show.gestureGuide && (
           <GestureGuideOverlay
             gestureState={{
               ...gesture,
@@ -87,7 +87,7 @@ export default function RelatedProductsPage() {
               setShow((prev) => ({ ...prev, gestureGuide: false }));
             }}
           />
-        )}
+        )} */}
       </div>
     </>
   );

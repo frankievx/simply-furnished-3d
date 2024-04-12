@@ -53,6 +53,11 @@ export default function ProductPage() {
     router.prefetch(`/${productId}/related/${productId}`);
   }, []);
 
+  const mobilePages = [
+    <GestureGuideRotate key={"gesture-guide-rotate"} />,
+    <GestureGuideScrollDown key={"gesture-guide-scroll-down"} />,
+  ];
+
   return (
     <div className="absolute pointer-events-none w-full h-full flex justify-center items-end">
       {show.gestureGuide ? (
