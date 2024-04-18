@@ -6,6 +6,8 @@ import { RightArrowIcon } from "./svgs/RightArrowIcon";
 import { TheTitle } from "./TheTitle";
 import { useAtom } from "jotai";
 import { loadingAtom } from "@/state/loading";
+import { useTexture } from "@react-three/drei";
+import { imageKitLoader } from "../utils/loader";
 
 export default function TheLoader({ onClick }: { onClick: () => void }) {
   const [loading, setLoading] = useAtom(loadingAtom);
@@ -66,8 +68,49 @@ export default function TheLoader({ onClick }: { onClick: () => void }) {
 }
 
 useGLTF.preload("/models/shelf.glb");
+useGLTF.preload("/models/bookshelf-opt.glb");
+useGLTF.preload("/models/hanging-shelf-opt.glb");
 useGLTF.preload("/models/floor.glb");
 useGLTF.preload("/models/chair-model-opt.glb");
 useGLTF.preload("/models/PlantPalm001/PlantPalm001-opt.glb");
+useGLTF.preload("/models/wall-flowers-opt.glb");
+useGLTF.preload("/models/books-opt.glb");
+useGLTF.preload("/models/globe-decor.glb");
+useGLTF.preload("/models/painting-fox.glb");
+useGLTF.preload("/models/painting-yellow.glb");
+useGLTF.preload("/models/painting-yellowred.glb");
+useGLTF.preload("/models/decorative-stone-opt.glb");
+useGLTF.preload("/models/decorative-bookshelf-opt.glb");
+useGLTF.preload("/models/succulent-opt.glb");
+useGLTF.preload("/models/small-monstera-opt.glb");
+useGLTF.preload("/models/vases-opt.glb");
+useGLTF.preload("/models/whale-wicker-basket-opt.glb");
+useGLTF.preload("/models/WallCarvingArt/WallCarvingArt.glb");
 
-
+[
+  "/models/PlantPalm001/PlantPalm001_COL_4K_METALNESS.jpg",
+  "/models/PlantPalm001/PlantPalm001_NRM_4K_METALNESS.jpg",
+  "/models/PlantPalm001/PlantPalm001_ROUGHNESS_4K_METALNESS.jpg",
+  "/models/PlantPalm001/PlantPalm001_METALNESS_4K_METALNESS.jpg",
+].map((src) => useTexture.preload(imageKitLoader({ src })));
+[
+  "/models/PlantPalm001/PlantPalmVase001_COL_4K_METALNESS.jpg",
+  "/models/PlantPalm001/PlantPalmVase001_NRM_4K_METALNESS.png",
+  "/models/PlantPalm001/PlantPalmVase001_ROUGHNESS_4K_METALNESS.jpg",
+  "/models/PlantPalm001/PlantPalmVase001_METALNESS_4K_METALNESS.jpg",
+].map((src) => useTexture.preload(imageKitLoader({ src })));
+[
+  "/models/WallCarvingArt/WalledDecoration002_COL_4K_METALNESS.png",
+  // "/models/WallCarvingArt/WalledDecoration002_NRM16_4K_LOD0_METALNESS.png",
+  "/models/WallCarvingArt/WalledDecoration002_ROUGHNESS_4K_METALNESS.png",
+  "/models/WallCarvingArt/WalledDecoration002_METALNESS_4K_METALNESS.png",
+  "/models/WallCarvingArt/WalledDecoration002_AO_4K_METALNESS.png",
+].map((src) => useTexture.preload(imageKitLoader({ src })));
+[
+  "/textures/VeneerWhiteOakRandomMatched001-4K/VeneerWhiteOakRandomMatched001_COL_4K_METALNESS.png",
+  "/textures/VeneerWhiteOakRandomMatched001-4K/VeneerWhiteOakRandomMatched001_DISP16_4K_METALNESS.png",
+  "/textures/VeneerWhiteOakRandomMatched001-4K/VeneerWhiteOakRandomMatched001_NRM_4K_METALNESS.png",
+  "/textures/VeneerWhiteOakRandomMatched001-4K/VeneerWhiteOakRandomMatched001_ROUGHNESS_4K_METALNESS.png",
+  "/textures/VeneerWhiteOakRandomMatched001-4K/VeneerWhiteOakRandomMatched001_METALNESS_4K_METALNESS.png",
+  "/textures/VeneerWhiteOakRandomMatched001-4K/VeneerWhiteOakRandomMatched001_AO_4K_METALNESS.png",
+].map((src) => useTexture.preload(imageKitLoader({ src })));

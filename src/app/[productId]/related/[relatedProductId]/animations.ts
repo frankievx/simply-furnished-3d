@@ -35,14 +35,14 @@ export const animateRelatedProducts = ({
       return {
         ...relatedProduct,
         rotation: [0, 0, 0.2] as Vector3Tuple,
-        config: { duration, easing: easings.easeOutQuad },
+        config: { duration, easing: easings.easeInOutQuad },
       };
     } else if ([0, products.length - 1].includes(relatedProduct.order))
       return { ...relatedProduct, config: { duration: 0 } };
     return {
       ...relatedProduct,
       rotation: [0, 0, 0] as Vector3Tuple,
-      config: { duration, easing: easings.easeOutQuad },
+      config: { duration, easing: easings.easeInOutQuad },
     };
   });
   relatedProductsApi.start((i) => {

@@ -61,7 +61,7 @@ export function ProductRotationSlider() {
 
   return (
     <animated3.group
-      position={[0, -0.6, 0.3]}
+      position={[0, -0.7, 0.3]}
       rotation={sliderSpring.rotation as unknown as Vector3Tuple}
     >
       <Html position={[-0.03, -0.5, 0]}>

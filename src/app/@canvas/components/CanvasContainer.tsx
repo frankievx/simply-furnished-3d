@@ -5,6 +5,7 @@ import {
   FlyControls,
   GizmoHelper,
   GizmoViewport,
+  Preload,
   Stats,
   StatsGl,
 } from "@react-three/drei";
@@ -25,26 +26,22 @@ export function CanvasContainer({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
   return (
     <div className="fixed w-screen h-dvh touch-none overflow-hidden">
       <Canvas
-        ref={canvasRef}
         camera={{
           position: [-0.011403, -5.26023, -2],
           rotation: new Euler(-0.3, 0, 0),
         }}
         resize={{ debounce: { scroll: 50, resize: 0 } }}
         shadows
-        // shadows={{
-        //   mapSize: { width: 2048, height: 2048 },
-        // }}
       >
         {children}
         {/* <ambientLight intensity={0.5} /> */}
         {/* <CameraControlsWrapper /> */}
         {/* <GizmoContainer /> */}
         {/* <Stats /> */}
+        {/* <Preload all /> */}
         {/* <StatsGl /> */}
         {/* <EffectComposer disableNormalPass>
           <shaderPass attachArray="passes" args={[GammaCorrectionShader]} />

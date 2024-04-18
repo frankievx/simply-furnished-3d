@@ -30,5 +30,3 @@ export function Shelf(props: JSX.IntrinsicElements["group"]) {
     </group>
   );
 }
-
-useGLTF.preload("/models/shelf.glb");

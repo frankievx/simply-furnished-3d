@@ -35,6 +35,20 @@ import { Plant } from "./components/models/Plant";
 import { WallCarvingArt } from "./components/models/WallCarvingArt";
 import { useGLTF } from "@react-three/drei";
 import { loadingAtom } from "@/state/loading";
+import { Plant2 } from "./components/models/Plant2";
+import { Plant3 } from "./components/models/Plant3";
+import { Bookshelf } from "./components/models/Bookshelf";
+import { SideTable } from "./components/models/SideTable";
+import { DecorativeBookshelf } from "./components/models/DecorativeBookshelf";
+import { HangingShelf } from "./components/models/HangingShelf";
+import { PaintingYellow } from "./components/models/PaintingYellow";
+import { PaintingFox } from "./components/models/PaintingFox";
+import { PaintingYellowRed } from "./components/models/PaintingYellowRed";
+import { SnakePlant } from "./components/models/SnakePlant";
+import { LemonTree } from "./components/models/LemonTree";
+import { WallFlowers } from "./components/models/WallFlowers";
+import { GlobeDecor } from "./components/models/GlobeDecor";
+import { Clock } from "./components/models/Clock";
 
 const t = new Vector3();
 const lightTarget = new Object3D();
@@ -150,7 +164,7 @@ export default function Layout({ children }: { children?: React.ReactNode }) {
     <>
       <directionalLight
         color={new Color("#FFFFFF")}
-        position={[-5.36612, -8.0653, 2.40629]}
+        position={[-2.36612, -8.0653, 2.40629]}
         intensity={1.4}
         shadow-mapSize={[2048, 2048]}
         shadow-camera-near={0.1}
@@ -162,8 +176,27 @@ export default function Layout({ children }: { children?: React.ReactNode }) {
       <animated.group>
         <ProductRotationSlider />
       </animated.group>
+      <HangingShelf position={[-1.8, -0.01, 1]} scale={1.8} />
+      {/* <Clock position={[-1.8, -0.01, 1.2]} scale={1.8} /> */}
+      <PaintingYellow
+        position={[1.8, -0.08, -0.1]}
+        rotation={[Math.PI / 2, 0, 0]}
+        scale={3}
+      />
+      <WallFlowers scale={4} position={[3.5, 0, 1.3]} />
+      <WallFlowers scale={4} position={[-0.9, 0, -4.3]} />
+      <WallFlowers scale={4} position={[-4, 0, 3.5]} />
 
-      {children}
+      <PaintingFox position={[-4, -0.01, -3]} scale={2} />
+      <PaintingYellowRed position={[1, 0, 4.5]} scale={1.5} />
+      <DecorativeBookshelf position={[6, -0.01, 1.2]} />
+      {/* <HangingShelf position={[1, 0, -1]} scale={1.8} /> */}
+      {/* <Bookshelf
+        rotation={[Math.PI / 2, 0, Math.PI / 2]}
+        scale={0.6}
+        position={[-1, -0.22, 1.5]}
+      /> */}
+      {/* {children} */}
       {!loading &&
         productsSpring.map((product, index) => (
           <Product
@@ -184,10 +217,6 @@ export default function Layout({ children }: { children?: React.ReactNode }) {
 
       {/* @ts-ignore */}
       <Wall rotation={new Euler(Math.PI / 2, 0, 0)} receiveShadow {...bind()} />
-      {/* <mesh rotation={new Euler(Math.PI / 2, 0, 0)} receiveShadow {...bind()}>
-        <meshStandardMaterial color="#FFD468" />
-        <planeGeometry args={[25, 20]} />
-      </mesh> */}
       <directionalLight
         color={new Color("#FFFFFF")}
         position={[-3.36612, -4.0653, -7.40629]}
@@ -202,15 +231,12 @@ export default function Layout({ children }: { children?: React.ReactNode }) {
       {!loading && (
         <group position={[0, 0, -9.985]} receiveShadow>
           <WallCarvingArt />
-          {/* <Plant /> */}
+          <Plant position={[1.8, -0.2, 1]} scale={1.2} />
+          <Bookshelf position={[-1.2, -0.1, 0.75]} scale={1.2} />
           <Floor />
         </group>
       )}
-      {/* <group position={[0, 1, -11.2]} receiveShadow>
-      <Floor />
-      </group> */}
     </>
   );
 }
 
-// useGLTF.preload("/models/PlantPalm001/PlantPalm001-opt.glb");

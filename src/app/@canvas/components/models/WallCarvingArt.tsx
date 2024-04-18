@@ -31,7 +31,7 @@ export function WallCarvingArt(props: JSX.IntrinsicElements["group"]) {
       "/models/WallCarvingArt/WalledDecoration002_ROUGHNESS_4K_METALNESS.png",
       "/models/WallCarvingArt/WalledDecoration002_METALNESS_4K_METALNESS.png",
       "/models/WallCarvingArt/WalledDecoration002_AO_4K_METALNESS.png",
-    ].map((src) => imageKitLoader({ src, quality: "50" }))
+    ].map((src) => imageKitLoader({ src }))
   ).map((texture) => {
     texture.flipY = false;
     return texture;
@@ -58,5 +58,3 @@ export function WallCarvingArt(props: JSX.IntrinsicElements["group"]) {
     </group>
   );
 }
-
-useGLTF.preload("/WallCarvingArt.glb");

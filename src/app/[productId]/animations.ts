@@ -3,7 +3,7 @@ import { Vector3Tuple } from "three";
 import { CameraSpringRef } from "@/state/camera";
 import { SliderApiRef } from "@/state/slider";
 
-export const detailCameraPosition: Vector3Tuple = [-0.011403, -1.6, 0.8];
+export const detailCameraPosition: Vector3Tuple = [-0.011403, -1.8, 0.8];
 export const detailCameraTarget: Vector3Tuple = [0, 0, 0.2];
 
 export const animateCameraToProduct = async ({
@@ -66,7 +66,9 @@ export const animateProductToCenter = async ({
     const currentPosition = currentProduct.position;
     if (currentProduct.i === product.i)
       return {
-        position: [0, -0.324315, 0],
+        // position: [0, -0.324315, 0],
+        position: [0, -0.624315, 0],
+
         rotation: [0, 0, 0],
         shelfPosition: [0, 3, 0],
         ring: false,

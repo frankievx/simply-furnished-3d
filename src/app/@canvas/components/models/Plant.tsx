@@ -26,33 +26,31 @@ export function Plant(props: JSX.IntrinsicElements["group"]) {
   ) as GLTFResult;
 
   const [plantColorMap, plantNormalMap, plantRoughnessMap, plantMetalnessMap] =
-    useLoader(
-      THREE.TextureLoader,
+    useTexture(
       [
         "/models/PlantPalm001/PlantPalm001_COL_4K_METALNESS.jpg",
         "/models/PlantPalm001/PlantPalm001_NRM_4K_METALNESS.jpg",
         "/models/PlantPalm001/PlantPalm001_ROUGHNESS_4K_METALNESS.jpg",
         "/models/PlantPalm001/PlantPalm001_METALNESS_4K_METALNESS.jpg",
-      ].map((src) => imageKitLoader({ src, quality: "50" }))
+      ].map((src) => imageKitLoader({ src }))
     ).map((texture) => {
       return texture;
     });
   const [vaseColorMap, vaseNormalMap, vaseRoughnessMap, vaseMetalnessMap] =
-    useLoader(
-      THREE.TextureLoader,
+    useTexture(
       [
         "/models/PlantPalm001/PlantPalmVase001_COL_4K_METALNESS.jpg",
         "/models/PlantPalm001/PlantPalmVase001_NRM_4K_METALNESS.png",
         "/models/PlantPalm001/PlantPalmVase001_ROUGHNESS_4K_METALNESS.jpg",
         "/models/PlantPalm001/PlantPalmVase001_METALNESS_4K_METALNESS.jpg",
-      ].map((src) => imageKitLoader({ src, quality: "50" }))
+      ].map((src) => imageKitLoader({ src }))
     ).map((texture) => {
       texture.flipY = false;
       return texture;
     });
 
   return (
-    <group {...props} position={[-0.1, -0.5, 0.84]}>
+    <group {...props}>
       <mesh
         castShadow
         receiveShadow
@@ -84,5 +82,3 @@ export function Plant(props: JSX.IntrinsicElements["group"]) {
     </group>
   );
 }
-
-useGLTF.preload("/models/floor.glb");

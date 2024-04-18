@@ -19,7 +19,7 @@ export function TheTitle({ show }: { show?: boolean }) {
     // <div className="absolute pointer-events-none py-auto px-4 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full">
     <animated.div
       style={spring}
-      className="flex flex-col  gap-8 sm:gap-16 items-center justify-center h-full"
+      className="flex flex-col gap-8 sm:gap-16 items-center justify-center h-full  py-20 px-12 rounded-lg mx-8 sm:mx-0 "
     >
       <div className="flex justify-center gap-8 sm:text-3xl tracking-widest">
         <div>CHAIRS</div>

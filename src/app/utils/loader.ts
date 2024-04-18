@@ -1,12 +1,16 @@
+import { isMobile } from "react-device-detect";
+
 export const imageKitLoader = ({
   src,
-  width = "auto",
+  // width,
   quality,
 }: {
   src: string;
-  width?: string;
+  // width?: string;
   quality?: string;
 }) => {
+  const width = isMobile ? "1024" : "2048";
+  // const width = "auto";
   if (src[0] === "/") src = src.slice(1);
   const params = [`w-${width}`];
   if (quality) {

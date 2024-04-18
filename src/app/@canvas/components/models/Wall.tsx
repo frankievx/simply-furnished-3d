@@ -6,6 +6,8 @@ import * as THREE from "three";
 import React, { useRef } from "react";
 import { useGLTF } from "@react-three/drei";
 import { GLTF } from "three-stdlib";
+import { useLoader } from "@react-three/fiber";
+import { imageKitLoader } from "@/app/utils/loader";
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -17,11 +19,30 @@ type GLTFResult = GLTF & {
 };
 
 export function Wall(props: JSX.IntrinsicElements["group"]) {
+  const [aoMap, normalMap, displacementMap, glossMap] = useLoader(
+    THREE.TextureLoader,
+    [
+      "/textures/DrywallPainted/DrywallPainted001_AO_8K.jpg",
+      "/textures/DrywallPainted/DrywallPainted001_NRM_4K.jpg",
+      "/textures/DrywallPainted/DrywallPainted001_DISP_8K.jpg",
+      "/textures/DrywallPainted/DrywallPainted001_GLOSS_8K.jpg",
+    ].map((src) => imageKitLoader({ src }))
+  ).map((texture) => {
+    texture.flipY = false;
+    texture.wrapS = THREE.RepeatWrapping;
+    texture.wrapT = THREE.RepeatWrapping;
+    return texture;
+  });
   return (
     <group {...props} dispose={null}>
       <mesh receiveShadow>
         {/* <meshStandardMaterial color="#FFC24D" /> */}
-        <meshStandardMaterial color="#FFD468" />
+        <meshPhysicalMaterial
+          color="#FFD468"
+          aoMap={aoMap}
+          normalMap={normalMap}
+          // displacementMap={displacementMap}
+        />
         <planeGeometry args={[25, 20]} />
       </mesh>
       <mesh receiveShadow position={[0, -9.95, 0]}>

@@ -60,7 +60,6 @@ export default function Product({
         setHovered(false);
       },
       onPointerDown: ({ event }) => {
-        console.log("event", event);
         event.stopPropagation();
         onClick(product);
       },
