@@ -19,9 +19,7 @@ type GLTFResult = GLTF & {
 };
 
 export function WallCarvingArt(props: JSX.IntrinsicElements["group"]) {
-  const { nodes } = useGLTF(
-    "/models/WallCarvingArt/WallCarvingArt.glb"
-  ) as GLTFResult;
+  const { nodes } = useGLTF("/models/WallCarvingArt.glb") as GLTFResult;
 
   const [map, roughnessMap, metalnessMap, aoMap] = useLoader(
     THREE.TextureLoader,

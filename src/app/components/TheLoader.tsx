@@ -85,7 +85,7 @@ useGLTF.preload("/models/succulent-opt.glb");
 useGLTF.preload("/models/small-monstera-opt.glb");
 useGLTF.preload("/models/vases-opt.glb");
 useGLTF.preload("/models/whale-wicker-basket-opt.glb");
-useGLTF.preload("/models/WallCarvingArt/WallCarvingArt.glb");
+useGLTF.preload("/models/WallCarvingArt.glb");
 
 [
   "/models/PlantPalm001/PlantPalm001_COL_4K_METALNESS.jpg",
