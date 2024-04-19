@@ -36,14 +36,7 @@ export function WallCarvingArt(props: JSX.IntrinsicElements["group"]) {
   });
   return (
     <group {...props} dispose={null}>
-      <mesh
-        castShadow
-        receiveShadow
-        geometry={nodes.WallCarvingArt.geometry}
-        position={[1, 0, 1.85]}
-        rotation={[0, 1.567, 0]}
-        scale={1.3}
-      >
+      <mesh castShadow receiveShadow geometry={nodes.WallCarvingArt.geometry}>
         <meshStandardMaterial
           map={map}
           // normalMap={normalMap}

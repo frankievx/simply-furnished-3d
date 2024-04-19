@@ -183,9 +183,9 @@ export default function Layout({ children }: { children?: React.ReactNode }) {
         rotation={[Math.PI / 2, 0, 0]}
         scale={3}
       />
-      <WallFlowers scale={4} position={[3.5, 0, 1.3]} />
-      <WallFlowers scale={4} position={[-0.9, 0, -4.3]} />
       <WallFlowers scale={4} position={[-4, 0, 3.5]} />
+      {/* <WallFlowers scale={4} position={[-0.9, 0, -4.3]} /> */}
+      <WallFlowers scale={4} position={[3.5, 0, 1.3]} />
 
       <PaintingFox position={[-4, -0.01, -3]} scale={2} />
       <PaintingYellowRed position={[1, 0, 4.5]} scale={1.5} />
@@ -230,9 +230,13 @@ export default function Layout({ children }: { children?: React.ReactNode }) {
       <primitive object={lTarget} />
       {!loading && (
         <group position={[0, 0, -9.985]} receiveShadow>
-          <WallCarvingArt />
-          <Plant position={[1.8, -0.2, 1]} scale={1.2} />
-          <Bookshelf position={[-1.2, -0.1, 0.75]} scale={1.2} />
+          <WallCarvingArt
+            position={[1.3, 0, 1.9]}
+            rotation={[0, 1.567, 0]}
+            scale={1.3}
+          />
+          <Plant position={[1.8, -0.2, 1]} rotation={[0, 0, 0.2]} scale={1.2} />
+          <Bookshelf position={[-1.3, -0.1, 0.75]} scale={1.2} />
           <Floor />
         </group>
       )}
