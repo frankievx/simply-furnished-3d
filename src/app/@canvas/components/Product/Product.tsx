@@ -18,7 +18,7 @@ import { ProductTitle } from "./ProductTitle";
 import { showAtom } from "@/state/show";
 import { ProductLandmark } from "./ProductLandmark";
 import { MathUtils, Vector3Tuple } from "three";
-import { useDrag, useGesture } from "@use-gesture/react";
+import { useGesture } from "@use-gesture/react";
 import { sliderApiAtom } from "@/state/slider";
 import { gestureAtom } from "@/state/gesture";
 

@@ -95,7 +95,7 @@ useGLTF.preload("/models/WallCarvingArt.glb");
 ].map((src) => useTexture.preload(imageKitLoader({ src })));
 [
   "/models/PlantPalm001/PlantPalmVase001_COL_4K_METALNESS.jpg",
-  "/models/PlantPalm001/PlantPalmVase001_NRM_4K_METALNESS.png",
+  "/models/PlantPalm001/PlantPalmVase001_NRM_2K_METALNESS.png",
   "/models/PlantPalm001/PlantPalmVase001_ROUGHNESS_4K_METALNESS.jpg",
   "/models/PlantPalm001/PlantPalmVase001_METALNESS_4K_METALNESS.jpg",
 ].map((src) => useTexture.preload(imageKitLoader({ src })));

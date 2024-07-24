@@ -22,10 +22,10 @@ export function Wall(props: JSX.IntrinsicElements["group"]) {
   const [aoMap, normalMap, displacementMap, glossMap] = useLoader(
     THREE.TextureLoader,
     [
-      "/textures/DrywallPainted/DrywallPainted001_AO_8K.jpg",
-      "/textures/DrywallPainted/DrywallPainted001_NRM_4K.jpg",
-      "/textures/DrywallPainted/DrywallPainted001_DISP_8K.jpg",
-      "/textures/DrywallPainted/DrywallPainted001_GLOSS_8K.jpg",
+      "/textures/DrywallPainted/DrywallPainted001_AO_2K.jpg",
+      "/textures/DrywallPainted/DrywallPainted001_NRM_2K.jpg",
+      "/textures/DrywallPainted/DrywallPainted001_DISP_2K.jpg",
+      "/textures/DrywallPainted/DrywallPainted001_GLOSS_2K.jpg",
     ].map((src) => imageKitLoader({ src }))
   ).map((texture) => {
     texture.flipY = false;

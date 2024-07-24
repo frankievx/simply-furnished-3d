@@ -5,7 +5,6 @@ import { Euler } from "three";
 
 export function CameraControlsWrapper({}: Readonly<{}>) {
   const { camera } = useThree();
-  console.log("camera", camera);
   const ref = useRef<typeof CameraControls>();
   // camera.setRotationFromEuler(new Euler(1.5708, 0, 0));
   // console.log("camera", camera);

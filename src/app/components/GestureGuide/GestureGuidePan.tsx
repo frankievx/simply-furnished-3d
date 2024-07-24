@@ -43,7 +43,7 @@ export const GestureGuidePan = () => {
         >
           <CursorIcon className="w-16 h-16 fill-black stroke-black stroke-1" />
         </animated.div>
-        <div className="absolute w-3/4 h-1/3 border-4 border-solid border-black rounded-lg"></div>
+        <div className="absolute w-3/4 sm:w-1/2 h-1/3 border-4 border-solid border-black rounded-lg"></div>
       </div>
       <h2 className="text-xl font-semibold flex-shrink">
         Click and drag to pan
