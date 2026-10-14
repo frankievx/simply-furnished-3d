@@ -24,7 +24,6 @@ export default function RootLayout({
         className={`${inter.className} select-none h-dvh w-screen overflow-hidden`}
       >
         {/* <TheLoader /> */}
-        {/* <TheGestureGuide /> */}
         <CanvasContainer>{canvas}</CanvasContainer>
         <TheApp>{children}</TheApp>
       </body>

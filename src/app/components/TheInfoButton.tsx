@@ -7,7 +7,7 @@ export const TheInfoButton = () => {
   const setShow = useSetAtom(showAtom);
 
   const onClick = () => {
-    setShow((show) => ({ ...show, info: true, title: false }));
+    setShow((show) => ({ ...show, info: true }));
   };
   return (
     <button className="bg-transparent pointer-events-auto" onClick={onClick}>

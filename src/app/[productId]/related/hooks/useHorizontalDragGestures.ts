@@ -1,6 +1,5 @@
 import { gestureAtom } from "@/state/gesture";
-import { useAtom, useSetAtom } from "jotai";
-import { useParams, useRouter } from "next/navigation";
+import { useAtomValue } from "jotai";
 import { useEffect, useRef } from "react";
 
 export const useHorizontalDragGestures = ({
@@ -10,7 +9,7 @@ export const useHorizontalDragGestures = ({
   nextHandler: () => void;
   prevHandler: () => void;
 }) => {
-  const [gesture, setGesture] = useAtom(gestureAtom);
+  const gesture = useAtomValue(gestureAtom);
   const touchStart = useRef(0);
   useEffect(() => {
     if (gesture.relatedProducts) {
@@ -30,7 +29,6 @@ export const useHorizontalDragGestures = ({
       };
       window.addEventListener("touchstart", touchStartHandler);
       window.addEventListener("touchend", touchEndHandler);
-      setGesture((prev) => ({ ...prev, canvas: false }));
 
       return () => {
         window.removeEventListener("touchstart", touchStartHandler);
