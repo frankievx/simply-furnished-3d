@@ -2,7 +2,7 @@
 import { animated } from "@react-spring/three";
 import { useCursor } from "@react-three/drei";
 import { useAtomValue } from "jotai";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { Vector3Tuple } from "three";
 import { Chair } from "../models/Chair";
 import { ProductSpring } from "@/state/products";
@@ -36,7 +36,11 @@ export default function Product({
         }}
       >
         <animated.group visible={show.itemTitles}>
-          <ProductTitle title={product.title.get()} />
+          {/* The title loads its font on first show. Without its own boundary
+              that suspends the whole canvas and the page flashes white. */}
+          <Suspense fallback={null}>
+            <ProductTitle title={product.title.get()} />
+          </Suspense>
         </animated.group>
         <group receiveShadow castShadow>
           <Chair />

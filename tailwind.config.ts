@@ -12,6 +12,12 @@ const config: Config = {
         casanova: ["Casanova"],
         display: ["Casanova"],
       },
+      keyframes: {
+        "fade-in": { from: { opacity: "0" }, to: { opacity: "1" } },
+      },
+      animation: {
+        "fade-in": "fade-in 600ms ease-out both",
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":

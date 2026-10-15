@@ -1,6 +1,6 @@
 "use client";
 import { useThree } from "@react-three/fiber";
-import { useEffect, useLayoutEffect, useState } from "react";
+import { Suspense, useEffect, useLayoutEffect, useState } from "react";
 import { Color, Euler, Mesh, Vector3 } from "three";
 import Product from "./components/Product/Product";
 import { ProductSpring, relatedProductsApiAtom } from "../../state/products";
@@ -65,7 +65,9 @@ export default function Layout() {
         castShadow
       />
       <hemisphereLight color={new Color("#FFFFFF")} intensity={1} />
-      <ProductMask position={[0, -1.85, -9.01]} />
+      <Suspense fallback={null}>
+        <ProductMask position={[0, -1.85, -9.01]} />
+      </Suspense>
       {relatedProductsSpring.map((product, index) => (
         <Product
           key={index}
@@ -87,16 +89,22 @@ export default function Layout() {
       />
       <primitive object={lTarget} />
       {!loading && (
-        <group position={[0, 0, -9.985]} receiveShadow>
-          <WallCarvingArt
-            position={[1.3, 0, 1.9]}
-            rotation={[0, 1.567, 0]}
-            scale={1.3}
-          />
-          <Plant position={[1.8, -0.2, 1]} rotation={[0, 0, 0.2]} scale={1.2} />
-          <Bookshelf position={[-1.3, -0.1, 0.75]} scale={1.2} />
-          <Floor />
-        </group>
+        <Suspense fallback={null}>
+          <group position={[0, 0, -9.985]} receiveShadow>
+            <WallCarvingArt
+              position={[1.3, 0, 1.9]}
+              rotation={[0, 1.567, 0]}
+              scale={1.3}
+            />
+            <Plant
+              position={[1.8, -0.2, 1]}
+              rotation={[0, 0, 0.2]}
+              scale={1.2}
+            />
+            <Bookshelf position={[-1.3, -0.1, 0.75]} scale={1.2} />
+            <Floor />
+          </group>
+        </Suspense>
       )}
     </>
   );
