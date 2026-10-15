@@ -1,68 +1,79 @@
 "use client";
-import { animated, useSpring } from "@react-spring/web";
-import { useGLTF, useProgress } from "@react-three/drei";
-import { Dispatch, SetStateAction, useState } from "react";
+import { useGLTF, useProgress, useTexture } from "@react-three/drei";
+import { useAtom } from "jotai";
+import { useEffect } from "react";
+import { loadingAtom } from "@/state/loading";
+import { imageKitLoader } from "../utils/loader";
 import { RightArrowIcon } from "./svgs/RightArrowIcon";
 import { TheTitle } from "./TheTitle";
-import { useAtom } from "jotai";
-import { loadingAtom } from "@/state/loading";
-import { useTexture } from "@react-three/drei";
-import { imageKitLoader } from "../utils/loader";
+
+const BAR_COUNT = 3;
+// Matches the bar fill transition below, so the enter button waits for the
+// last bar to finish filling.
+const FILL_MS = 700;
 
 export default function TheLoader({ onClick }: { onClick: () => void }) {
   const [loading, setLoading] = useAtom(loadingAtom);
-  const { active, progress, errors, item, loaded, total } = useProgress();
+  const { progress } = useProgress();
 
-  const [progressSpring, progressApi] = useSpring(
-    () => ({
-      from: { width: "0%" },
-      to: { width: progress.toFixed(2) + "%" },
-      config: { duration: 2000 },
-      onRest: () => setLoading(false),
-    }),
-    [progress]
-  );
-
-  const containerSpring = useSpring({
-    from: {
-      opacity: 0,
-      y: 300,
-    },
-    to: {
-      opacity: 1,
-      y: 0,
-    },
-    config: { duration: 2000 },
-  });
+  useEffect(() => {
+    if (progress < 100) return;
+    const id = setTimeout(() => setLoading(false), FILL_MS);
+    return () => clearTimeout(id);
+  }, [progress, setLoading]);
 
   return (
-    <div className=" bg-[#E8D896] h-dvh w-screen flex flex-col justify-center items-center z-20 absolute overflow-hidden">
-      <div className="w-1/2 h-1/2 flex justify-center">
-        <TheTitle />
-      </div>
-      <animated.div
-        style={containerSpring}
-        className="absolute bottom-12 sm:bottom-48  flex flex-col items-center w-1/2 sm:w-1/4"
-      >
-        {loading ? (
-          <>
-            <animated.div
-              className="h-1 bg-[#D2BE9D] rounded-md "
-              style={progressSpring}
-            ></animated.div>
-            <h1 className="text-lg text-center mt-4">Loading...</h1>
-          </>
-        ) : (
-          <>
-            <animated.button
-              className="rounded-lg px-5 py-3 bg-[#D2BE9D] w-fit"
-              onClick={onClick}
+    <div className="absolute z-20 h-dvh w-screen overflow-hidden bg-[#D2BE9D] p-3 sm:p-6">
+      <div className="h-full w-full overflow-hidden bg-[#E8D896]">
+        <TheTitle>
+          {/* Fixed-height slot: the bars and the button share it, so nothing
+              shifts when loading finishes. */}
+          <div className="relative h-12 w-full">
+            <div
+              role="progressbar"
+              aria-label="Loading the showroom"
+              aria-valuemin={0}
+              aria-valuemax={100}
+              aria-valuenow={Math.round(progress)}
+              aria-hidden={!loading}
+              className={`absolute inset-0 flex items-center gap-2 transition-opacity duration-500 motion-reduce:transition-none ${
+                loading ? "opacity-100" : "pointer-events-none opacity-0"
+              }`}
             >
-              <RightArrowIcon />
-            </animated.button>
-          </>
-        )}
-      </animated.div>
+              {Array.from({ length: BAR_COUNT }, (_, i) => {
+                const share = 100 / BAR_COUNT;
+                const fill = Math.min(Math.max((progress - i * share) / share, 0), 1);
+                return (
+                  <div
+                    key={i}
+                    className="h-1 flex-1 overflow-hidden rounded-full bg-[#1b1710]/15"
+                  >
+                    <div
+                      className="h-full origin-left rounded-full bg-[#1b1710] transition-transform ease-out motion-reduce:transition-none"
+                      style={{
+                        transform: `scaleX(${fill})`,
+                        transitionDuration: `${FILL_MS}ms`,
+                      }}
+                    />
+                  </div>
+                );
+              })}
+            </div>
+            <button
+              type="button"
+              onClick={onClick}
+              disabled={loading}
+              tabIndex={loading ? -1 : 0}
+              className={`absolute left-0 top-0 flex h-12 items-center gap-3 rounded-full bg-[#1b1710] px-7 text-xs uppercase tracking-[0.18em] text-[#E8D896] transition-opacity duration-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#1b1710] motion-reduce:transition-none sm:text-sm ${
+                loading ? "pointer-events-none opacity-0" : "opacity-100"
+              }`}
+            >
+              Enter showroom
+              <RightArrowIcon className="h-4 w-4 [&_path]:stroke-[#E8D896]" />
+            </button>
+          </div>
+        </TheTitle>
+      </div>
     </div>
   );
 }
