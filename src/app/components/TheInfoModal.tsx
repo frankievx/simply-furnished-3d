@@ -1,27 +1,4 @@
-import { gestureAtom } from "@/state/gesture";
-import { ExtractAtomValue, useSetAtom } from "jotai";
-import mapValues from "lodash/mapValues";
-import { useEffect } from "react";
-
-export const TheInfoModal = ({
-  initialGestureState,
-  onDismiss,
-}: {
-  initialGestureState: ExtractAtomValue<typeof gestureAtom>;
-  onDismiss: () => void;
-}) => {
-  const setGesture = useSetAtom(gestureAtom);
-
-  useEffect(() => {
-    setGesture((gesture) => {
-      return mapValues(gesture, () => false);
-    });
-
-    return () => {
-      setGesture(initialGestureState);
-    };
-  }, [initialGestureState]);
-
+export const TheInfoModal = ({ onDismiss }: { onDismiss: () => void }) => {
   return (
     <div
       className="absolute h-dvh w-screen flex flex-col justify-center items-center z-30 gap-4 bg-gray-600 bg-opacity-70 pointer-events-auto"
