@@ -1,16 +1,16 @@
 "use client";
 import { useThree } from "@react-three/fiber";
-import { Suspense, useEffect, useLayoutEffect, useState } from "react";
+import { Suspense, useEffect, useLayoutEffect, useRef } from "react";
 import { Color, Euler, Mesh, Vector3 } from "three";
 import Product from "./components/Product/Product";
-import { ProductSpring, relatedProductsApiAtom } from "../../state/products";
 import { easings, useSprings } from "@react-spring/web";
-import { useAtomValue, useSetAtom } from "jotai";
+import { useAtomValue } from "jotai";
 import { carouselCamera } from "@/state/camera";
 import { Floor } from "./components/models/Floor";
-import { useParams, useRouter } from "next/navigation";
 import { ProductMask } from "./components/Product/ProductMask";
-import { getInitialRelatedProducts } from "./utils";
+import { products } from "@/data/products";
+import { useCarouselNavigation } from "@/app/hooks/carouselNavigation";
+import { carouselLayout, crossesSeam, getItemTarget } from "./carousel";
 import { Wall } from "./components/models/Wall";
 import { Plant } from "./components/models/Plant";
 import { WallCarvingArt } from "./components/models/WallCarvingArt";
@@ -22,36 +22,40 @@ lTarget.position.set(0, 0, -10);
 
 export default function Layout() {
   const { camera } = useThree();
-  const router = useRouter();
-  const { productId, relatedProductId } = useParams();
   const loading = useAtomValue(loadingAtom);
-  const setRelatedProductsApi = useSetAtom(relatedProductsApiAtom);
+  const { activeIndex: urlIndex, goToIndex } = useCarouselNavigation();
+  // An unknown id is redirected by the page; show the first item meanwhile.
+  const activeIndex = Math.max(urlIndex, 0);
+  const count = products.length;
 
-  // Lay the carousel out around the product in the URL from the first frame.
-  const [initialProducts] = useState(() =>
-    getInitialRelatedProducts(Number(relatedProductId))
+  // One spring per item, laid out around the active item from the first
+  // frame, so entering needs no animation.
+  const [springs, api] = useSprings(count, (i) =>
+    getItemTarget(i, activeIndex, count)
   );
-  const [relatedProductsSpring, relatedProductsApi] = useSprings(
-    initialProducts.length,
-    (i) => ({
-      ...initialProducts[i],
-      config: { easing: easings.easeInOutSine },
-    })
-  );
+
+  // The URL is the only source of the active item: whenever it changes, every
+  // item retargets from wherever it currently is.
+  const previousIndexRef = useRef(activeIndex);
+  useEffect(() => {
+    const previous = previousIndexRef.current;
+    if (previous === activeIndex) return;
+    previousIndexRef.current = activeIndex;
+    api.start((i) => ({
+      ...getItemTarget(i, activeIndex, count),
+      immediate: crossesSeam(i, previous, activeIndex, count),
+      config: {
+        duration: carouselLayout.duration,
+        easing: easings.easeInOutQuad,
+      },
+    }));
+  }, [activeIndex, api, count]);
 
   // The camera is fixed: no intro or transitions, just the carousel view.
   useLayoutEffect(() => {
     camera.position.set(...carouselCamera.position);
     camera.lookAt(new Vector3(...carouselCamera.target));
   }, [camera]);
-
-  useEffect(() => {
-    setRelatedProductsApi(() => relatedProductsApi);
-  }, [relatedProductsApi, setRelatedProductsApi]);
-
-  const onRelatedProductClick = (product: ProductSpring) => {
-    router.push(`/${productId}/related/${product.i.get()}`);
-  };
 
   return (
     <>
@@ -68,11 +72,12 @@ export default function Layout() {
       <Suspense fallback={null}>
         <ProductMask position={[0, -1.85, -9.01]} />
       </Suspense>
-      {relatedProductsSpring.map((product, index) => (
+      {springs.map((spring, index) => (
         <Product
-          key={index}
-          product={product}
-          onClick={onRelatedProductClick}
+          key={products[index].id}
+          item={products[index]}
+          spring={spring}
+          onClick={() => goToIndex(index)}
           castShadow
         />
       ))}

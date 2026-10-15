@@ -17,17 +17,6 @@ walk(join(process.cwd(), "public/models"), "/models");
 const nextConfig = {
   reactStrictMode: false,
   env: { NEXT_PUBLIC_GLB_SIZES: JSON.stringify(glbSizes) },
-  async redirects() {
-    // The wall landing and product pages were removed; the carousel is the app.
-    return [
-      { source: "/", destination: "/0/related/0", permanent: false },
-      {
-        source: "/:productId(\\d+)",
-        destination: "/:productId/related/:productId",
-        permanent: false,
-      },
-    ];
-  },
 };
 
 export default nextConfig;
