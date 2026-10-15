@@ -1,33 +1,42 @@
 "use client";
+import { products } from "@/data/products";
+import { mod } from "@/app/@canvas/carousel";
 import { useCarouselNavigation } from "@/app/hooks/carouselNavigation";
 import { RightArrowIcon } from "./svgs/RightArrowIcon";
 
-const arrowClass =
-  "pointer-events-auto absolute top-1/2 hidden h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-white/85 shadow-lg transition-colors hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white motion-safe:animate-fade-in sm:flex";
+const pillClass =
+  "pointer-events-auto absolute bottom-[5.25rem] flex h-10 items-center gap-2 rounded-full border border-white/70 px-4 text-sm text-white transition-colors hover:bg-white hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white motion-safe:animate-fade-in motion-reduce:transition-none [&_path]:stroke-current";
 
-// Previous and next buttons for desktop. Touch screens use swipe and the bars.
+// Labeled previous and next buttons, either side of the bars. They name the
+// neighbouring chair, which also makes the wraparound clear.
 export function TheCarouselArrows() {
-  const { next, prev } = useCarouselNavigation();
-  const delay = { animationDelay: "2s" };
+  const { activeIndex, next, prev } = useCarouselNavigation();
+  if (activeIndex < 0) return null;
+  const count = products.length;
+  const prevTitle = products[mod(activeIndex - 1, count)].title;
+  const nextTitle = products[mod(activeIndex + 1, count)].title;
+  const delay = { animationDelay: "2s", animationFillMode: "backwards" };
   return (
     <>
       <button
         type="button"
-        aria-label="Previous chair"
+        aria-label={`Previous chair: ${prevTitle}`}
         onClick={prev}
         style={delay}
-        className={`${arrowClass} left-6`}
+        className={`${pillClass} right-[calc(50%+6rem)]`}
       >
-        <RightArrowIcon className="h-5 w-5 rotate-180" />
+        <RightArrowIcon className="h-4 w-4 rotate-180" />
+        {prevTitle}
       </button>
       <button
         type="button"
-        aria-label="Next chair"
+        aria-label={`Next chair: ${nextTitle}`}
         onClick={next}
         style={delay}
-        className={`${arrowClass} right-6`}
+        className={`${pillClass} left-[calc(50%+6rem)]`}
       >
-        <RightArrowIcon className="h-5 w-5" />
+        {nextTitle}
+        <RightArrowIcon className="h-4 w-4" />
       </button>
     </>
   );

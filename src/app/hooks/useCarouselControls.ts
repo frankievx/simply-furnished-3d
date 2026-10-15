@@ -25,7 +25,7 @@ const isInteractive = (target: EventTarget | null) =>
   target.closest("button, a, input, textarea, select, [role=dialog]") !== null;
 
 /**
- * Keyboard (arrows, Home, End), mouse/touch/pen drag and horizontal wheel or
+ * Keyboard (arrows, Home, End), mouse drag and horizontal wheel or
  * trackpad swipes. Each gesture moves the carousel one step.
  */
 export const useCarouselControls = ({ enabled = true, ...handlers }: Controls) => {
@@ -62,7 +62,7 @@ export const useCarouselControls = ({ enabled = true, ...handlers }: Controls) =
 
     let drag: { id: number; x: number; y: number } | null = null;
     const onPointerDown = (e: PointerEvent) => {
-      if (!e.isPrimary || (e.pointerType === "mouse" && e.button !== 0)) return;
+      if (e.pointerType !== "mouse" || e.button !== 0) return;
       if (isInteractive(e.target)) return;
       drag = { id: e.pointerId, x: e.clientX, y: e.clientY };
     };

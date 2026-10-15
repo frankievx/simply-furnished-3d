@@ -1,6 +1,8 @@
 "use client";
 import { ReactNode, useState } from "react";
-import TheLoader from "./TheLoader";
+import dynamic from "next/dynamic";
+import { TheMobileLanding } from "./TheMobileLanding";
+import { useIsDesktop } from "@/app/hooks/useIsDesktop";
 import { useAtom } from "jotai";
 import { animated, useSpring, useTransition } from "@react-spring/web";
 import { TheInfoButton } from "./TheInfoButton";
@@ -10,7 +12,11 @@ import { CarouselController } from "./CarouselController";
 import { TheCarouselArrows } from "./TheCarouselArrows";
 import { showAtom } from "@/state/show";
 
+// Loaded only on desktop: the module starts downloading every model on import.
+const TheLoader = dynamic(() => import("./TheLoader"), { ssr: false });
+
 export const TheApp = ({ children }: { children: ReactNode }) => {
+  const isDesktop = useIsDesktop();
   const [enter, setEnter] = useState(false);
   const [spring, api] = useSpring({ opacity: 1 }, []);
   const [show, setShow] = useAtom(showAtom);
@@ -33,6 +39,10 @@ export const TheApp = ({ children }: { children: ReactNode }) => {
   const dismissHandler = () => {
     setShow((show) => ({ ...show, info: false }));
   };
+
+  if (isDesktop === false) return <TheMobileLanding />;
+  if (isDesktop === null)
+    return <div className="absolute h-dvh w-screen bg-[#D2BE9D]" />;
 
   if (!enter)
     return (

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { CanvasContainer } from "@/app/@canvas/components/CanvasContainer";
+import { DesktopOnly } from "./components/DesktopOnly";
 import { TheApp } from "./components/TheApp";
 import { assetProgressScript } from "./utils/assetProgressScript";
 import "./globals.css";
@@ -28,7 +29,9 @@ export default function RootLayout({
         className={`${inter.className} select-none h-dvh w-screen overflow-hidden`}
       >
         {/* <TheLoader /> */}
-        <CanvasContainer>{canvas}</CanvasContainer>
+        <DesktopOnly>
+          <CanvasContainer>{canvas}</CanvasContainer>
+        </DesktopOnly>
         <TheApp>{children}</TheApp>
       </body>
     </html>
