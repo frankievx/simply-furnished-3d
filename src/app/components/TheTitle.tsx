@@ -21,7 +21,7 @@ export function TheTitle({ children }: { children?: ReactNode }) {
       {/* A still of the carousel's own window: the white outline, the chair's
           title and the chair in its room. No 3D is loaded for this. */}
       <div
-        className="relative aspect-[560/982] h-[34dvh] shrink-0 overflow-hidden border-2 border-white shadow-[0_24px_48px_-28px_rgba(74,52,38,0.55)] sm:h-[70dvh] sm:max-h-[640px]"
+        className="relative aspect-[560/982] h-[28dvh] shrink-0 overflow-hidden border-2 border-white shadow-[0_24px_48px_-28px_rgba(74,52,38,0.55)] sm:h-[56dvh] sm:max-h-[500px]"
         style={{ borderRadius: "5.9% / 3.4%" }}
       >
         <Image
@@ -29,7 +29,7 @@ export function TheTitle({ children }: { children?: ReactNode }) {
           alt="The Axis Lounge chair in the showroom"
           fill
           priority
-          sizes="(min-width: 640px) 370px, 200px"
+          sizes="(min-width: 640px) 290px, 160px"
           className="object-cover"
         />
       </div>
