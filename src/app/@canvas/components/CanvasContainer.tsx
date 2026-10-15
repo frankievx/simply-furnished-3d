@@ -13,6 +13,7 @@ import { Canvas, extend } from "@react-three/fiber";
 import { useRef } from "react";
 import { GizmoContainer } from "./GizmoContainer";
 import { Euler } from "three";
+import { carouselCamera } from "@/state/camera";
 import { EffectComposer, SMAA, ToneMapping } from "@react-three/postprocessing";
 import { GammaCorrectionShader } from "three-stdlib";
 import { ShaderPass } from "three-stdlib";
@@ -30,7 +31,7 @@ export function CanvasContainer({
     <div className="fixed w-screen h-dvh touch-none overflow-hidden">
       <Canvas
         camera={{
-          position: [-0.011403, -5.26023, -2],
+          position: carouselCamera.position,
           rotation: new Euler(-0.3, 0, 0),
         }}
         resize={{ debounce: { scroll: 50, resize: 0 } }}

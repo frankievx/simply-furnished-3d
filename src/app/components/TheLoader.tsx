@@ -67,20 +67,13 @@ export default function TheLoader({ onClick }: { onClick: () => void }) {
   );
 }
 
-useGLTF.preload("/models/shelf.glb");
 useGLTF.preload("/models/bookshelf-opt.glb");
-useGLTF.preload("/models/hanging-shelf-opt.glb");
 useGLTF.preload("/models/floor.glb");
 useGLTF.preload("/models/chair-model-opt.glb");
 useGLTF.preload("/models/PlantPalm001/PlantPalm001-opt.glb");
-useGLTF.preload("/models/wall-flowers-opt.glb");
 useGLTF.preload("/models/books-opt.glb");
 useGLTF.preload("/models/globe-decor.glb");
-useGLTF.preload("/models/painting-fox.glb");
-useGLTF.preload("/models/painting-yellow.glb");
-useGLTF.preload("/models/painting-yellowred.glb");
 useGLTF.preload("/models/decorative-stone-opt.glb");
-useGLTF.preload("/models/decorative-bookshelf-opt.glb");
 useGLTF.preload("/models/succulent-opt.glb");
 useGLTF.preload("/models/small-monstera-opt.glb");
 useGLTF.preload("/models/vases-opt.glb");

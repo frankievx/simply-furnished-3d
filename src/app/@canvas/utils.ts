@@ -1,4 +1,3 @@
-import { easings } from "@react-spring/web";
 import { Vector3Tuple } from "three";
 import { ProductType, ProductsType, products } from "@/state/products";
 
@@ -40,9 +39,22 @@ export const getRelatedProducts = ({ selected }: { selected: ProductType }) => {
     return {
       ...product,
       order: orderIndex,
-      shelf: false,
       position: [positionX, product.position[1] - 0.8, -10] as Vector3Tuple,
-      shelfPosition: [0, 3, -2] as Vector3Tuple,
     };
   });
+};
+
+export const selectedProductRotation: Vector3Tuple = [0, 0, 0.2];
+
+// Carousel layout centered on `selectedId`, in the same state `animateRelatedProducts`
+// settles on, so the first render needs no animation.
+export const getInitialRelatedProducts = (selectedId: number) => {
+  const selected = products[selectedId] ?? products[0];
+  return getRelatedProducts({ selected }).map((product) => ({
+    ...product,
+    rotation:
+      product.i === selected.i
+        ? selectedProductRotation
+        : ([0, 0, 0] as Vector3Tuple),
+  }));
 };
