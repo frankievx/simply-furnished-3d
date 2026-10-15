@@ -32,6 +32,8 @@ body {
   height: 100%;
   width: 100%;
   overflow: hidden;
+  /* A horizontal swipe moves the carousel, not browser history. */
+  overscroll-behavior: none;
 }
 
 body {

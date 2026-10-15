@@ -97,8 +97,21 @@ export const TheCarouselNavigation = () => {
               id={"related-nav-button-" + i}
               key={"related-nav-button-" + i}
               style={props}
-              className={"py-4 outline-none " + navButtons[i].className}
+              className={
+                "rounded-md py-4 outline-none " +
+                navButtons[i].className
+              }
               onClick={navButtons[i].handler}
+              aria-label={
+                i === PREV_BAR
+                  ? "Previous chair"
+                  : i === NEXT_BAR
+                  ? "Next chair"
+                  : undefined
+              }
+              aria-hidden={i === PREV_BAR || i === NEXT_BAR ? undefined : true}
+              // The labeled arrow buttons are the keyboard controls.
+              tabIndex={-1}
             >
               <div className="h-1 w-10 rounded-md bg-white"></div>
             </animated.button>

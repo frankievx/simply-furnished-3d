@@ -10,7 +10,7 @@ import { Floor } from "./components/models/Floor";
 import { ProductMask } from "./components/Product/ProductMask";
 import { products } from "@/data/products";
 import { useCarouselNavigation } from "@/app/hooks/carouselNavigation";
-import { carouselLayout, crossesSeam, getItemTarget } from "./carousel";
+import { carouselLayout, getItemTarget, wrapsAround } from "./carousel";
 import { Wall } from "./components/models/Wall";
 import { Plant } from "./components/models/Plant";
 import { WallCarvingArt } from "./components/models/WallCarvingArt";
@@ -22,6 +22,7 @@ lTarget.position.set(0, 0, -10);
 
 export default function Layout() {
   const { camera } = useThree();
+  const getViewport = useThree((state) => state.viewport.getCurrentViewport);
   const loading = useAtomValue(loadingAtom);
   const { activeIndex: urlIndex, goToIndex } = useCarouselNavigation();
   // An unknown id is redirected by the page; show the first item meanwhile.
@@ -36,20 +37,50 @@ export default function Layout() {
 
   // The URL is the only source of the active item: whenever it changes, every
   // item retargets from wherever it currently is.
+  const springsRef = useRef(springs);
+  springsRef.current = springs;
   const previousIndexRef = useRef(activeIndex);
   useEffect(() => {
-    const previous = previousIndexRef.current;
-    if (previous === activeIndex) return;
+    if (previousIndexRef.current === activeIndex) return;
     previousIndexRef.current = activeIndex;
-    api.start((i) => ({
-      ...getItemTarget(i, activeIndex, count),
-      immediate: crossesSeam(i, previous, activeIndex, count),
-      config: {
-        duration: carouselLayout.duration,
-        easing: easings.easeInOutQuad,
-      },
-    }));
-  }, [activeIndex, api, count]);
+    const { duration, spacing, y, z, offscreenMargin } = carouselLayout;
+    const visible = getViewport(camera, [0, y, z]);
+    const offscreenX = visible.width / 2 + offscreenMargin;
+    api.start((i) => {
+      const target = getItemTarget(i, activeIndex, count);
+      const [targetX] = target.position;
+      const [currentX] = springsRef.current[i].position.get();
+      if (!wrapsAround(currentX, targetX, count))
+        return {
+          ...target,
+          config: { duration, easing: easings.easeInOutQuad },
+        };
+      // Crossing the seam: slide off one side, then come in from the other,
+      // instead of jumping across the room.
+      const exit = currentX < targetX ? -1 : 1;
+      const exitX = exit * Math.max(offscreenX, Math.abs(currentX) + spacing);
+      const enterX = -exit * Math.max(offscreenX, Math.abs(targetX) + spacing);
+      const outDistance = Math.abs(exitX - currentX);
+      const inDistance = Math.abs(targetX - enterX);
+      const outDuration = (duration * outDistance) / (outDistance + inDistance);
+      return {
+        to: async (next: (props: object) => Promise<unknown>) => {
+          await next({
+            position: [exitX, y, z],
+            config: { duration: outDuration, easing: easings.easeInQuad },
+          });
+          await next({ position: [enterX, y, z], immediate: true });
+          await next({
+            ...target,
+            config: {
+              duration: duration - outDuration,
+              easing: easings.easeOutQuad,
+            },
+          });
+        },
+      };
+    });
+  }, [activeIndex, api, count, camera, getViewport]);
 
   // The camera is fixed: no intro or transitions, just the carousel view.
   useLayoutEffect(() => {
