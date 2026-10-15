@@ -33,7 +33,9 @@ export default function Product({
         {...props}
         onPointerOver={() => setHovered(true)}
         onPointerOut={() => setHovered(false)}
-        onPointerDown={(event) => {
+        // onClick, not onPointerDown: a drag that starts on a chair must not
+        // also select it.
+        onClick={(event) => {
           event.stopPropagation();
           onClick(item);
         }}

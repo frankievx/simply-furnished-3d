@@ -7,6 +7,7 @@ import { TheInfoButton } from "./TheInfoButton";
 import { TheInfoModal } from "./TheInfoModal";
 import { TheCarouselNavigation } from "./TheCarouselNavigation";
 import { CarouselController } from "./CarouselController";
+import { TheCarouselArrows } from "./TheCarouselArrows";
 import { showAtom } from "@/state/show";
 
 export const TheApp = ({ children }: { children: ReactNode }) => {
@@ -45,6 +46,7 @@ export const TheApp = ({ children }: { children: ReactNode }) => {
       <div className="absolute flex justify-between items-end w-full px-3 pointer-events-none bottom-3">
         <TheInfoButton />
       </div>
+      <TheCarouselArrows />
       <TheCarouselNavigation />
       <CarouselController />
       {children}

@@ -12,6 +12,8 @@ export const carouselLayout = {
   restRotation: [0, 0, 0] as Vector3Tuple,
   /** Milliseconds for a one step move. */
   duration: 1500,
+  /** How far past the screen edge an item waits when it wraps round. */
+  offscreenMargin: 1.2,
 };
 
 export type ItemTarget = {
@@ -49,18 +51,9 @@ export const getItemTarget = (
 };
 
 /**
- * True when moving the active item from `fromActive` to `toActive` sends
- * `index` across the loop's seam (one edge to the other). Those items jump
- * instead of sliding the length of the room.
+ * True when the short way from `currentX` to `targetX` goes round the loop's
+ * seam instead of across the room. Judged from where the item actually is, so
+ * it stays right if the user changes direction mid-animation.
  */
-export const crossesSeam = (
-  index: number,
-  fromActive: number,
-  toActive: number,
-  count: number
-) => {
-  const half = Math.floor(count / 2);
-  const raw =
-    getOffset(index, toActive, count) - getOffset(index, fromActive, count);
-  return raw !== mod(raw + half, count) - half;
-};
+export const wrapsAround = (currentX: number, targetX: number, count: number) =>
+  Math.abs(targetX - currentX) > (count * carouselLayout.spacing) / 2;
