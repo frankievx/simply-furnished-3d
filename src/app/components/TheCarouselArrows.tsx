@@ -5,10 +5,11 @@ import { useCarouselNavigation } from "@/app/hooks/carouselNavigation";
 import { RightArrowIcon } from "./svgs/RightArrowIcon";
 
 const pillClass =
-  "pointer-events-auto absolute bottom-[5.25rem] flex h-10 items-center gap-2 rounded-full border border-white/70 px-4 text-sm text-white transition-colors hover:bg-white hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white motion-safe:animate-fade-in motion-reduce:transition-none [&_path]:stroke-current";
+  "pointer-events-auto absolute bottom-[4.875rem] flex h-10 cursor-pointer select-none items-center gap-2 rounded-full border border-white/70 px-4 text-sm leading-none text-white transition-colors hover:bg-white hover:text-black active:bg-white/80 active:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white motion-safe:animate-fade-in motion-reduce:transition-none [&_path]:stroke-current";
 
 // Labeled previous and next buttons, either side of the bars. They name the
-// neighbouring chair, which also makes the wraparound clear.
+// neighbouring chair, which also makes the wraparound clear. bottom-[4.875rem]
+// centres them on the bars (bars sit at bottom-20, 2.25rem tall).
 export function TheCarouselArrows() {
   const { activeIndex, next, prev } = useCarouselNavigation();
   if (activeIndex < 0) return null;
