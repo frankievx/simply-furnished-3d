@@ -1,0 +1,12 @@
+{
+  "path": "/modesto",
+  "viewport": { "width": 1440, "height": 900 },
+  "steps": [
+    { "click": { "text": "Enter showroom", "timeout": 180000 } },
+    { "settle": { "interval": 3000, "max": 20 } },
+    { "shot": "default" },
+    { "press": "ArrowRight" },
+    { "settle": { "interval": 3000, "max": 20 } },
+    { "shot": "next-chair" }
+  ]
+}
