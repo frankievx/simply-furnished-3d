@@ -6,7 +6,7 @@ import { useCarouselNavigation } from "@/app/hooks/carouselNavigation";
 import { RightArrowIcon } from "./svgs/RightArrowIcon";
 
 const pillClass =
-  "pointer-events-auto absolute bottom-[4.875rem] h-10 cursor-pointer select-none overflow-hidden rounded-full border border-white/70 text-sm leading-none text-white transition-[color,background-color,width] duration-300 ease-out hover:bg-white hover:text-black active:bg-white/80 active:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white motion-safe:animate-fade-in motion-reduce:transition-none [&_path]:stroke-current";
+  "pointer-events-auto absolute bottom-[max(0.5rem,calc(13.8vh_-_70px))] h-10 cursor-pointer select-none overflow-hidden rounded-full bg-white/60 text-sm font-medium leading-none text-[#1d1c18] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.75),0_2px_8px_rgba(0,0,0,0.12)] backdrop-blur-md transition-[color,background-color,width] duration-300 ease-out hover:bg-white/85 active:bg-white/95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white motion-safe:animate-fade-in motion-reduce:transition-none [&_path]:stroke-current";
 
 // A pill whose width follows its content, so it eases to the new width when
 // the label changes instead of jumping. CSS can't animate to `auto`, so the
@@ -55,8 +55,10 @@ function Pill({
 }
 
 // Labeled previous and next buttons, either side of the bars. They name the
-// neighbouring chair, which also makes the wraparound clear. bottom-[4.875rem]
-// centres them on the bars (bars sit at bottom-20, 2.25rem tall).
+// neighbouring chair, which also makes the wraparound clear. The frame's
+// bottom edge is 13.8vh above the bottom of the window, so the row sits 30px
+// under it (the pills' bottom edge is 70px below the frame's, centring them on
+// the bars).
 export function TheCarouselArrows() {
   const { activeIndex, next, prev } = useCarouselNavigation();
   if (activeIndex < 0) return null;

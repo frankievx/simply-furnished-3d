@@ -83,7 +83,7 @@ export const TheCarouselNavigation = () => {
   return (
     <animated.div
       style={fadeIn}
-      className="absolute bottom-8 w-full pointer-events-none text-white sm:bottom-20"
+      className="absolute bottom-8 w-full pointer-events-none text-white sm:bottom-[max(0.5rem,calc(13.8vh_-_68px))]"
     >
       {/* Mask */}
       <div className="pointer-events-auto mx-auto w-40 overflow-hidden">
