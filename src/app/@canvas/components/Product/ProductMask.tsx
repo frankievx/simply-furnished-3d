@@ -23,7 +23,6 @@ import {
 // import { DisplayItemSpring } from "@/state/spring";
 // import { selectedAtom } from "@/state/selected";
 import { PlusIcon } from "@/app/components/svgs/PlusIcon";
-import { formatPrice, ProductData } from "@/data/products";
 import { useLayoutEffect, useRef } from "react";
 import { GroupProps } from "@react-three/fiber";
 
@@ -83,10 +82,7 @@ const roundedRectShape = createRoundedRectShape(-0.4, -0.98, 0.8, 1.4, 0.05);
 
 const lineGeometry = createLineShape(roundedRectShape, -1, 1, 0, 0, 0, 0, 1);
 
-export function ProductMask({
-  product,
-  ...props
-}: BillboardProps & GroupProps & { product: ProductData }) {
+export function ProductMask(props: BillboardProps & GroupProps) {
   const roundedPlaneRef = useRef(null);
   const [show, setShow] = useAtom(showAtom);
   // const selected = useAtomValue(selectedAtom);
@@ -124,25 +120,6 @@ export function ProductMask({
                 lineWidth={2}
                 toneMapped={false}
               />
-              {/* Under the title, above the chair. Halfway between the two
-                  in frame units; the frame is 1.4 tall from y = -0.98. */}
-              <Html position={[0, 0.04, 0]} center className="pointer-events-none">
-                <animated.div
-                  style={{ opacity: style.opacity }}
-                  className="w-64 whitespace-nowrap text-center text-black"
-                >
-                  {/* Keyed so the text fades in again when the chair changes. */}
-                  <div
-                    key={product.id}
-                    className="motion-safe:animate-fade-in [animation-duration:400ms]"
-                  >
-                    <p className="text-sm">{product.subtitle}</p>
-                    <p className="mt-0.5 text-base font-medium">
-                      {formatPrice(product.price)}
-                    </p>
-                  </div>
-                </animated.div>
-              </Html>
               <Html position={[0, -1, 0]}>
                 <animated.button
                   onClick={clickHandler}

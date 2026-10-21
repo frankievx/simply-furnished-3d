@@ -33,7 +33,7 @@ export const products: ProductData[] = [
   {
     id: "axis-lounge",
     title: "Axis Lounge",
-    subtitle: "Chair, Oak and oat linen",
+    subtitle: "Oak and oat linen",
     description:
       "The original: a light oak frame with a soft oat cushion. Easy in any room.",
     price: 130.9,
@@ -42,7 +42,7 @@ export const products: ProductData[] = [
   {
     id: "zenith",
     title: "Zenith",
-    subtitle: "Chair, Oak and sage linen",
+    subtitle: "Oak and sage linen",
     description:
       "Oak with a muted sage seat. Calm next to plants and natural light.",
     price: 280.0,
@@ -51,7 +51,7 @@ export const products: ProductData[] = [
   {
     id: "modesto",
     title: "Modesto",
-    subtitle: "Chair, Walnut and sand linen",
+    subtitle: "Walnut and sand linen",
     description:
       "A darker walnut frame softened by a warm sand cushion. Works well at a desk.",
     price: 324.0,
@@ -60,7 +60,7 @@ export const products: ProductData[] = [
   {
     id: "tranquility",
     title: "Tranquility",
-    subtitle: "Chair, Oak and dusk blue linen",
+    subtitle: "Oak and dusk blue linen",
     description:
       "Oak with a dusty blue seat, for quiet corners and reading nooks.",
     price: 149.1,
@@ -69,7 +69,7 @@ export const products: ProductData[] = [
   {
     id: "nova",
     title: "Nova",
-    subtitle: "Chair, Ebony and natural cotton",
+    subtitle: "Ebony and natural cotton",
     description:
       "A statement chair: a near-black frame and legs against a warm natural seat.",
     price: 1129.99,
@@ -78,7 +78,7 @@ export const products: ProductData[] = [
   {
     id: "aura-arc",
     title: "Aura Arc",
-    subtitle: "Chair, Oak and terracotta linen",
+    subtitle: "Oak and terracotta linen",
     description:
       "Warm terracotta on a light oak frame. A splash of colour that still feels natural.",
     price: 721.99,
@@ -87,7 +87,7 @@ export const products: ProductData[] = [
   {
     id: "echo-recliner",
     title: "Echo Recliner",
-    subtitle: "Chair, Smoked oak and charcoal wool",
+    subtitle: "Smoked oak, charcoal wool",
     description:
       "Smoked oak with a deep charcoal seat. Made for long evenings in.",
     price: 220.0,
@@ -96,7 +96,7 @@ export const products: ProductData[] = [
   {
     id: "luna",
     title: "Luna",
-    subtitle: "Chair, Oak and blush linen",
+    subtitle: "Oak and blush linen",
     description:
       "A blush seat on a soft oak frame. Light and gentle in a small room.",
     price: 147.98,

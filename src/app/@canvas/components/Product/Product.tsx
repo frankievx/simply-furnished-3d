@@ -4,7 +4,7 @@ import { useCursor } from "@react-three/drei";
 import { useAtomValue } from "jotai";
 import { Suspense, useState } from "react";
 import { Vector3Tuple } from "three";
-import { ProductData } from "@/data/products";
+import { formatPrice, ProductData } from "@/data/products";
 import { ItemSpring } from "../../carousel";
 import { Chair } from "../models/Chair";
 import { ProductTitle } from "./ProductTitle";
@@ -44,7 +44,11 @@ export default function Product({
           {/* The title loads its font on first show. Without its own boundary
               that suspends the whole canvas and the page flashes white. */}
           <Suspense fallback={null}>
-            <ProductTitle title={item.title} />
+            <ProductTitle
+              title={item.title}
+              subtitle={item.subtitle}
+              price={formatPrice(item.price)}
+            />
           </Suspense>
         </animated.group>
         <group receiveShadow castShadow>
