@@ -124,7 +124,7 @@ export function ProductMask(props: BillboardProps & GroupProps) {
                 <animated.button
                   onClick={clickHandler}
                   style={{ opacity: style.opacity }}
-                  className="absolute sm:bottom-12 bottom-8 left-1/2 -translate-x-1/2 bg-white rounded-full font-light px-4 py-2 whitespace-nowrap shadow-lg flex items-center gap-6 w-48 hover:bg-gray-100 active:shadow-none active:bg-white text-black"
+                  className="absolute sm:bottom-12 bottom-8 left-1/2 -translate-x-1/2 flex w-48 items-center gap-6 whitespace-nowrap rounded-full bg-white/60 px-4 py-2 font-medium text-[#1d1c18] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.75),0_2px_8px_rgba(0,0,0,0.12)] backdrop-blur-md transition-colors hover:bg-white/85 active:bg-white/95 motion-reduce:transition-none"
                 >
                   <PlusIcon className="w-5 h-5" />
                   <p>Add To Cart</p>
