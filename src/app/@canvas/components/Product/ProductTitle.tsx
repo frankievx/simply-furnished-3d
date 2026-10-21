@@ -56,7 +56,7 @@ const LABEL_H = 0.105;
 const LABEL_PAD = 0.12;
 
 // The eyebrow: a paper label holding the material, with a paint chip at each
-// end showing the seat colour (left) and the leg colour (right).
+// end showing the leg colour (left) and the seat colour (right).
 function PaperLabel({
   text,
   seat,
@@ -106,8 +106,8 @@ function PaperLabel({
         {...stencil}
       />
       {[
-        { x: -chipX, color: seat },
-        { x: chipX, color: legs },
+        { x: -chipX, color: legs },
+        { x: chipX, color: seat },
       ].map(({ x, color }) => (
         <group key={x} position={[x, 0, 0.002]}>
           <Shape size={[CHIP + 0.011, CHIP + 0.011]} radius={0.006} color="#8f8a78" opacity={opacity} stencil={stencil} position={[0, 0, 0]} order={3} />
@@ -150,6 +150,19 @@ function PriceTag({
 }) {
   const [textWidth, setTextWidth] = useState(0.2);
   const width = textWidth + 0.1;
+  // The hole, then a gentle curve out of the tag to a pin on the chair.
+  const hole: [number, number] = [-width / 2 + 0.032, 0];
+  const pin: [number, number] = [-width / 2 - 0.09, 0.05];
+  const control: [number, number] = [-width / 2 - 0.02, 0.07];
+  const string = Array.from({ length: 25 }, (_, i) => {
+    const t = i / 24;
+    const u = 1 - t;
+    return [
+      u * u * hole[0] + 2 * u * t * control[0] + t * t * pin[0],
+      u * u * hole[1] + 2 * u * t * control[1] + t * t * pin[1],
+      0,
+    ] as [number, number, number];
+  });
   return (
     <group position={[0.27, -0.58, 0.2]} rotation={[0, 0, -0.14]}>
       <Shape
@@ -165,19 +178,26 @@ function PriceTag({
         <circleGeometry args={[0.0085, 16]} />
         <animated3.meshBasicMaterial {...stencil} color="#8c8470" opacity={opacity} transparent toneMapped={false} />
       </mesh>
+      {/* A string from the hole to a pin on the chair. */}
       <AnimatedLine
-        points={[
-          [-width / 2, 0, 0],
-          [-width / 2 - 0.05, -0.014, 0],
-        ]}
+        points={string}
         color="#5f584b"
-        lineWidth={1}
+        lineWidth={1.3}
         opacity={opacity}
         transparent
         toneMapped={false}
-        renderOrder={2}
+        position={[0, 0, 0.002]}
+        renderOrder={4}
         {...stencil}
       />
+      <mesh position={[pin[0], pin[1], 0.003]} renderOrder={5}>
+        <circleGeometry args={[0.0085, 20]} />
+        <animated3.meshBasicMaterial {...stencil} color="#5f584b" opacity={opacity} transparent toneMapped={false} />
+      </mesh>
+      <mesh position={[pin[0], pin[1], 0.0025]} renderOrder={4}>
+        <circleGeometry args={[0.013, 20]} />
+        <animated3.meshBasicMaterial {...stencil} color="#fbf7ea" opacity={opacity} transparent toneMapped={false} />
+      </mesh>
       <Text
         position={[-width / 2 + 0.065, 0, 0.003]}
         color="#111111"
