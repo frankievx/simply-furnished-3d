@@ -48,6 +48,8 @@ export default function Product({
               title={item.title}
               subtitle={item.subtitle}
               price={formatPrice(item.price)}
+              seat={item.swatches.seat}
+              legs={item.swatches.legs}
             />
           </Suspense>
         </animated.group>

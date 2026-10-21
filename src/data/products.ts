@@ -22,6 +22,10 @@ export type ProductData = {
   description: string;
   price: number;
   finish: Finish;
+  /** The seat and leg colours as they look on screen, for the colour chips on
+   *  the label. These are not the tints above: a tint multiplies the model's
+   *  texture, so walnut on oak looks nothing like the tint colour. */
+  swatches: { seat: string; legs: string };
 };
 
 const natural = "#ffffff";
@@ -38,6 +42,7 @@ export const products: ProductData[] = [
       "The original: a light oak frame with a soft oat cushion. Easy in any room.",
     price: 130.9,
     finish: { frame: natural, cushion: natural, legs: natural },
+    swatches: { seat: "#c6a38d", legs: "#e5a45c" },
   },
   {
     id: "zenith",
@@ -47,6 +52,7 @@ export const products: ProductData[] = [
       "Oak with a muted sage seat. Calm next to plants and natural light.",
     price: 280.0,
     finish: { frame: natural, cushion: "#b9cdaa", legs: natural },
+    swatches: { seat: "#8f825c", legs: "#e5a45c" },
   },
   {
     id: "modesto",
@@ -56,6 +62,7 @@ export const products: ProductData[] = [
       "A darker walnut frame softened by a warm sand cushion. Works well at a desk.",
     price: 324.0,
     finish: { frame: "#9a7660", cushion: "#dcc9ae", legs: "#7f726a" },
+    swatches: { seat: "#aa805e", legs: "#714721" },
   },
   {
     id: "tranquility",
@@ -65,6 +72,7 @@ export const products: ProductData[] = [
       "Oak with a dusty blue seat, for quiet corners and reading nooks.",
     price: 149.1,
     finish: { frame: natural, cushion: "#a7bad4", legs: natural },
+    swatches: { seat: "#817674", legs: "#e5a45c" },
   },
   {
     id: "nova",
@@ -74,6 +82,7 @@ export const products: ProductData[] = [
       "A statement chair: a near-black frame and legs against a warm natural seat.",
     price: 1129.99,
     finish: { frame: "#4b403b", cushion: "#f1e8da", legs: "#2e2927" },
+    swatches: { seat: "#bb9478", legs: "#281607" },
   },
   {
     id: "aura-arc",
@@ -83,6 +92,7 @@ export const products: ProductData[] = [
       "Warm terracotta on a light oak frame. A splash of colour that still feels natural.",
     price: 721.99,
     finish: { frame: natural, cushion: "#e29d85", legs: natural },
+    swatches: { seat: "#af6347", legs: "#e5a45c" },
   },
   {
     id: "echo-recliner",
@@ -92,6 +102,7 @@ export const products: ProductData[] = [
       "Smoked oak with a deep charcoal seat. Made for long evenings in.",
     price: 220.0,
     finish: { frame: "#7a6458", cushion: "#5b6270", legs: "#5d4c43" },
+    swatches: { seat: "#453c3b", legs: "#532e12" },
   },
   {
     id: "luna",
@@ -101,6 +112,7 @@ export const products: ProductData[] = [
       "A blush seat on a soft oak frame. Light and gentle in a small room.",
     price: 147.98,
     finish: { frame: "#c2a894", cushion: "#efc4c1", legs: "#d6cdc4" },
+    swatches: { seat: "#b97c69", legs: "#c08345" },
   },
 ];
 
