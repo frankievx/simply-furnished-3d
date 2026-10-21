@@ -101,7 +101,10 @@ export default function Layout() {
       />
       <hemisphereLight color={new Color("#FFFFFF")} intensity={1} />
       <Suspense fallback={null}>
-        <ProductMask position={[0, -1.85, -9.01]} />
+        <ProductMask
+          position={[0, -1.85, -9.01]}
+          product={products[activeIndex]}
+        />
       </Suspense>
       {springs.map((spring, index) => (
         <Product

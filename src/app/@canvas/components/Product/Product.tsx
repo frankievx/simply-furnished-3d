@@ -48,7 +48,7 @@ export default function Product({
           </Suspense>
         </animated.group>
         <group receiveShadow castShadow>
-          <Chair />
+          <Chair finish={item.finish} />
         </group>
       </animated.group>
     </>
