@@ -77,16 +77,16 @@ export const TheCarouselNavigation = () => {
   const fadeIn = useSpring({
     from: { opacity: 0, y: "6rem" },
     to: { opacity: 1, y: "0rem" },
-    delay: 2000,
+    delay: 300,
   });
 
   return (
     <animated.div
       style={fadeIn}
-      className="absolute bottom-8 w-full pointer-events-auto text-white sm:bottom-20"
+      className="absolute bottom-8 w-full pointer-events-none text-white sm:bottom-20"
     >
       {/* Mask */}
-      <div className="mx-auto w-40 overflow-hidden">
+      <div className="pointer-events-auto mx-auto w-40 overflow-hidden">
         {/* Container */}
         <animated.div
           style={containerSpring}

@@ -16,7 +16,7 @@ export function TheCarouselArrows() {
   const count = products.length;
   const prevTitle = products[mod(activeIndex - 1, count)].title;
   const nextTitle = products[mod(activeIndex + 1, count)].title;
-  const delay = { animationDelay: "2s", animationFillMode: "backwards" };
+  const delay = { animationDelay: "300ms", animationFillMode: "backwards" };
   return (
     <>
       <button
