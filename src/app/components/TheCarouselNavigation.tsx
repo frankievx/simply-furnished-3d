@@ -102,6 +102,17 @@ export const TheCarouselNavigation = () => {
                 navButtons[i].className
               }
               onClick={navButtons[i].handler}
+              // Highlight the bars you can click while the pointer is on them.
+              onMouseEnter={
+                i === PREV_BAR || i === NEXT_BAR
+                  ? () => api.start((j) => (j === i ? { opacity: 1 } : {}))
+                  : undefined
+              }
+              onMouseLeave={
+                i === PREV_BAR || i === NEXT_BAR
+                  ? () => api.start((j) => (j === i ? { opacity: 0.4 } : {}))
+                  : undefined
+              }
               aria-label={
                 i === PREV_BAR
                   ? "Previous chair"
