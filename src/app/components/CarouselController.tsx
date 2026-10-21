@@ -2,23 +2,26 @@
 import { showAtom } from "@/state/show";
 import { useAtomValue, useSetAtom } from "jotai";
 import { useEffect } from "react";
+import { products } from "@/data/products";
 import { useCarouselNavigation } from "@/app/hooks/carouselNavigation";
-import { useHorizontalDragGestures } from "@/app/hooks/useHorizontalDragGestures";
+import { useCarouselControls } from "@/app/hooks/useCarouselControls";
 
 // Behaviour that belongs to the carousel page and renders nothing itself.
 export function CarouselController() {
   const show = useAtomValue(showAtom);
   const setShow = useSetAtom(showAtom);
-  const { next, prev } = useCarouselNavigation();
+  const { next, prev, goToIndex } = useCarouselNavigation();
 
   useEffect(() => {
     setShow((show) => ({ ...show, itemTitles: true }));
   }, [setShow]);
 
-  // Swiping is off while the credits modal is open.
-  useHorizontalDragGestures({
+  // Input is off while the credits modal is open.
+  useCarouselControls({
     onNext: next,
     onPrev: prev,
+    onFirst: () => goToIndex(0),
+    onLast: () => goToIndex(products.length - 1),
     enabled: !show.info,
   });
 

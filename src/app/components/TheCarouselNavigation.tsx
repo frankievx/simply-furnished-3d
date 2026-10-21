@@ -77,16 +77,16 @@ export const TheCarouselNavigation = () => {
   const fadeIn = useSpring({
     from: { opacity: 0, y: "6rem" },
     to: { opacity: 1, y: "0rem" },
-    delay: 2000,
+    delay: 300,
   });
 
   return (
     <animated.div
       style={fadeIn}
-      className="absolute bottom-8 w-full pointer-events-auto text-white sm:bottom-20"
+      className="absolute bottom-8 w-full pointer-events-none text-white sm:bottom-20"
     >
       {/* Mask */}
-      <div className="mx-auto w-40 overflow-hidden">
+      <div className="pointer-events-auto mx-auto w-40 overflow-hidden">
         {/* Container */}
         <animated.div
           style={containerSpring}
@@ -97,8 +97,32 @@ export const TheCarouselNavigation = () => {
               id={"related-nav-button-" + i}
               key={"related-nav-button-" + i}
               style={props}
-              className={"py-4 outline-none " + navButtons[i].className}
+              className={
+                "rounded-md py-4 outline-none " +
+                navButtons[i].className
+              }
               onClick={navButtons[i].handler}
+              // Highlight the bars you can click while the pointer is on them.
+              onMouseEnter={
+                i === PREV_BAR || i === NEXT_BAR
+                  ? () => api.start((j) => (j === i ? { opacity: 1 } : {}))
+                  : undefined
+              }
+              onMouseLeave={
+                i === PREV_BAR || i === NEXT_BAR
+                  ? () => api.start((j) => (j === i ? { opacity: 0.4 } : {}))
+                  : undefined
+              }
+              aria-label={
+                i === PREV_BAR
+                  ? "Previous chair"
+                  : i === NEXT_BAR
+                  ? "Next chair"
+                  : undefined
+              }
+              aria-hidden={i === PREV_BAR || i === NEXT_BAR ? undefined : true}
+              // The labeled arrow buttons are the keyboard controls.
+              tabIndex={-1}
             >
               <div className="h-1 w-10 rounded-md bg-white"></div>
             </animated.button>
