@@ -1,0 +1,42 @@
+name: Preview screenshots
+
+# When Vercel finishes a preview, render it and post the screenshots to the
+# Linear issue named in the branch (ren-44-... -> REN-44).
+# Secrets: LINEAR_API_KEY, VERCEL_AUTOMATION_BYPASS_SECRET.
+on:
+  deployment_status:
+
+permissions:
+  contents: read
+
+jobs:
+  shoot:
+    if: >-
+      github.event.deployment_status.state == 'success' &&
+      startsWith(github.event.deployment.environment, 'Preview')
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      BRANCH: ${{ github.event.deployment.ref }}
+      PREVIEW_URL: ${{ github.event.deployment_status.environment_url }}
+      RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.deployment.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install the screenshot tool
+        run: npm install --no-save --no-package-lock --prefix .github/preview-shots playwright-core
+      - name: Screenshot the preview
+        env:
+          CHROMIUM_PATH: /usr/bin/google-chrome
+          VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+        run: |
+          node .github/preview-shots/preview-shot.mjs --url "$PREVIEW_URL" \
+            --recipe .claude/preview-shot.json --out shots > shots.json || true
+      - name: Post to Linear
+        env:
+          LINEAR_API_KEY: ${{ secrets.LINEAR_API_KEY }}
+        run: node .github/preview-shots/post-to-linear.mjs
