@@ -209,10 +209,13 @@ function ContactShadow({ lift }: { lift: number }) {
   );
 }
 
-// The sun from the street window, along the same direction as the render's
-// sun (build_scene.py SUN_DIR), so the chairs' shadows match the room's.
+// Daylight through the street window behind the camera, from the same side
+// as the render's sun (build_scene.py SUN_DIR). It is a spot a few metres
+// away rather than a sun, so each chair's shadow stretches and leans as it
+// crosses the room instead of sliding along unchanged.
 const SUN_DIR = new Vector3(-2.36612, -8.0653, 2.40629).normalize();
 const ROW_CENTRE = new Vector3(0, -1.124, FLOOR_Z + 0.4);
+const WINDOW_DISTANCE = 5;
 
 function Sun({ intensity }: { intensity: number }) {
   const [target] = useState(() => {
@@ -220,24 +223,23 @@ function Sun({ intensity }: { intensity: number }) {
     object.position.copy(ROW_CENTRE);
     return object;
   });
-  const position = ROW_CENTRE.clone().addScaledVector(SUN_DIR, 12);
+  const position = ROW_CENTRE.clone().addScaledVector(SUN_DIR, WINDOW_DISTANCE);
   return (
     <>
       <primitive object={target} />
-      <directionalLight
+      <spotLight
         position={position}
         target={target}
         intensity={intensity}
+        angle={1.05}
+        penumbra={0.7}
+        decay={0}
         castShadow
-        shadow-mapSize={[2048, 2048]}
-        shadow-camera-left={-6}
-        shadow-camera-right={6}
-        shadow-camera-top={4}
-        shadow-camera-bottom={-4}
-        shadow-camera-near={4}
-        shadow-camera-far={20}
+        shadow-mapSize={[1024, 1024]}
+        shadow-camera-near={1}
+        shadow-camera-far={15}
         shadow-bias={-0.0005}
-        shadow-radius={4}
+        shadow-normalBias={0.02}
       />
     </>
   );
