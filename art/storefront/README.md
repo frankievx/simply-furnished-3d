@@ -32,8 +32,9 @@ options: `--samples 48 --height 720` for quick tests, `--no-render` to only
 build the `.blend`, `--only backplate` or `--only probe`.
 
 Scene frame: x across, y towards the back wall (wall face at y 0), z up from
-the floor. The app's world is the same with the floor at z -9.987, where the
-chairs' feet rest (between y -1.5 and -0.9). The camera matches
+the floor. The app's world is the same, with the top of the theme's platform
+at z -9.987, where the chairs' feet rest (between y -1.5 and -0.9) in the
+original room too, so the chairs and their labels never move between themes. The camera matches
 `src/state/camera.ts` with a vertical field of view of 75°. Whatever the chairs
 stand on must cover that footprint, or they look like they hover. Nothing may
 stand in front of the chairs (y below about -1.6), because the chairs are
@@ -41,9 +42,10 @@ always drawn over the backplate.
 
 ## Adding a theme
 
-1. Add a function to `THEMES` in `build_scene.py` and render it.
+1. Add a function and its platform height to `THEMES` in `build_scene.py`
+   and render it.
 2. Add it to `themes` in `src/app/@canvas/components/themes/themeState.ts` and
-   to `prerendered` in `ThemeScene.tsx` (platform lift, shadow strength, sun).
+   to `prerendered` in `ThemeScene.tsx` (shadow strength, sun).
 
 ## Sources and licences
 

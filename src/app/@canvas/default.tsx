@@ -17,7 +17,7 @@ import { WallCarvingArt } from "./components/models/WallCarvingArt";
 import { loadingAtom } from "@/state/loading";
 import { Bookshelf } from "./components/models/Bookshelf";
 import { themeAtom } from "./components/themes/themeState";
-import { ThemeScene, themeLift } from "./components/themes/ThemeScene";
+import { ThemeScene } from "./components/themes/ThemeScene";
 
 const lTarget = new Mesh();
 lTarget.position.set(0, 0, -10);
@@ -112,17 +112,15 @@ export default function Layout() {
       <Suspense fallback={null}>
         <ProductMask position={[0, -1.85, -9.01]} />
       </Suspense>
-      <group position={[0, 0, themeLift(theme)]}>
-        {springs.map((spring, index) => (
-          <Product
-            key={products[index].id}
-            item={products[index]}
-            spring={spring}
-            onClick={() => goToIndex(index)}
-            castShadow
-          />
-        ))}
-      </group>
+      {springs.map((spring, index) => (
+        <Product
+          key={products[index].id}
+          item={products[index]}
+          spring={spring}
+          onClick={() => goToIndex(index)}
+          castShadow
+        />
+      ))}
       {!rendered && (
         <Wall rotation={new Euler(Math.PI / 2, 0, 0)} receiveShadow />
       )}

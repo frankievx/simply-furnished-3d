@@ -9,8 +9,9 @@ Writes art/storefront/<theme>.blend and, unless --no-render:
   public/storefront/<theme>/probe.hdr        a small equirect lighting map for the chairs
 
 The scene is built in a "stage" frame: x across, y towards the back wall
-(wall face at y 0), z up from the floor. The app's world is the same with the
-floor at z -9.987, where the chairs' feet rest. The camera matches
+(wall face at y 0), z up from the floor. The app's world is the same, with
+the top of the theme's platform at z -9.987, where the chairs' feet rest (as
+in the original room). The camera matches
 src/state/camera.ts and the R3F default (vertical fov 75). The chairs are not
 in the render; they stay real-time, with their feet between y -1.45 and -0.91.
 """
@@ -29,9 +30,18 @@ REPO = HERE.parent.parent
 ASSETS = HERE / "assets"
 FONTS = REPO / "public" / "fonts"
 
-FLOOR_Z = -9.987
-CAMERA = (0.0, -3.26023, -9.0 - FLOOR_Z)
-TARGET = (0.0, 0.0, -9.5 - FLOOR_Z)
+# Where the chairs' feet rest in the app (its z), the same as the original
+# room. A theme's platform top sits exactly there, so the room's floor is
+# the platform's height lower and the chairs never need raising.
+FEET_Z = -9.987
+
+
+def camera_for(lift):
+    """The app camera's eye and target in the stage frame, whose z 0 is the
+    floor under a platform `lift` high."""
+    floor = FEET_Z - lift
+    return (0.0, -3.26023, -9.0 - floor), (0.0, 0.0, -9.5 - floor)
+
 FOV_Y = 75.0
 ASPECT = 2.4  # widest window supported; narrower windows crop the sides
 CHAIR_Y = -1.124
@@ -356,6 +366,18 @@ def room(wall_mat, floor_mat, ceiling_mat, clerestory=None):
     box("front_transom", (-5.5, front - 0.08, 2.9), (5.5, front, 2.95), frame)
 
 
+def sun_light(name, towards, strength, kelvin=5600, angle=1.0):
+    """A sun shining from the direction `towards` points."""
+    data = bpy.data.lights.new(name, "SUN")
+    data.energy = strength
+    data.angle = math.radians(angle)
+    data.use_temperature = True
+    data.temperature = kelvin
+    obj = bpy.data.objects.new(name, data)
+    bpy.context.collection.objects.link(obj)
+    obj.rotation_euler = Vector(towards).normalized().to_track_quat("Z", "Y").to_euler()
+
+
 def ceiling_fill(watts, kelvin=4200):
     """Soft shop lighting from the ceiling, so the room is evenly lit."""
     data = bpy.data.lights.new("ceiling_fill", "AREA")
@@ -392,34 +414,42 @@ def world_and_sun(sky_strength=1.0, sun_strength=3.0, sun_kelvin=5200):
 
 SCANDI_LIFT = 0.07
 JAPANDI_LIFT = 0.06
+# Scandi's sun, in the stage frame: behind the back wall and high enough to
+# shine down through the clerestory onto the platform.
+SCANDI_SUN = (0.9, 1.6, 6.2)
 
 
 def scandi():
     wall = pbr("plaster_white", "painted_plaster_wall", tint=(1.32, 1.31, 1.28), bump=0.04, saturation=0.35, scale=1.6)
-    floor = pbr("ash_boards", "ash_veneer", tint=(0.95, 0.9, 0.84), rough_scale=0.9, bump=0.25, planks=(1.6, 0.16), saturation=0.8)
+    floor = pbr("ash_boards", "ash_veneer", tint=(0.9, 0.74, 0.55), rough_scale=0.9, bump=0.25, planks=(1.6, 0.16), saturation=0.8)
     room(wall, floor, wall, clerestory=(2.5, 3.25))
     white = paint("white_trim", srgb("#f2efe8"), 0.45)
-    world_and_sun(sky_strength=1.6, sun_strength=4.0)
-    ceiling_fill(900, 4600)
+    world_and_sun(sky_strength=1.6, sun_strength=0.0)
+    ceiling_fill(500, 4600)
 
     # Clerestory: frame, mullions and a sill along the top of the back wall.
-    box("clerestory_sill", (-7.5, -0.06, 2.46), (7.5, 0.2, 2.5), white, bevel=0.006)
+    box("clerestory_sill", (-7.5, -0.01, 2.46), (7.5, 0.2, 2.5), white, bevel=0.006)
     box("clerestory_head", (-7.5, -0.02, 3.25), (7.5, 0.2, 3.28), white)
     for i in range(-6, 7):
         x = i * 1.2
         box(f"clerestory_mullion_{i}", (x - 0.025, 0.02, 2.5), (x + 0.025, 0.08, 3.25), white, bevel=0.004)
+    # The room's main light: the sun high behind the back wall, shining down
+    # through the clerestory so each pane lands on the platform as a bright
+    # rectangle. The app lights the chairs from the same point
+    # (ThemeScene.tsx, CLERESTORY_SUN), so their shadows fall the same way.
+    sun_light("clerestory_sun", Vector(SCANDI_SUN) - Vector((0, CHAIR_Y, SCANDI_LIFT + 0.4)), 9.0, 5600, angle=0.5)
     box("skirting", (-7.5, -0.015, SCANDI_LIFT), (7.5, 0.0, SCANDI_LIFT + 0.1), white, bevel=0.003)
 
     # A low birch platform under the row, running back to the wall so every
     # chair leg stands on it.
-    ply = pbr("birch_ply", "plywood", tint=(1.1, 1.05, 0.98), bump=0.1, saturation=0.5)
+    ply = pbr("birch_ply", "plywood", tint=(0.92, 0.82, 0.68), bump=0.1, saturation=0.5)
     box("platform", (-7.5, -1.7, 0), (7.5, -0.015, SCANDI_LIFT), ply, bevel=0.008)
 
     # Wordmark above the frame.
     ink = paint("ink", srgb("#2f2c28"), 0.5)
-    words("wordmark", "simply furnished", (0, -0.002, 2.34), 0.12, ink, spacing=1.12)
+    words("wordmark", "simply furnished", (0, -0.002, 2.2), 0.12, ink, spacing=1.12)
     grey = paint("ink_grey", srgb("#7a756c"), 0.5)
-    words("tagline", "S H O W R O O M   ·   N O R D I C   C H A I R S", (0, -0.002, 2.23), 0.032, grey)
+    words("tagline", "S H O W R O O M   ·   N O R D I C   C H A I R S", (0, -0.002, 2.09), 0.032, grey)
 
     # Paper pendants either side.
     shade = paper("paper_shade", ribs=9.0)
@@ -465,25 +495,25 @@ def japandi():
     linen = pbr("indigo_linen", "rough_linen", tint=(0.05, 0.08, 0.2), bump=0.3, saturation=0.0)
     cream = paint("crest", srgb("#efe7d6"), 0.8)
     rod = paint("rod", srgb("#3b2b20"), 0.5)
-    cylinder("noren_rod", (0, -0.08, 2.74), 0.016, 2.1, rod, rotation=(0, math.pi / 2, 0))
+    cylinder("noren_rod", (0, -0.08, 2.54), 0.016, 2.1, rod, rotation=(0, math.pi / 2, 0))
     for x in (-0.75, -0.25, 0.25, 0.75):
-        bpy.ops.mesh.primitive_grid_add(x_subdivisions=24, y_subdivisions=12, size=1, location=(x, -0.06, 2.47), rotation=(math.pi / 2, 0, 0))
+        bpy.ops.mesh.primitive_grid_add(x_subdivisions=24, y_subdivisions=12, size=1, location=(x, -0.06, 2.27), rotation=(math.pi / 2, 0, 0))
         panel = bpy.context.active_object
         panel.name = f"noren_{x}"
         panel.scale = (0.47, 0.52, 1)
         bpy.ops.object.transform_apply(scale=True)
         for v in panel.data.vertices:
-            depth = (2.73 - (v.co.z + 2.47)) / 0.52
+            depth = (2.53 - (v.co.z + 2.27)) / 0.52
             v.co.y += 0.006 * math.sin(v.co.x * 40 + x * 7) * depth
         panel.data.materials.append(linen)
         mod = panel.modifiers.new("thick", "SOLIDIFY")
         mod.thickness = 0.003
         bpy.ops.object.shade_smooth()
-    cylinder("crest", (0, -0.068, 2.49), 0.14, 0.004, cream, rotation=(math.pi / 2, 0, 0))
+    cylinder("crest", (0, -0.068, 2.29), 0.14, 0.004, cream, rotation=(math.pi / 2, 0, 0))
     indigo = paint("indigo_ink", srgb("#273a5c"), 0.8)
-    words("crest_mark", "SF", (0, -0.072, 2.49), 0.12, indigo, font="casanova.ttf", depth=0.002)
-    words("noren_left", "S I M P L Y", (-0.75, -0.069, 2.35), 0.032, cream, depth=0.001)
-    words("noren_right", "F U R N I S H E D", (0.75, -0.069, 2.35), 0.032, cream, depth=0.001)
+    words("crest_mark", "SF", (0, -0.072, 2.29), 0.12, indigo, font="casanova.ttf", depth=0.002)
+    words("noren_left", "S I M P L Y", (-0.75, -0.069, 2.15), 0.032, cream, depth=0.001)
+    words("noren_right", "F U R N I S H E D", (0.75, -0.069, 2.15), 0.032, cream, depth=0.001)
 
     # A low walnut plinth under the row, running back to the wall so every
     # chair leg stands on it.
@@ -503,7 +533,7 @@ def japandi():
         point_light(f"andon_light_{x}", (cx, cy, z0 + 0.3), 8, 2600, 0.04)
 
 
-THEMES = {"scandi": scandi, "japandi": japandi}
+THEMES = {"scandi": (scandi, SCANDI_LIFT), "japandi": (japandi, JAPANDI_LIFT)}
 
 
 # ---------------------------------------------------------------- camera and render
@@ -535,7 +565,7 @@ def setup_render(samples):
     scene.view_settings.exposure = EXPOSURE
 
 
-def render_backplate(render_dir, height):
+def render_backplate(render_dir, height, lift):
     scene = bpy.context.scene
     cam_data = bpy.data.cameras.new("app_camera")
     cam_data.sensor_fit = "VERTICAL"
@@ -543,7 +573,7 @@ def render_backplate(render_dir, height):
     cam_data.clip_start = 0.1
     cam = bpy.data.objects.new("app_camera", cam_data)
     scene.collection.objects.link(cam)
-    look(cam, CAMERA, TARGET)
+    look(cam, *camera_for(lift))
     scene.camera = cam
     scene.render.resolution_x = round(height * ASPECT)
     scene.render.resolution_y = height
@@ -556,7 +586,7 @@ def render_backplate(render_dir, height):
     return png
 
 
-def render_probe(out_dir, intensity=1.0, face=128, width=256):
+def render_probe(out_dir, lift, intensity=1.0, face=128, width=256):
     """Render a cube of views at the chairs and resample it into the
     equirect layout three.js expects (y is 'up' in its lookup)."""
     scene = bpy.context.scene
@@ -574,7 +604,7 @@ def render_probe(out_dir, intensity=1.0, face=128, width=256):
     scene.render.resolution_x = scene.render.resolution_y = face
     scene.render.image_settings.file_format = "OPEN_EXR"
     scene.render.image_settings.color_depth = "32"
-    centre = Vector((0, CHAIR_Y, 0.45))
+    centre = Vector((0, CHAIR_Y, lift + 0.45))
     faces = []
     for name, fwd, up in [
         ("px", (1, 0, 0), (0, 0, 1)), ("nx", (-1, 0, 0), (0, 0, 1)),
@@ -623,7 +653,8 @@ def main():
     global EXPOSURE
     EXPOSURE = float(opts["exposure"])
     bpy.ops.wm.read_factory_settings(use_empty=True)
-    THEMES[theme]()
+    build, lift = THEMES[theme]
+    build()
     setup_render(opts["samples"])
     bpy.ops.wm.save_as_mainfile(filepath=str(HERE / f"{theme}.blend"), relative_remap=True)
     if not opts["render"]:
@@ -633,9 +664,9 @@ def main():
     out_dir.mkdir(parents=True, exist_ok=True)
     render_dir.mkdir(parents=True, exist_ok=True)
     if opts.get("only") != "probe":
-        render_backplate(render_dir, opts["height"])
+        render_backplate(render_dir, opts["height"], lift)
     if opts.get("only") != "backplate":
-        render_probe(out_dir)
+        render_probe(out_dir, lift)
 
 
 main()
