@@ -8,6 +8,7 @@ on:
 
 permissions:
   contents: read
+  pull-requests: read
 
 jobs:
   shoot:
@@ -17,7 +18,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
-      BRANCH: ${{ github.event.deployment.ref }}
+      REF: ${{ github.event.deployment.ref }}
+      SHA: ${{ github.event.deployment.sha }}
+      GH_TOKEN: ${{ github.token }}
       PREVIEW_URL: ${{ github.event.deployment_status.environment_url }}
       RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
     steps:
@@ -27,6 +30,13 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+      - name: Find the branch
+        # Vercel sets the deployment ref to the commit SHA, so ask GitHub
+        # which pull request this commit belongs to.
+        run: |
+          BRANCH=$(gh api "repos/$GITHUB_REPOSITORY/commits/$SHA/pulls" --jq '.[0].head.ref // empty' || true)
+          echo "BRANCH=${BRANCH:-$REF}" >> "$GITHUB_ENV"
+          echo "Branch: ${BRANCH:-$REF}"
       - name: Install the screenshot tool
         run: npm install --no-save --no-package-lock --prefix .github/preview-shots playwright-core
       - name: Screenshot the preview
@@ -36,6 +46,7 @@ jobs:
         run: |
           node .github/preview-shots/preview-shot.mjs --url "$PREVIEW_URL" \
             --recipe .claude/preview-shot.json --out shots > shots.json || true
+          echo '--- report ---'; head -c 4000 shots.json
       - name: Post to Linear
         env:
           LINEAR_API_KEY: ${{ secrets.LINEAR_API_KEY }}
