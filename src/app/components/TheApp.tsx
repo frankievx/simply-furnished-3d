@@ -11,6 +11,7 @@ import { TheCarouselNavigation } from "./TheCarouselNavigation";
 import { CarouselController } from "./CarouselController";
 import { TheCarouselArrows } from "./TheCarouselArrows";
 import { showAtom } from "@/state/show";
+import { TheThemePicker } from "./TheThemePicker";
 
 // Loaded only on desktop: the module starts downloading every model on import.
 const TheLoader = dynamic(() => import("./TheLoader"), { ssr: false });
@@ -56,6 +57,7 @@ export const TheApp = ({ children }: { children: ReactNode }) => {
       <div className="absolute flex justify-between items-end w-full px-3 pointer-events-none bottom-3">
         <TheInfoButton />
       </div>
+      <TheThemePicker />
       <TheCarouselArrows />
       <TheCarouselNavigation />
       <CarouselController />

@@ -16,6 +16,8 @@ import { Plant } from "./components/models/Plant";
 import { WallCarvingArt } from "./components/models/WallCarvingArt";
 import { loadingAtom } from "@/state/loading";
 import { Bookshelf } from "./components/models/Bookshelf";
+import { themeAtom } from "./components/themes/themeState";
+import { ThemeScene, themeLift } from "./components/themes/ThemeScene";
 
 const lTarget = new Mesh();
 lTarget.position.set(0, 0, -10);
@@ -24,6 +26,7 @@ export default function Layout() {
   const { camera } = useThree();
   const getViewport = useThree((state) => state.viewport.getCurrentViewport);
   const loading = useAtomValue(loadingAtom);
+  const theme = useAtomValue(themeAtom);
   const { activeIndex: urlIndex, goToIndex } = useCarouselNavigation();
   // An unknown id is redirected by the page; show the first item meanwhile.
   const activeIndex = Math.max(urlIndex, 0);
@@ -103,16 +106,20 @@ export default function Layout() {
       <Suspense fallback={null}>
         <ProductMask position={[0, -1.85, -9.01]} />
       </Suspense>
-      {springs.map((spring, index) => (
-        <Product
-          key={products[index].id}
-          item={products[index]}
-          spring={spring}
-          onClick={() => goToIndex(index)}
-          castShadow
-        />
-      ))}
-      <Wall rotation={new Euler(Math.PI / 2, 0, 0)} receiveShadow />
+      <group position={[0, 0, themeLift[theme] ?? 0]}>
+        {springs.map((spring, index) => (
+          <Product
+            key={products[index].id}
+            item={products[index]}
+            spring={spring}
+            onClick={() => goToIndex(index)}
+            castShadow
+          />
+        ))}
+      </group>
+      {theme === "now" && (
+        <Wall rotation={new Euler(Math.PI / 2, 0, 0)} receiveShadow />
+      )}
       <directionalLight
         color={new Color("#FFFFFF")}
         position={[-3.36612, -4.0653, -7.40629]}
@@ -124,7 +131,12 @@ export default function Layout() {
         castShadow
       />
       <primitive object={lTarget} />
-      {!loading && (
+      {theme !== "now" && (
+        <Suspense fallback={null}>
+          <ThemeScene theme={theme} />
+        </Suspense>
+      )}
+      {!loading && theme === "now" && (
         <Suspense fallback={null}>
           <group position={[0, 0, -9.985]} receiveShadow>
             <WallCarvingArt
