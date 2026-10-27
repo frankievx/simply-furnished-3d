@@ -11,7 +11,8 @@ Blender and shipped as two small files in `public/storefront/<theme>/`:
 
 The chairs stay real-time. In the app (`src/app/@canvas/components/themes/ThemeScene.tsx`)
 invisible floor and wall planes catch their shadows from a sun aimed the same
-way as the render's sun.
+way as the render's sun, and a contact shadow darkens the platform under each
+foot.
 
 ## Rebuilding a theme
 
@@ -31,9 +32,11 @@ options: `--samples 48 --height 720` for quick tests, `--no-render` to only
 build the `.blend`, `--only backplate` or `--only probe`.
 
 Scene frame: x across, y towards the back wall (wall face at y 0), z up from
-the floor. The app's world is the same with the floor at z -10.2. The camera
-matches `src/state/camera.ts` with a vertical field of view of 75°. Nothing may
-stand in front of the chairs (y below about -1.5), because the chairs are
+the floor. The app's world is the same with the floor at z -9.987, where the
+chairs' feet rest (between y -1.5 and -0.9). The camera matches
+`src/state/camera.ts` with a vertical field of view of 75°. Whatever the chairs
+stand on must cover that footprint, or they look like they hover. Nothing may
+stand in front of the chairs (y below about -1.6), because the chairs are
 always drawn over the backplate.
 
 ## Adding a theme

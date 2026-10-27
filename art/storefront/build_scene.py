@@ -10,9 +10,9 @@ Writes art/storefront/<theme>.blend and, unless --no-render:
 
 The scene is built in a "stage" frame: x across, y towards the back wall
 (wall face at y 0), z up from the floor. The app's world is the same with the
-floor at z -10.2. The camera matches src/state/camera.ts and the R3F default
-(vertical fov 75). The chairs are not in the render; they stay real-time and
-stand at y -1.124.
+floor at z -9.987, where the chairs' feet rest. The camera matches
+src/state/camera.ts and the R3F default (vertical fov 75). The chairs are not
+in the render; they stay real-time, with their feet between y -1.45 and -0.91.
 """
 import json
 import math
@@ -29,7 +29,7 @@ REPO = HERE.parent.parent
 ASSETS = HERE / "assets"
 FONTS = REPO / "public" / "fonts"
 
-FLOOR_Z = -10.2
+FLOOR_Z = -9.987
 CAMERA = (0.0, -3.26023, -9.0 - FLOOR_Z)
 TARGET = (0.0, 0.0, -9.5 - FLOOR_Z)
 FOV_Y = 75.0
@@ -408,11 +408,12 @@ def scandi():
     for i in range(-6, 7):
         x = i * 1.2
         box(f"clerestory_mullion_{i}", (x - 0.025, 0.02, 2.5), (x + 0.025, 0.08, 3.25), white, bevel=0.004)
-    box("skirting", (-7.5, -0.015, 0), (7.5, 0.0, 0.1), white, bevel=0.003)
+    box("skirting", (-7.5, -0.015, SCANDI_LIFT), (7.5, 0.0, SCANDI_LIFT + 0.1), white, bevel=0.003)
 
-    # A low birch platform under the row.
+    # A low birch platform under the row, running back to the wall so every
+    # chair leg stands on it.
     ply = pbr("birch_ply", "plywood", tint=(1.1, 1.05, 0.98), bump=0.1, saturation=0.5)
-    box("platform", (-7.5, -1.42, 0), (7.5, -0.82, SCANDI_LIFT), ply, bevel=0.008)
+    box("platform", (-7.5, -1.7, 0), (7.5, -0.015, SCANDI_LIFT), ply, bevel=0.008)
 
     # Wordmark above the frame.
     ink = paint("ink", srgb("#2f2c28"), 0.5)
@@ -423,21 +424,21 @@ def scandi():
     # Paper pendants either side.
     shade = paper("paper_shade", ribs=9.0)
     cord = paint("cord", srgb("#e8e2d6"), 0.6)
-    for x, z in ((-2.6, 2.4), (2.6, 2.3)):
+    for x, z in ((-2.6, 2.15), (2.6, 2.05)):
         sphere(f"pendant_{x}", (x, -0.5, z), 0.2, shade)
         cylinder(f"cord_{x}", (x, -0.5, (z + 3.6) / 2 + 0.1), 0.004, 3.6 - z - 0.2, cord, vertices=8)
         point_light(f"pendant_light_{x}", (x, -0.5, z), 6, 2900, 0.05)
 
     # A stoneware vase with dry branches beside the right-hand stop.
     stoneware = paint("stoneware", srgb("#e6e0d4"), 0.7)
-    lathe("vase", [(0.0, 0.0), (0.08, 0.0), (0.1, 0.06), (0.105, 0.2), (0.08, 0.34), (0.045, 0.42), (0.05, 0.45)], (2.3, -0.45, SCANDI_LIFT * 0), stoneware)
+    lathe("vase", [(0.0, 0.0), (0.08, 0.0), (0.1, 0.06), (0.105, 0.2), (0.08, 0.34), (0.045, 0.42), (0.05, 0.45)], (2.3, -0.45, SCANDI_LIFT), stoneware)
     bark = paint("bark", srgb("#4d3d30"), 0.8)
     for i, pts in enumerate([
         [(0, 0, 0.4), (-0.05, 0, 0.7), (-0.16, 0.02, 1.0), (-0.28, 0.05, 1.18)],
         [(0, 0, 0.4), (0.02, 0, 0.75), (0.07, -0.02, 1.05), (0.1, -0.04, 1.3)],
         [(0, 0, 0.4), (0.06, 0.01, 0.65), (0.18, 0.03, 0.9), (0.33, 0.05, 1.02)],
     ]):
-        branch(f"branch_{i}", (2.3, -0.45, 0), pts, 0.006, bark)
+        branch(f"branch_{i}", (2.3, -0.45, SCANDI_LIFT), pts, 0.006, bark)
 
 
 def japandi():
@@ -449,7 +450,7 @@ def japandi():
     ceiling_fill(500, 4000)
     oak = pbr("oak", "oak_veneer_01", tint=(0.95, 0.92, 0.88), bump=0.08, saturation=0.55)
     walnut = pbr("walnut", "walnut_veneer", tint=(0.32, 0.28, 0.25), bump=0.06, saturation=0.8)
-    box("skirting", (-7.5, -0.015, 0), (7.5, 0.0, 0.08), walnut, bevel=0.003)
+    box("skirting", (-7.5, -0.015, JAPANDI_LIFT), (7.5, 0.0, JAPANDI_LIFT + 0.08), walnut, bevel=0.003)
 
     # Oak slat screens framing the row at either end.
     for side in (-1, 1):
@@ -458,47 +459,48 @@ def japandi():
             cx = side * x
             box(f"slat_{cx:.2f}", (cx - 0.0225, -0.09, 0), (cx + 0.0225, -0.04, 3.6), oak, bevel=0.004)
             x += 0.09
-        box(f"slat_rail_{side}", (side * 2.93 - (0 if side > 0 else 4.5), -0.04, 0), (side * 2.93 + (4.5 if side > 0 else 0), 0.0, 0.06), walnut)
+        box(f"slat_rail_{side}", (side * 2.93 - (0 if side > 0 else 4.5), -0.04, JAPANDI_LIFT), (side * 2.93 + (4.5 if side > 0 else 0), 0.0, JAPANDI_LIFT + 0.06), walnut)
 
     # Noren: four linen panels on a rod, the shop's sign.
     linen = pbr("indigo_linen", "rough_linen", tint=(0.05, 0.08, 0.2), bump=0.3, saturation=0.0)
     cream = paint("crest", srgb("#efe7d6"), 0.8)
     rod = paint("rod", srgb("#3b2b20"), 0.5)
-    cylinder("noren_rod", (0, -0.08, 2.99), 0.016, 2.1, rod, rotation=(0, math.pi / 2, 0))
+    cylinder("noren_rod", (0, -0.08, 2.74), 0.016, 2.1, rod, rotation=(0, math.pi / 2, 0))
     for x in (-0.75, -0.25, 0.25, 0.75):
-        bpy.ops.mesh.primitive_grid_add(x_subdivisions=24, y_subdivisions=12, size=1, location=(x, -0.06, 2.72), rotation=(math.pi / 2, 0, 0))
+        bpy.ops.mesh.primitive_grid_add(x_subdivisions=24, y_subdivisions=12, size=1, location=(x, -0.06, 2.47), rotation=(math.pi / 2, 0, 0))
         panel = bpy.context.active_object
         panel.name = f"noren_{x}"
         panel.scale = (0.47, 0.52, 1)
         bpy.ops.object.transform_apply(scale=True)
         for v in panel.data.vertices:
-            depth = (2.98 - (v.co.z + 2.72)) / 0.52
+            depth = (2.73 - (v.co.z + 2.47)) / 0.52
             v.co.y += 0.006 * math.sin(v.co.x * 40 + x * 7) * depth
         panel.data.materials.append(linen)
         mod = panel.modifiers.new("thick", "SOLIDIFY")
         mod.thickness = 0.003
         bpy.ops.object.shade_smooth()
-    cylinder("crest", (0, -0.068, 2.74), 0.14, 0.004, cream, rotation=(math.pi / 2, 0, 0))
+    cylinder("crest", (0, -0.068, 2.49), 0.14, 0.004, cream, rotation=(math.pi / 2, 0, 0))
     indigo = paint("indigo_ink", srgb("#273a5c"), 0.8)
-    words("crest_mark", "SF", (0, -0.072, 2.74), 0.12, indigo, font="casanova.ttf", depth=0.002)
-    words("noren_left", "S I M P L Y", (-0.75, -0.069, 2.6), 0.032, cream, depth=0.001)
-    words("noren_right", "F U R N I S H E D", (0.75, -0.069, 2.6), 0.032, cream, depth=0.001)
+    words("crest_mark", "SF", (0, -0.072, 2.49), 0.12, indigo, font="casanova.ttf", depth=0.002)
+    words("noren_left", "S I M P L Y", (-0.75, -0.069, 2.35), 0.032, cream, depth=0.001)
+    words("noren_right", "F U R N I S H E D", (0.75, -0.069, 2.35), 0.032, cream, depth=0.001)
 
-    # A low walnut plinth under the row.
-    box("plinth", (-7.5, -1.40, 0), (7.5, -0.84, JAPANDI_LIFT), walnut, bevel=0.006)
+    # A low walnut plinth under the row, running back to the wall so every
+    # chair leg stands on it.
+    box("plinth", (-7.5, -1.7, 0), (7.5, -0.015, JAPANDI_LIFT), walnut, bevel=0.006)
 
     # Andon lanterns: an oak frame round a glowing paper box.
     shade = paper("andon_paper", (0.97, 0.92, 0.82))
     for x in (-2.25, 2.25):
-        cx, cy = x, -0.45
-        box(f"andon_base_{x}", (cx - 0.11, cy - 0.11, 0), (cx + 0.11, cy + 0.11, 0.025), walnut, bevel=0.004)
-        box(f"andon_paper_{x}", (cx - 0.085, cy - 0.085, 0.04), (cx + 0.085, cy + 0.085, 0.52), shade)
+        cx, cy, z0 = x, -0.45, JAPANDI_LIFT
+        box(f"andon_base_{x}", (cx - 0.11, cy - 0.11, z0), (cx + 0.11, cy + 0.11, z0 + 0.025), walnut, bevel=0.004)
+        box(f"andon_paper_{x}", (cx - 0.085, cy - 0.085, z0 + 0.04), (cx + 0.085, cy + 0.085, z0 + 0.52), shade)
         for dx in (-1, 1):
             for dy in (-1, 1):
                 px, py = cx + dx * 0.09, cy + dy * 0.09
-                box(f"andon_post_{x}_{dx}_{dy}", (px - 0.008, py - 0.008, 0.02), (px + 0.008, py + 0.008, 0.55), oak, bevel=0.002)
-        box(f"andon_top_{x}", (cx - 0.1, cy - 0.1, 0.52), (cx + 0.1, cy + 0.1, 0.545), oak, bevel=0.003)
-        point_light(f"andon_light_{x}", (cx, cy, 0.3), 8, 2600, 0.04)
+                box(f"andon_post_{x}_{dx}_{dy}", (px - 0.008, py - 0.008, z0 + 0.02), (px + 0.008, py + 0.008, z0 + 0.55), oak, bevel=0.002)
+        box(f"andon_top_{x}", (cx - 0.1, cy - 0.1, z0 + 0.52), (cx + 0.1, cy + 0.1, z0 + 0.545), oak, bevel=0.003)
+        point_light(f"andon_light_{x}", (cx, cy, z0 + 0.3), 8, 2600, 0.04)
 
 
 THEMES = {"scandi": scandi, "japandi": japandi}

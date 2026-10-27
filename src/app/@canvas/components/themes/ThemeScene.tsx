@@ -1,17 +1,26 @@
-import { useEffect, useMemo, useState } from "react";
-import { useLoader, useThree } from "@react-three/fiber";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useFrame, useLoader, useThree } from "@react-three/fiber";
 import { useTexture } from "@react-three/drei";
 import {
+  Color,
+  DoubleSide,
   EquirectangularReflectionMapping,
-  SRGBColorSpace,
+  Mesh,
+  MeshDepthMaterial,
   Object3D,
+  OrthographicCamera,
+  PlaneGeometry,
+  Scene,
   ShaderMaterial,
+  SRGBColorSpace,
   Vector3,
+  WebGLRenderTarget,
 } from "three";
-import { RGBELoader } from "three-stdlib";
+import { HorizontalBlurShader, RGBELoader, VerticalBlurShader } from "three-stdlib";
 import { ThemeKey, themes } from "./themeState";
 
-const FLOOR_Z = -10.2;
+/** Where the chairs' feet rest; the rendered rooms' floor (build_scene.py). */
+const FLOOR_Z = -9.987;
 /** Width over height of the rendered backplates (art/storefront/build_scene.py). */
 const PLATE_ASPECT = 2.4;
 
@@ -73,13 +82,14 @@ function Backplate({ theme }: { theme: ThemeKey }) {
   );
 }
 
-// Invisible floor and wall that only show the chairs' shadows.
+// Invisible floor and wall that only show the chairs' shadows. The floor's
+// are a little darker: the sun hits it more directly than the wall.
 function ShadowCatchers({ lift, opacity }: { lift: number; opacity: number }) {
   return (
     <>
       <mesh position={[0, -2, FLOOR_Z + lift + 0.001]} receiveShadow>
         <planeGeometry args={[20, 4]} />
-        <shadowMaterial opacity={opacity} />
+        <shadowMaterial opacity={Math.min(1, opacity * 1.5)} />
       </mesh>
       <mesh
         position={[0, -0.001, FLOOR_Z + 2]}
@@ -90,6 +100,112 @@ function ShadowCatchers({ lift, opacity }: { lift: number; opacity: number }) {
         <shadowMaterial opacity={opacity} />
       </mesh>
     </>
+  );
+}
+
+// Soft darkening where the legs meet the platform, which is what makes the
+// chairs sit on it rather than hover. Like drei's ContactShadows, but that
+// assumes y is up and blurs on a plane at the world origin, which this
+// z-up scene never sees. An orthographic camera at the platform looks up and
+// draws whatever is within `far` of it, fading with height; the result is
+// blurred and laid on the platform, tinted the shadow colour.
+const CONTACT = { width: 9, height: 1.7, far: 0.3, blur: 2.5, opacity: 0.8 };
+const CONTACT_RES: [number, number] = [1536, 290];
+const clearColor = new Color();
+
+function ContactShadow({ lift }: { lift: number }) {
+  const gl = useThree((state) => state.gl);
+  const scene = useThree((state) => state.scene);
+  const { width, height, far, blur, opacity } = CONTACT;
+  const parts = useMemo(() => {
+    const [w, h] = CONTACT_RES;
+    const target = new WebGLRenderTarget(w, h);
+    const scratch = new WebGLRenderTarget(w, h);
+    // Looking up: an orthographic camera faces -z, so turn it over.
+    const camera = new OrthographicCamera(-width / 2, width / 2, height / 2, -height / 2, 0, far);
+    camera.rotation.x = Math.PI;
+    const depth = new MeshDepthMaterial();
+    depth.depthTest = depth.depthWrite = false;
+    depth.onBeforeCompile = (shader) => {
+      shader.fragmentShader = shader.fragmentShader.replace(
+        "vec4( vec3( 1.0 - fragCoordZ ), opacity );",
+        "vec4( vec3( 1.0 ), 1.0 - fragCoordZ );"
+      );
+    };
+    const horizontal = new ShaderMaterial(HorizontalBlurShader);
+    const vertical = new ShaderMaterial(VerticalBlurShader);
+    const quad = new Mesh(new PlaneGeometry(2, 2), horizontal);
+    const quadScene = new Scene();
+    quadScene.add(quad);
+    const quadCamera = new OrthographicCamera(-1, 1, 1, -1, 0, 1);
+    return { target, scratch, camera, depth, horizontal, vertical, quad, quadScene, quadCamera };
+  }, [width, height, far]);
+  const mesh = useRef<Mesh>(null);
+
+  useEffect(
+    () => () => {
+      parts.target.dispose();
+      parts.scratch.dispose();
+      parts.depth.dispose();
+      parts.horizontal.dispose();
+      parts.vertical.dispose();
+      parts.quad.geometry.dispose();
+    },
+    [parts]
+  );
+
+  useFrame(() => {
+    const { target, scratch, camera, depth, horizontal, vertical, quad, quadScene, quadCamera } = parts;
+    if (!mesh.current) return;
+    camera.position.set(0, -0.9, FLOOR_Z + lift - 0.005);
+    camera.updateMatrixWorld();
+    const background = scene.background;
+    gl.getClearColor(clearColor);
+    const clearAlpha = gl.getClearAlpha();
+    mesh.current.visible = false;
+    scene.background = null;
+    scene.overrideMaterial = depth;
+    gl.setRenderTarget(target);
+    gl.setClearColor(0x000000, 0);
+    gl.clear();
+    gl.render(scene, camera);
+    scene.overrideMaterial = null;
+    scene.background = background;
+    mesh.current.visible = true;
+    for (const amount of [blur, blur * 0.4]) {
+      quad.material = horizontal;
+      horizontal.uniforms.tDiffuse.value = target.texture;
+      horizontal.uniforms.h.value = amount / CONTACT_RES[0];
+      gl.setRenderTarget(scratch);
+      gl.render(quadScene, quadCamera);
+      quad.material = vertical;
+      vertical.uniforms.tDiffuse.value = scratch.texture;
+      vertical.uniforms.v.value = amount / CONTACT_RES[1];
+      gl.setRenderTarget(target);
+      gl.render(quadScene, quadCamera);
+    }
+    gl.setRenderTarget(null);
+    gl.setClearColor(clearColor, clearAlpha);
+  });
+
+  // The camera's image has +x to the right and -y (towards the viewer) up.
+  return (
+    <mesh
+      ref={mesh}
+      position={[0, -0.9, FLOOR_Z + lift + 0.002]}
+      rotation={[Math.PI, 0, 0]}
+      renderOrder={1}
+    >
+      <planeGeometry args={[width, height]} />
+      <meshBasicMaterial
+        map={parts.target.texture}
+        color="#2a2118"
+        transparent
+        opacity={opacity}
+        depthWrite={false}
+        side={DoubleSide}
+      />
+    </mesh>
   );
 }
 
@@ -167,6 +283,7 @@ export function ThemeScene({ theme }: { theme: ThemeKey }) {
           <Backplate theme={theme} />
           <RoomLight theme={theme} />
           <ShadowCatchers lift={room.lift} opacity={room.shadow} />
+          <ContactShadow lift={room.lift} />
           <Sun intensity={room.sun} />
         </>
       )}
