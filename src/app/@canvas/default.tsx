@@ -27,6 +27,9 @@ export default function Layout() {
   const getViewport = useThree((state) => state.viewport.getCurrentViewport);
   const loading = useAtomValue(loadingAtom);
   const theme = useAtomValue(themeAtom);
+  // Rendered rooms light the chairs themselves (ThemeScene), so the real-time
+  // lights only add the shadows and a little sun.
+  const rendered = theme !== "original";
   const { activeIndex: urlIndex, goToIndex } = useCarouselNavigation();
   // An unknown id is redirected by the page; show the first item meanwhile.
   const activeIndex = Math.max(urlIndex, 0);
@@ -96,17 +99,20 @@ export default function Layout() {
       <directionalLight
         color={new Color("#FFFFFF")}
         position={[-2.36612, -8.0653, 2.40629]}
-        intensity={1.4}
+        intensity={rendered ? 0 : 1.4}
         shadow-mapSize={[2048, 2048]}
         shadow-camera-near={0.1}
         shadow-camera-far={100}
-        castShadow
+        castShadow={!rendered}
       />
-      <hemisphereLight color={new Color("#FFFFFF")} intensity={1} />
+      <hemisphereLight
+        color={new Color("#FFFFFF")}
+        intensity={rendered ? 0.15 : 1}
+      />
       <Suspense fallback={null}>
         <ProductMask position={[0, -1.85, -9.01]} />
       </Suspense>
-      <group position={[0, 0, themeLift[theme] ?? 0]}>
+      <group position={[0, 0, themeLift(theme)]}>
         {springs.map((spring, index) => (
           <Product
             key={products[index].id}
@@ -117,26 +123,26 @@ export default function Layout() {
           />
         ))}
       </group>
-      {theme === "now" && (
+      {!rendered && (
         <Wall rotation={new Euler(Math.PI / 2, 0, 0)} receiveShadow />
       )}
       <directionalLight
         color={new Color("#FFFFFF")}
         position={[-3.36612, -4.0653, -7.40629]}
-        intensity={1.5}
+        intensity={rendered ? 0 : 1.5}
         target={lTarget}
         shadow-mapSize={[2048, 2048]}
         shadow-near={0.1}
         shadow-far={2}
-        castShadow
+        castShadow={!rendered}
       />
       <primitive object={lTarget} />
-      {theme !== "now" && (
+      {rendered && (
         <Suspense fallback={null}>
           <ThemeScene theme={theme} />
         </Suspense>
       )}
-      {!loading && theme === "now" && (
+      {!loading && !rendered && (
         <Suspense fallback={null}>
           <group position={[0, 0, -9.985]} receiveShadow>
             <WallCarvingArt

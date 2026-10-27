@@ -1,0 +1,16 @@
+{
+  "_note": "Render-time sources for the pre-rendered storefront themes. All from Poly Haven (https://polyhaven.com), licensed CC0. Only the rendered backgrounds ship in public/storefront; these files stay local (art/storefront/assets is gitignored). Fetch them with fetch_assets.py.",
+  "textures": {
+    "painted_plaster_wall": { "use": "Scandi wall", "res": "2k" },
+    "ash_veneer": { "use": "Scandi floorboards", "res": "2k" },
+    "plywood": { "use": "Scandi platform", "res": "1k" },
+    "clay_plaster": { "use": "Japandi wall", "res": "2k" },
+    "tatami_mat": { "use": "Japandi floor", "res": "2k" },
+    "oak_veneer_01": { "use": "Japandi slat screens and lantern frames", "res": "1k" },
+    "walnut_veneer": { "use": "Japandi plinth", "res": "1k" },
+    "rough_linen": { "use": "Japandi noren curtain", "res": "1k" }
+  },
+  "hdris": {
+    "kloofendal_48d_partly_cloudy_puresky": { "use": "Daylight and sky for both themes", "res": "2k" }
+  }
+}

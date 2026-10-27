@@ -34,3 +34,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Render-time source textures (fetched by art/storefront/fetch_assets.py)
+/art/storefront/assets/
+/art/storefront/renders/

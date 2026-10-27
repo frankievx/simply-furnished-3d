@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useAtom } from "jotai";
 import { saveTheme, themeAtom, themes } from "@/app/@canvas/components/themes/themeState";
 
-// REN-64 prototype only: switch between the storefront theme mock-ups.
+// Switch between the storefront themes (REN-64).
 // Hidden with `?clean`, so screenshots show the scene alone.
 export function TheThemePicker() {
   const [theme, setTheme] = useAtom(themeAtom);

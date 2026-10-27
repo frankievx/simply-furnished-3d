@@ -1,15 +1,12 @@
 import { atom } from "jotai";
 
-// REN-64 design exploration: each theme is a stand-in storefront built from
-// simple shapes and generated textures, switched with `?theme=<key>`.
+// The storefront themes: the original real-time room, and rooms rendered in
+// Blender for the fixed camera (art/storefront). Switch with `?theme=<key>`
+// or the picker.
 export const themes = [
-  { key: "now", label: "Now" },
-  { key: "parisian", label: "Parisian boutique" },
+  { key: "original", label: "Original" },
   { key: "scandi", label: "Scandi daylight" },
   { key: "japandi", label: "Japandi atelier" },
-  { key: "midcentury", label: "Mid-century" },
-  { key: "loft", label: "Industrial loft" },
-  { key: "mediterranean", label: "Mediterranean arcade" },
 ] as const;
 
 export type ThemeKey = (typeof themes)[number]["key"];
@@ -22,7 +19,7 @@ const isThemeKey = (value: string | null): value is ThemeKey =>
 // The carousel drops the query string when it navigates, so the choice is
 // also kept for the session.
 export const readTheme = (): ThemeKey => {
-  if (typeof window === "undefined") return "now";
+  if (typeof window === "undefined") return "original";
   const fromUrl = new URLSearchParams(window.location.search).get("theme");
   if (isThemeKey(fromUrl)) {
     try {
@@ -34,7 +31,7 @@ export const readTheme = (): ThemeKey => {
     const stored = sessionStorage.getItem(STORAGE_KEY);
     if (isThemeKey(stored)) return stored;
   } catch {}
-  return "now";
+  return "original";
 };
 
 export const saveTheme = (key: ThemeKey) => {
