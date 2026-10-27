@@ -34,3 +34,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# preview-shots tool deps (CI installs them)
+/.github/preview-shots/node_modules

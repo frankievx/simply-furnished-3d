@@ -1,0 +1,60 @@
+name: Preview screenshots
+
+# When Vercel finishes a preview, render it and post the screenshots to the
+# Linear issue named in the branch (ren-44-... -> REN-44).
+# Secrets: LINEAR_API_KEY, VERCEL_AUTOMATION_BYPASS_SECRET.
+on:
+  deployment_status:
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  shoot:
+    if: >-
+      github.event.deployment_status.state == 'success' &&
+      startsWith(github.event.deployment.environment, 'Preview')
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      REF: ${{ github.event.deployment.ref }}
+      SHA: ${{ github.event.deployment.sha }}
+      GH_TOKEN: ${{ github.token }}
+      PREVIEW_URL: ${{ github.event.deployment_status.environment_url }}
+      RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+    steps:
+      - name: Check secrets
+        env:
+          BYPASS: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+          LINEAR: ${{ secrets.LINEAR_API_KEY }}
+        run: |
+          [ -n "$BYPASS" ] || { echo "::error::VERCEL_AUTOMATION_BYPASS_SECRET is not set; previews are behind Vercel login"; exit 1; }
+          [ -n "$LINEAR" ] || { echo "::error::LINEAR_API_KEY is not set"; exit 1; }
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.deployment.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Find the branch
+        # Vercel sets the deployment ref to the commit SHA, so ask GitHub
+        # which pull request this commit belongs to.
+        run: |
+          BRANCH=$(gh api "repos/$GITHUB_REPOSITORY/commits/$SHA/pulls" --jq '.[0].head.ref // empty' || true)
+          echo "BRANCH=${BRANCH:-$REF}" >> "$GITHUB_ENV"
+          echo "Branch: ${BRANCH:-$REF}"
+      - name: Install the screenshot tool
+        run: npm install --no-save --no-package-lock --prefix .github/preview-shots playwright-core
+      - name: Screenshot the preview
+        env:
+          CHROMIUM_PATH: /usr/bin/google-chrome
+          VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+        run: |
+          node .github/preview-shots/preview-shot.mjs --url "$PREVIEW_URL" \
+            --recipe .claude/preview-shot.json --out shots > shots.json || true
+          echo '--- report ---'; head -c 4000 shots.json
+      - name: Post to Linear
+        env:
+          LINEAR_API_KEY: ${{ secrets.LINEAR_API_KEY }}
+        run: node .github/preview-shots/post-to-linear.mjs
