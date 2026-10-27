@@ -24,6 +24,13 @@ jobs:
       PREVIEW_URL: ${{ github.event.deployment_status.environment_url }}
       RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
     steps:
+      - name: Check secrets
+        env:
+          BYPASS: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+          LINEAR: ${{ secrets.LINEAR_API_KEY }}
+        run: |
+          [ -n "$BYPASS" ] || { echo "::error::VERCEL_AUTOMATION_BYPASS_SECRET is not set; previews are behind Vercel login"; exit 1; }
+          [ -n "$LINEAR" ] || { echo "::error::LINEAR_API_KEY is not set"; exit 1; }
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.deployment.sha }}
