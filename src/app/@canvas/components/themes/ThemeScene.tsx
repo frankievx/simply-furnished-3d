@@ -32,6 +32,8 @@ type Prerendered = {
   sun: number;
   /** Where the room's main light comes from, matching the render. */
   light: Vector3;
+  /** Lamps in the room that light the chairs as they pass. */
+  lamps?: Vector3[];
 };
 
 const ROW_CENTRE = new Vector3(0, -1.124, FLOOR_Z + 0.4);
@@ -48,6 +50,8 @@ export const prerendered: Partial<Record<ThemeKey, Prerendered>> = {
       new Vector3(-2.36612, -8.0653, 2.40629).normalize(),
       5
     ),
+    // The andon lanterns' bulbs (build_scene.py japandi).
+    lamps: [-2.25, 2.25].map((x) => new Vector3(x, -0.45, FLOOR_Z + 0.3)),
   },
 };
 
@@ -255,6 +259,25 @@ function Sun({ intensity, position }: { intensity: number; position: Vector3 }) 
   );
 }
 
+// Warm light from the room's lamps, so a chair glows on the side facing one
+// as it passes.
+function Lamps({ positions }: { positions: Vector3[] }) {
+  return (
+    <>
+      {positions.map((position) => (
+        <pointLight
+          key={position.x}
+          position={position}
+          color="#ffb067"
+          intensity={0.6}
+          distance={2.5}
+          decay={2}
+        />
+      ))}
+    </>
+  );
+}
+
 // Light the chairs with the room they stand in.
 function RoomLight({ theme }: { theme: ThemeKey }) {
   const probe = useLoader(RGBELoader, probeUrl(theme));
@@ -297,6 +320,7 @@ export function ThemeScene({ theme }: { theme: ThemeKey }) {
           <ShadowCatchers opacity={room.shadow} />
           <ContactShadow />
           <Sun intensity={room.sun} position={room.light} />
+          {room.lamps && <Lamps positions={room.lamps} />}
         </>
       )}
     </>

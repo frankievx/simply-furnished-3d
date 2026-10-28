@@ -451,14 +451,6 @@ def scandi():
     grey = paint("ink_grey", srgb("#7a756c"), 0.5)
     words("tagline", "S H O W R O O M   ·   N O R D I C   C H A I R S", (0, -0.002, 2.09), 0.032, grey)
 
-    # Paper pendants either side.
-    shade = paper("paper_shade", ribs=9.0)
-    cord = paint("cord", srgb("#e8e2d6"), 0.6)
-    for x, z in ((-2.6, 2.15), (2.6, 2.05)):
-        sphere(f"pendant_{x}", (x, -0.5, z), 0.2, shade)
-        cylinder(f"cord_{x}", (x, -0.5, (z + 3.6) / 2 + 0.1), 0.004, 3.6 - z - 0.2, cord, vertices=8)
-        point_light(f"pendant_light_{x}", (x, -0.5, z), 6, 2900, 0.05)
-
     # A stoneware vase with dry branches beside the right-hand stop.
     stoneware = paint("stoneware", srgb("#e6e0d4"), 0.7)
     lathe("vase", [(0.0, 0.0), (0.08, 0.0), (0.1, 0.06), (0.105, 0.2), (0.08, 0.34), (0.045, 0.42), (0.05, 0.45)], (2.3, -0.45, SCANDI_LIFT), stoneware)
@@ -530,7 +522,9 @@ def japandi():
                 px, py = cx + dx * 0.09, cy + dy * 0.09
                 box(f"andon_post_{x}_{dx}_{dy}", (px - 0.008, py - 0.008, z0 + 0.02), (px + 0.008, py + 0.008, z0 + 0.55), oak, bevel=0.002)
         box(f"andon_top_{x}", (cx - 0.1, cy - 0.1, z0 + 0.52), (cx + 0.1, cy + 0.1, z0 + 0.545), oak, bevel=0.003)
-        point_light(f"andon_light_{x}", (cx, cy, z0 + 0.3), 8, 2600, 0.04)
+        # Bright enough to throw a warm pool on the plinth and wall. The app
+        # adds a light here too (ThemeScene.tsx, LANTERNS) for the chairs.
+        point_light(f"andon_light_{x}", (cx, cy, z0 + 0.3), 25, 2600, 0.04)
 
 
 THEMES = {"scandi": (scandi, SCANDI_LIFT), "japandi": (japandi, JAPANDI_LIFT)}
